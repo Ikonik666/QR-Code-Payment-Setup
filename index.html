@@ -97,7 +97,8 @@
                     <div class="price-summary" id="price-summary">Total: ₹0</div>
                     <input class="form-input" type="text" name="telegram_id_or_phone" placeholder="Your Telegram ID or Phone Number" required>
                     <textarea class="form-input" name="additional-info" placeholder="Additional Info (Optional)" rows="2"></textarea>
-                    <input class="form-input" type="file" name="screenshot" accept="image/*" required>
+                    <label for="screenshot-upload" style="display: block; color: #ccc; margin-bottom: 10px;">Upload Payment Screenshot:</label>
+                    <input id="screenshot-upload" class="form-input" type="file" name="screenshot" accept="image/*" required>
                     <button type="submit" class="submit-btn">SUBMIT PROOF & GET ACCESS</button>
                 </form>
             </div>
@@ -113,7 +114,7 @@
             { name: "PDF Stories Pack", price: 299 }, { name: "Animated Pack", price: 399 }, { name: "Viral MMS Pack", price: 349 },
             { name: "Incest Vault (Captions)", price: 499 }, { name: "The Secret Vault", price: 499 }, { name: "BBC-Guy Collection", price: 299 }
         ];
-        const discounts = { 1: 0.10, 2: 0.15, 3: 0.20, 4: 0.25, 5: 0.30, 6: 0.30 };
+        const discounts = { 2: 0.10, 3: 0.15, 4: 0.20, 5: 0.25, 6: 0.30 }; // No discount for 1
 
         function openModal(initialPackIndex) {
             packSelector.innerHTML = '';
@@ -146,16 +147,8 @@
             
             checkboxes.forEach(cb => { if (cb.checked) { selectedCount++; } });
             
-            let currentDiscountRate = 0;
-            if (selectedCount > 0) {
-                currentDiscountRate = discounts[selectedCount] || 0;
-            }
-
-            let nextDiscountRate = discounts[selectedCount + 1] || currentDiscountRate;
-            if (selectedCount === 0) { // Special case: if nothing is selected, tempt with the first discount
-                nextDiscountRate = discounts[1] || 0;
-            }
-
+            const currentDiscount = discounts[selectedCount] || 0; // The real discount for the total
+            const nextDiscount = discounts[selectedCount + 1] || currentDiscount; // The temptation discount
 
             checkboxes.forEach(cb => {
                 const index = cb.dataset.index;
@@ -167,23 +160,25 @@
                     baseTotal += pack.price;
                     selectedPackNames.push(pack.name);
                     label.classList.add('selected');
+                    // Selected packs show their original price clearly
                     textSpan.innerHTML = ` ${pack.name} - ₹${pack.price}`;
                 } else {
                     label.classList.remove('selected');
-                    const discountedPrice = Math.round(pack.price * (1 - nextDiscountRate));
-                    if (nextDiscountRate > 0) {
-                        textSpan.innerHTML = ` ${pack.name} - <del>₹${pack.price}</del> ₹${discountedPrice}`;
+                    // Unselected packs show the NEXT potential discount
+                    const temptingPrice = Math.round(pack.price * (1 - nextDiscount));
+                    if (selectedCount > 0 && nextDiscount > 0) { // Only show temptation if at least one is selected
+                        textSpan.innerHTML = ` ${pack.name} - <del>₹${pack.price}</del> ₹${temptingPrice}`;
                     } else {
                         textSpan.innerHTML = ` ${pack.name} - ₹${pack.price}`;
                     }
                 }
             });
 
-            const finalTotal = baseTotal * (1 - currentDiscountRate);
+            const finalTotal = baseTotal * (1 - currentDiscount);
 
             if (selectedCount > 0) {
                 let summaryText = `Total: ₹${Math.round(finalTotal)}`;
-                if(currentDiscountRate > 0) { summaryText += ` (You Saved ₹${Math.round(baseTotal - finalTotal)}!)`; }
+                if(currentDiscount > 0) { summaryText += ` (You Saved ₹${Math.round(baseTotal - finalTotal)}!)`; }
                 priceSummary.textContent = summaryText;
                 hiddenPacksInput.value = `Packs: ${selectedPackNames.join(', ')} | Total Paid: ₹${Math.round(finalTotal)}`;
             } else {
