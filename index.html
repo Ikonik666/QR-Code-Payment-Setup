@@ -40,8 +40,8 @@
 
     <div class="container">
         <div class="header">
-            <h1>💎 Welcome to DesiTease Premium 💎</h1>
-            <p>Premium Collections • Lifetime Access • Private Groups</p>
+            <h1>Welcome to DesiTease Premium</h1>
+            <p>Instant Access to Exclusive Private Telegram Groups • Lifetime Updates</p>
         </div>
 
         <div class="packs-container">
@@ -131,9 +131,9 @@
                 <div class="qr-code">
                     <img src="upi-qr.png" alt="Scan to Pay UPI">
                 </div>
-                <p>Scan to pay, then select your packs below to confirm the total.</p>
+                <p><b>Step 1:</b> Scan the QR code to pay.<br><b>Step 2:</b> Enter your Telegram ID & upload the screenshot to get <b>instant access!</b></p>
                 
-                <form name="payment-proof" method="POST" data-netlify="true" action="/success.html" netlify-honeypot="bot-field">
+                <form id="payment-form" name="payment-proof" method="POST" data-netlify="true" netlify-honeypot="bot-field">
                     <input type="hidden" name="form-name" value="payment-proof" />
                     <p style="display:none;"><label>Don’t fill this out if you're human: <input name="bot-field"></label></p>
                     
@@ -141,7 +141,7 @@
                     
                     <div class="price-summary" id="price-summary">Total: ₹0</div>
                     
-                    <input class="form-input" type="text" name="telegram_id" placeholder="Enter Your Telegram ID or Number" required>
+                    <input class="form-input" type="text" name="telegram_id" placeholder="Your Telegram ID (e.g., @username)" required>
                     <input class="form-input" type="file" name="screenshot" accept="image/*" required>
                     
                     <button type="submit" class="submit-btn">SUBMIT PROOF & GET ACCESS</button>
@@ -152,8 +152,10 @@
 
     <script>
         const modal = document.getElementById('paymentModal');
+        const modalBody = document.querySelector('.modal-body');
         const packSelector = document.getElementById('pack-selector');
         const priceSummary = document.getElementById('price-summary');
+        const paymentForm = document.getElementById('payment-form');
 
         const packs = [
             { name: "📖 PDF Stories Pack", price: 299 },
@@ -218,6 +220,28 @@
                 priceSummary.textContent = 'Total: ₹0';
             }
         }
+
+        paymentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(paymentForm);
+            
+            fetch('/', {
+                method: 'POST',
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formData).toString()
+            }).then(() => {
+                modalBody.innerHTML = `
+                    <div class="container">
+                        <h1 style="color: #50c878; font-size: 2.5em;">✅ Payment Proof Submitted!</h1>
+                        <p style="font-size: 1.2em; color: #b0b0b0;">Your request for access has been submitted! Our team will verify your payment and add you to the exclusive private groups on Telegram shortly.</p>
+                        <p style="font-size: 1.2em; color: #b0b0b0;">In the meantime, you can contact our admin on Telegram at <a href="https://t.me/Its_DesiTease" style="color: #ff3366; text-decoration: none;">@Its_DesiTease</a> for any questions.</p>
+                    </div>
+                `;
+            }).catch((error) => {
+                alert('There was an error submitting your form. Please try again.');
+                console.error(error);
+            });
+        });
 
         window.onclick = function(event) {
             if (event.target == modal) {
