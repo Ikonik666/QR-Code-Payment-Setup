@@ -1,26 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
-
-  <link rel="icon" type="image/png" sizes="32x32" href="image/favicon-32x32.png">
-  
-  <title>Frontend Mentor | QR code component</title>
-
-  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DesiTease Premium Store</title>
+    <style>
+        body { background-color: #121212; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #ff3366; font-size: 2.2em; margin-bottom: 5px; }
+        .header p { font-style: italic; color: #b0b0b0; }
+        .packs-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; max-width: 1100px; margin: 0 auto; }
+        .pack-card { background: #1e1e1e; border: 1px solid #333; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.4); transition: transform 0.3s; }
+        .pack-card:hover { transform: scale(1.03); }
+        .pack-card img { width: 100%; height: 180px; object-fit: cover; }
+        .pack-content { padding: 20px; }
+        .pack-content h2 { color: #ff6699; margin: 0 0 10px; }
+        .pack-content p { color: #ccc; font-size: 0.95em; line-height: 1.5; height: 65px; }
+        .price-buy { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+        .price { font-size: 1.6em; font-weight: bold; color: #50c878; }
+        .buy-btn { background-color: #ff3366; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; }
+        .buy-btn:hover { background-color: #e6004c; }
+        .bundle-offer { background: linear-gradient(45deg, #ff3366, #ff6699); color: white; text-align: center; padding: 20px; margin: 40px auto; max-width: 700px; border-radius: 15px; font-size: 1.4em; font-weight: bold; }
+        .footer { text-align: center; margin-top: 40px; color: #aaa; }
+        .footer a { color: #ff6699; text-decoration: none; }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <img src="image/imageqrcode.png" alt="image-qr-code">
-  
-    <h1>Improve your front-end skills by building projects</h1>
-    <p>Scan the QR code to visit Frontend Mentor and take your coding skills to the next level</p>
-  </div>
-  <div class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-    Coded by <a href="#">Shivam Surve</a>.
-  </div>
+
+    <div class="header">
+        <h1>💎 Welcome to DesiTease Premium 💎</h1>
+        <p>Premium Collections • Lifetime Access • Private Groups</p>
+    </div>
+
+    <div class="packs-container">
+        <!-- PDF Stories Pack -->
+        <div class="pack-card">
+            <img src="pdf-stories.jpg" alt="PDF Stories">
+            <div class="pack-content">
+                <h2>📖 PDF Stories Pack</h2>
+                <p>Hundreds of the hottest, most imaginative erotic tales designed to fuel your deepest fantasies.</p>
+                <div class="price-buy">
+                    <span class="price">₹299</span>
+                    <button class="buy-btn" onclick="window.location.href='https://t.me/Its_DesiTease'">BUY NOW</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Animated Pack -->
+        <div class="pack-card">
+            <img src="animated-pack.jpg" alt="Animated Videos">
+            <div class="pack-content">
+                <h2>🎨 Animated Pack</h2>
+                <p>Watch your wildest fantasies come to life with this exclusive collection of uncensored animated videos.</p>
+                <div class="price-buy">
+                    <span class="price">₹399</span>
+                    <button class="buy-btn" onclick="window.location.href='https://t.me/Its_DesiTease'">BUY NOW</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Viral MMS Pack -->
+        <div class="pack-card">
+            <img src="viral-mms.jpg" alt="Viral MMS">
+            <div class="pack-content">
+                <h2>🎬 Viral MMS Pack</h2>
+                <p>The raw, unfiltered, and viral moments you crave. A massive library of the internet's most sought-after clips.</p>
+                <div class="price-buy">
+                    <span class="price">₹349</span>
+                    <button class="buy-btn" onclick="window.location.href='https://t.me/Its_DesiTease'">BUY NOW</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Incest Vault -->
+        <div class="pack-card">
+            <img src="incest-vault.jpg" alt="Incest Vault">
+            <div class="pack-content">
+                <h2>⚡️ Incest Vault (Captions)</h2>
+                <p>Dive into the deepest, most forbidden family secrets. Every video includes provocative captions to guide the fantasy.</p>
+                <div class="price-buy">
+                    <span class="price">₹499</span>
+                    <button class="buy-btn" onclick="window.location.href='https://t.me/Its_DesiTease'">BUY NOW</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- The Secret Vault -->
+        <div class="pack-card">
+            <img src="secret-vault.jpg" alt="The Secret Vault">
+            <div class="pack-content">
+                <h2>🔞 The Secret Vault</h2>
+                <p>Our most guarded collection. The explicit, hardcore content that others are too afraid to even mention.</p>
+                <div class="price-buy">
+                    <span class="price">₹499</span>
+                    <button class="buy-btn" onclick="window.location.href='https://t.me/Its_DesiTease'">BUY NOW</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- BBC-Guy Collection -->
+        <div class="pack-card">
+            <img src="bbc-guy.jpg" alt="BBC-Guy Collection">
+            <div class="pack-content">
+                <h2>🖤 BBC-Guy Collection</h2>
+                <p>300+ exclusive, full-length scenes featuring the ultimate BBC conquest of innocent Indian beauties.</p>
+                <div class="price-buy">
+                    <span class="price">₹299</span>
+                    <button class="buy-btn" onclick="window.location.href='https://t.me/Its_DesiTease'">BUY NOW</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bundle-offer">
+        🔥 Buy All 6 Packs & Save 30% — Only ₹1710! 🔥
+    </div>
+
+    <div class="footer">
+        <p>💳 We accept All UPI Apps, PayPal & Amazon Gift Cards.</p>
+        <p>Ready to unlock everything? DM <a href="https://t.me/Its_DesiTease">@Its_DesiTease</a> now!</p>
+    </div>
+
 </body>
 </html>
