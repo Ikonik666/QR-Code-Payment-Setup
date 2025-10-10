@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DesiTease Premium Store</title>
     <style>
-        body { background-color: #121212; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 15px; }
+        body { background-color: #121212; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 15px; -webkit-font-smoothing: antialiased; }
         .container { max-width: 1200px; margin: auto; padding: 1rem; }
         .header { text-align: center; margin-bottom: 30px; }
         .header h1 { color: #ff3366; font-size: 2.5em; margin-bottom: 10px; line-height: 1.2; }
@@ -35,9 +35,9 @@
         .modal-body { text-align: center; }
         .qr-code { display: flex; flex-direction: column; align-items: center; }
         .qr-code img { width: 180px; height: 180px; border-radius: 12px; border: 3px solid #ff3366; margin-bottom: 10px; }
-        .download-link { color: #50c878; cursor: pointer; font-weight: bold; margin-bottom: 15px; display: inline-block; }
+        .download-link { color: #50c878; cursor: pointer; font-weight: bold; margin-bottom: 15px; display: inline-block; text-decoration: none; }
         .pack-selector { max-height: 220px; overflow-y: auto; text-align: left; margin-bottom: 20px; border: 1px solid #444; border-radius: 8px; padding: 10px; }
-        .pack-selector label { display: flex; align-items: center; background: #2c2c2c; padding: 12px; margin-bottom: 8px; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; border: 2px solid transparent; }
+        .pack-selector label { display: flex; align-items: center; background: #2c2c2c; padding: 12px; margin-bottom: 8px; border-radius: 8px; cursor: pointer; transition: all 0.2s; border: 2px solid transparent; }
         .pack-selector label:hover { background-color: #444; }
         .pack-selector label.selected { background-color: #1c3a1c; border-color: #50c878; }
         .pack-selector input { margin-right: 10px; transform: scale(1.2); vertical-align: middle; }
@@ -45,7 +45,6 @@
         .form-input { width: 100%; padding: 12px; box-sizing: border-box; border-radius: 8px; border: 1px solid #444; margin-bottom: 15px; background-color: #2c2c2c; color: white; font-size: 1em; resize: vertical; }
         .submit-btn { width: 100%; padding: 15px; background-color: #ff3366; border: none; border-radius: 10px; color: #fff; font-weight: bold; font-size: 1.2em; cursor: pointer; transition: background-color 0.3s; }
         del { color: #888; }
-        
         @media (max-width: 600px) {
             body { padding: 10px; }
             .header h1 { font-size: 1.8em; }
@@ -86,7 +85,7 @@
             <div class="modal-header"> <h2>Complete Your Purchase</h2> <span class="close-btn" onclick="closeModal()">&times;</span> </div>
             <div class="modal-body">
                 <div class="qr-code">
-                    <a href="upi-qr.png" download="DesiTease-UPI-QR.png"> <img src="upi-qr.png" alt="Scan to Pay UPI" title="Click to Download QR Code"> </a>
+                    <a href="upi-qr.png" download="DesiTease-UPI-QR.png" title="Click to Download QR Code"> <img src="upi-qr.png" alt="Scan to Pay UPI"> </a>
                     <a href="upi-qr.png" download="DesiTease-UPI-QR.png" class="download-link">Download QR Code</a>
                 </div>
                 <p><b>Step 1:</b> Scan or Download the QR code to pay.<br><b>Step 2:</b> Fill the form below to get <b>instant access!</b></p>
@@ -114,7 +113,7 @@
             { name: "PDF Stories Pack", price: 299 }, { name: "Animated Pack", price: 399 }, { name: "Viral MMS Pack", price: 349 },
             { name: "Incest Vault (Captions)", price: 499 }, { name: "The Secret Vault", price: 499 }, { name: "BBC-Guy Collection", price: 299 }
         ];
-        const discounts = { 2: 0.10, 3: 0.15, 4: 0.20, 5: 0.30, 6: 0.30 };
+        const discounts = { 1: 0.10, 2: 0.15, 3: 0.20, 4: 0.25, 5: 0.30, 6: 0.30 };
 
         function openModal(initialPackIndex) {
             packSelector.innerHTML = '';
@@ -146,7 +145,17 @@
             const checkboxes = packSelector.querySelectorAll('input[type="checkbox"]');
             
             checkboxes.forEach(cb => { if (cb.checked) { selectedCount++; } });
-            const discountRate = discounts[selectedCount] || 0;
+            
+            let currentDiscountRate = 0;
+            if (selectedCount > 0) {
+                currentDiscountRate = discounts[selectedCount] || 0;
+            }
+
+            let nextDiscountRate = discounts[selectedCount + 1] || currentDiscountRate;
+            if (selectedCount === 0) { // Special case: if nothing is selected, tempt with the first discount
+                nextDiscountRate = discounts[1] || 0;
+            }
+
 
             checkboxes.forEach(cb => {
                 const index = cb.dataset.index;
@@ -161,8 +170,8 @@
                     textSpan.innerHTML = ` ${pack.name} - ₹${pack.price}`;
                 } else {
                     label.classList.remove('selected');
-                    const discountedPrice = Math.round(pack.price * (1 - discountRate));
-                    if (discountRate > 0) {
+                    const discountedPrice = Math.round(pack.price * (1 - nextDiscountRate));
+                    if (nextDiscountRate > 0) {
                         textSpan.innerHTML = ` ${pack.name} - <del>₹${pack.price}</del> ₹${discountedPrice}`;
                     } else {
                         textSpan.innerHTML = ` ${pack.name} - ₹${pack.price}`;
@@ -170,10 +179,11 @@
                 }
             });
 
-            const finalTotal = baseTotal * (1 - discountRate);
+            const finalTotal = baseTotal * (1 - currentDiscountRate);
+
             if (selectedCount > 0) {
                 let summaryText = `Total: ₹${Math.round(finalTotal)}`;
-                if(discountRate > 0) { summaryText += ` (You Saved ₹${Math.round(baseTotal - finalTotal)}!)`; }
+                if(currentDiscountRate > 0) { summaryText += ` (You Saved ₹${Math.round(baseTotal - finalTotal)}!)`; }
                 priceSummary.textContent = summaryText;
                 hiddenPacksInput.value = `Packs: ${selectedPackNames.join(', ')} | Total Paid: ₹${Math.round(finalTotal)}`;
             } else {
