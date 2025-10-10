@@ -11,16 +11,17 @@
         .header h1 { color: #ff3366; font-size: 2.5em; margin-bottom: 10px; }
         .header p { font-style: italic; font-size: 1.1em; color: #b0b0b0; }
         .packs-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
-        .pack-card { background: #1e1e1e; border: 1px solid #333; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.4); transition: transform 0.3s; }
+        .pack-card { background: #1e1e1e; border: 1px solid #333; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.4); transition: transform 0.3s; display: flex; flex-direction: column; }
         .pack-card:hover { transform: scale(1.03); }
         .pack-card img { width: 100%; height: 200px; object-fit: cover; }
-        .pack-content { padding: 20px; }
+        .pack-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
         .pack-content h2 { color: #ff6699; margin: 0 0 10px; font-size: 1.4em; }
-        .pack-content p { color: #ccc; font-size: 0.95em; line-height: 1.5; height: 70px; }
+        .pack-content p { color: #ccc; font-size: 0.95em; line-height: 1.5; height: 70px; flex-grow: 1; }
         .price-buy { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
         .price { font-size: 1.6em; font-weight: bold; color: #50c878; }
         .buy-btn { background-color: #ff3366; color: white; border: none; padding: 12px 22px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; font-size: 1em; }
         .buy-btn:hover { background-color: #e6004c; }
+        .buyers { color: #888; font-size: 0.9em; margin-top: 10px; text-align: center; }
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px); }
         .modal-content { background-color: #1e1e1e; margin: 5% auto; padding: 30px; border-radius: 15px; max-width: 500px; box-shadow: 0 0 25px rgba(255, 51, 102, 0.5); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; color: #ff3366; margin-bottom: 20px; }
@@ -45,7 +46,6 @@
         </div>
 
         <div class="packs-container">
-            <!-- All your 6 pack-card divs go here, exactly as they were before -->
             <!-- Pack 1 -->
             <div class="pack-card">
                 <img src="pdf-stories.jpg" alt="PDF Stories">
@@ -56,6 +56,7 @@
                         <span class="price">₹299</span>
                         <button class="buy-btn" onclick="openModal(0)">BUY NOW</button>
                     </div>
+                    <div class="buyers">1806+ Buyers</div>
                 </div>
             </div>
             <!-- Pack 2 -->
@@ -68,6 +69,7 @@
                         <span class="price">₹399</span>
                         <button class="buy-btn" onclick="openModal(1)">BUY NOW</button>
                     </div>
+                    <div class="buyers">1420+ Buyers</div>
                 </div>
             </div>
             <!-- Pack 3 -->
@@ -75,11 +77,12 @@
                 <img src="viral-mms.jpg" alt="Viral MMS">
                 <div class="pack-content">
                     <h2>🎬 Viral MMS Pack</h2>
-                    <p>A massive library of the raw, unfiltered, and viral moments you crave.</p>
+                    <p>A massive library of raw, unfiltered, viral moments involving stunning Indian beauties.</p>
                     <div class="price-buy">
                         <span class="price">₹349</span>
                         <button class="buy-btn" onclick="openModal(2)">BUY NOW</button>
                     </div>
+                    <div class="buyers">1205+ Buyers</div>
                 </div>
             </div>
             <!-- Pack 4 -->
@@ -92,6 +95,7 @@
                         <span class="price">₹499</span>
                         <button class="buy-btn" onclick="openModal(3)">BUY NOW</button>
                     </div>
+                    <div class="buyers">985+ Buyers</div>
                 </div>
             </div>
             <!-- Pack 5 -->
@@ -104,6 +108,7 @@
                         <span class="price">₹499</span>
                         <button class="buy-btn" onclick="openModal(4)">BUY NOW</button>
                     </div>
+                    <div class="buyers">1100+ Buyers</div>
                 </div>
             </div>
             <!-- Pack 6 -->
@@ -111,11 +116,12 @@
                 <img src="bbc-guy.jpg" alt="BBC-Guy Collection">
                 <div class="pack-content">
                     <h2>🖤 BBC-Guy Collection</h2>
-                    <p>300+ exclusive, full-length scenes featuring the ultimate BBC conquest.</p>
+                    <p>300+ exclusive full-length scenes featuring powerful BBC dominance over innocent Indian girls.</p>
                     <div class="price-buy">
                         <span class="price">₹299</span>
                         <button class="buy-btn" onclick="openModal(5)">BUY NOW</button>
                     </div>
+                    <div class="buyers">1260+ Buyers</div>
                 </div>
             </div>
         </div>
