@@ -3,189 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DesiTease Premium Payment</title>
+    <title>DesiTease Premium Store</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #121212;
-            color: #e0e0e0;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background-color: #1e1e1e;
-            border-radius: 15px;
-            padding: 30px;
-            border: 1px solid #333;
-            box-shadow: 0 0 25px rgba(255, 51, 102, 0.4);
-        }
-        h1 {
-            text-align: center;
-            color: #ff3366;
-            margin-bottom: 25px;
-            font-size: 1.8em;
-        }
-        .qr-code {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .qr-code img {
-            width: 180px;
-            height: 180px;
-            border-radius: 12px;
-            border: 3px solid #ff3366;
-        }
-        .instructions {
-            text-align: center;
-            color: #b0b0b0;
-            margin-bottom: 25px;
-        }
-        .pack-list {
-            list-style: none;
-            padding: 0;
-            margin-bottom: 25px;
-        }
-        .pack-list li {
-            background: #2c2c2c;
-            margin-bottom: 10px;
-            padding: 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background-color 0.2s ease, transform 0.2s ease;
-            border-left: 5px solid transparent;
-        }
-        .pack-list li.selected {
-            background-color: #3e3e3e;
-            border-left: 5px solid #ff3366;
-            transform: scale(1.02);
-        }
-        .pack-list li:hover {
-            background-color: #383838;
-        }
-        .price-summary {
-            font-weight: bold;
-            font-size: 1.5em;
-            margin-bottom: 25px;
-            text-align: center;
-            color: #50c878;
-        }
-        input[type="text"], input[type="file"]::file-selector-button {
-            width: 100%;
-            padding: 12px;
-            box-sizing: border-box;
-            border-radius: 8px;
-            border: 1px solid #444;
-            margin-bottom: 15px;
-            background-color: #2c2c2c;
-            color: white;
-            font-size: 1em;
-        }
-        .submit-btn {
-            width: 100%;
-            padding: 15px;
-            background-color: #ff3366;
-            border: none;
-            border-radius: 10px;
-            color: #fff;
-            font-weight: bold;
-            font-size: 1.2em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .submit-btn:hover {
-            background-color: #e6004c;
-        }
+        body { background-color: #121212; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: auto; padding: 1rem; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { color: #ff3366; font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-style: italic; font-size: 1.1em; color: #b0b0b0; }
+        .packs-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .pack-card { background: #1e1e1e; border: 1px solid #333; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.4); transition: transform 0.3s; }
+        .pack-card:hover { transform: scale(1.03); }
+        .pack-card img { width: 100%; height: 200px; object-fit: cover; }
+        .pack-content { padding: 20px; }
+        .pack-content h2 { color: #ff6699; margin: 0 0 10px; font-size: 1.4em; }
+        .pack-content p { color: #ccc; font-size: 0.95em; line-height: 1.5; height: 70px; }
+        .price-buy { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+        .price { font-size: 1.6em; font-weight: bold; color: #50c878; }
+        .buy-btn { background-color: #ff3366; color: white; border: none; padding: 12px 22px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; font-size: 1em; }
+        .buy-btn:hover { background-color: #e6004c; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px); }
+        .modal-content { background-color: #1e1e1e; margin: 5% auto; padding: 30px; border-radius: 15px; max-width: 500px; box-shadow: 0 0 25px rgba(255, 51, 102, 0.5); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; color: #ff3366; margin-bottom: 20px; }
+        .modal-header h2 { margin: 0; font-size: 1.6em; }
+        .close-btn { font-size: 2em; font-weight: bold; color: #aaa; cursor: pointer; }
+        .modal-body { text-align: center; }
+        .qr-code img { width: 180px; height: 180px; border-radius: 12px; border: 3px solid #ff3366; margin-bottom: 15px; }
+        .pack-selector { max-height: 180px; overflow-y: auto; text-align: left; margin-bottom: 20px; padding-right: 10px; }
+        .pack-selector label { display: block; background: #2c2c2c; padding: 12px; margin-bottom: 8px; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; }
+        .pack-selector input { margin-right: 10px; }
+        .price-summary { font-size: 1.4em; font-weight: bold; color: #50c878; margin: 20px 0; }
+        .form-input { width: 100%; padding: 12px; box-sizing: border-box; border-radius: 8px; border: 1px solid #444; margin-bottom: 15px; background-color: #2c2c2c; color: white; font-size: 1em; }
+        .submit-btn { width: 100%; padding: 15px; background-color: #ff3366; border: none; border-radius: 10px; color: #fff; font-weight: bold; font-size: 1.2em; cursor: pointer; transition: background-color 0.3s; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>💎 DesiTease Payment Portal 💎</h1>
-    <div class="qr-code">
-        <img src="upi-qr.png" alt="Scan to Pay UPI">
+    <div class="container">
+        <div class="header">
+            <h1>💎 Welcome to DesiTease Premium 💎</h1>
+            <p>Premium Collections • Lifetime Access • Private Groups</p>
+        </div>
+
+        <div class="packs-container">
+            <!-- Pack 1 -->
+            <div class="pack-card">
+                <img src="pdf-stories.jpg" alt="PDF Stories">
+                <div class="pack-content">
+                    <h2>📖 PDF Stories Pack</h2>
+                    <p>Hundreds of the hottest erotic tales to fuel your deepest fantasies.</p>
+                    <div class="price-buy">
+                        <span class="price">₹299</span>
+                        <button class="buy-btn" onclick="openModal(0)">BUY NOW</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Pack 2 -->
+            <div class="pack-card">
+                <img src="animated-pack.jpg" alt="Animated Videos">
+                <div class="pack-content">
+                    <h2>🎨 Animated Pack</h2>
+                    <p>Exclusive, uncensored animations bringing your wildest fantasies to life.</p>
+                    <div class="price-buy">
+                        <span class="price">₹399</span>
+                        <button class="buy-btn" onclick="openModal(1)">BUY NOW</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Pack 3 -->
+            <div class="pack-card">
+                <img src="viral-mms.jpg" alt="Viral MMS">
+                <div class="pack-content">
+                    <h2>🎬 Viral MMS Pack</h2>
+                    <p>A massive library of the raw, unfiltered, and viral moments you crave.</p>
+                    <div class="price-buy">
+                        <span class="price">₹349</span>
+                        <button class="buy-btn" onclick="openModal(2)">BUY NOW</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Pack 4 -->
+            <div class="pack-card">
+                <img src="incest-vault.jpg" alt="Incest Vault">
+                <div class="pack-content">
+                    <h2>⚡️ Incest Vault (Captions)</h2>
+                    <p>Dive into forbidden family secrets with provocative captions to guide the fantasy.</p>
+                    <div class="price-buy">
+                        <span class="price">₹499</span>
+                        <button class="buy-btn" onclick="openModal(3)">BUY NOW</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Pack 5 -->
+            <div class="pack-card">
+                <img src="secret-vault.jpg" alt="The Secret Vault">
+                <div class="pack-content">
+                    <h2>🔞 The Secret Vault</h2>
+                    <p>Our most guarded collection. The explicit content others are too afraid to show.</p>
+                    <div class="price-buy">
+                        <span class="price">₹499</span>
+                        <button class="buy-btn" onclick="openModal(4)">BUY NOW</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Pack 6 -->
+            <div class="pack-card">
+                <img src="bbc-guy.jpg" alt="BBC-Guy Collection">
+                <div class="pack-content">
+                    <h2>🖤 BBC-Guy Collection</h2>
+                    <p>300+ exclusive, full-length scenes featuring the ultimate BBC conquest.</p>
+                    <div class="price-buy">
+                        <span class="price">₹299</span>
+                        <button class="buy-btn" onclick="openModal(5)">BUY NOW</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <p class="instructions">Scan the QR, then select the packs you paid for below to calculate your total and apply discounts.</p>
-    
-    <ul class="pack-list" id="packs">
-        <li data-price="299">📖 PDF Stories Pack <span>₹299</span></li>
-        <li data-price="399">🎨 Animated Pack <span>₹399</span></li>
-        <li data-price="349">🎬 Viral MMS Pack <span>₹349</span></li>
-        <li data-price="499">⚡️ Incest Vault (Captions) <span>₹499</span></li>
-        <li data-price="499">🔞 The Secret Vault <span>₹499</span></li>
-        <li data-price="299">🖤 BBC-Guy Collection <span>₹299</span></li>
-    </ul>
 
-    <div class="price-summary" id="price-summary">Total: ₹0</div>
+    <!-- The Payment Modal (Popup) -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Complete Your Purchase</h2>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="qr-code">
+                    <img src="upi-qr.png" alt="Scan to Pay UPI">
+                </div>
+                <p>Scan to pay, then select your packs below to confirm the total.</p>
+                
+                <form name="payment-proof" method="POST" data-netlify="true" action="/success.html" netlify-honeypot="bot-field">
+                    <input type="hidden" name="form-name" value="payment-proof" />
+                    <p style="display:none;"><label>Don’t fill this out if you're human: <input name="bot-field"></label></p>
+                    
+                    <div id="pack-selector" class="pack-selector"></div>
+                    
+                    <div class="price-summary" id="price-summary">Total: ₹0</div>
+                    
+                    <input class="form-input" type="text" name="telegram_id" placeholder="Enter Your Telegram ID or Number" required>
+                    <input class="form-input" type="file" name="screenshot" accept="image/*" required>
+                    
+                    <button type="submit" class="submit-btn">SUBMIT PROOF & GET ACCESS</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    <form name="payment-proof-form" method="POST" data-netlify="true" action="/success.html" netlify-honeypot="bot-field">
-        <input type="hidden" name="form-name" value="payment-proof-form" />
-        <p style="display:none;"><label>Don’t fill this out if you're human: <input name="bot-field"></label></p>
-        
-        <input type="text" id="telegram_id" name="telegram_id" placeholder="Enter your Telegram ID or Number" required>
-        <input type="file" id="screenshot" name="screenshot" accept="image/*" required>
-        
-        <button type="submit" class="submit-btn">SUBMIT & GET ACCESS</button>
-    </form>
-</div>
+    <script>
+        const modal = document.getElementById('paymentModal');
+        const packSelector = document.getElementById('pack-selector');
+        const priceSummary = document.getElementById('price-summary');
 
-<script>
-    const packList = document.getElementById('packs');
-    const priceSummary = document.getElementById('price-summary');
-    const packItems = Array.from(packList.getElementsByTagName('li'));
-    const form = document.querySelector('form');
+        const packs = [
+            { name: "📖 PDF Stories Pack", price: 299 },
+            { name: "🎨 Animated Pack", price: 399 },
+            { name: "🎬 Viral MMS Pack", price: 349 },
+            { name: "⚡️ Incest Vault (Captions)", price: 499 },
+            { name: "🔞 The Secret Vault", price: 499 },
+            { name: "🖤 BBC-Guy Collection", price: 299 }
+        ];
 
-    // Define discounts: { packCount: discount_percentage }
-    const discounts = {
-        2: 0.10, // 10%
-        3: 0.15, // 15%
-        4: 0.20, // 20%
-        5: 0.25, // 25%
-        6: 0.30  // 30%
-    };
+        const discounts = { 2: 0.10, 3: 0.15, 4: 0.20, 5: 0.30, 6: 0.30 };
 
-    let selectedIndices = new Set();
-
-    packItems.forEach((item, index) => {
-        item.addEventListener('click', () => {
-            item.classList.toggle('selected');
-            if (selectedIndices.has(index)) {
-                selectedIndices.delete(index);
-            } else {
-                selectedIndices.add(index);
-            }
+        function openModal(initialPackIndex) {
+            packSelector.innerHTML = '';
+            
+            packs.forEach((pack, index) => {
+                const label = document.createElement('label');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.dataset.price = pack.price;
+                checkbox.dataset.index = index;
+                if(index === initialPackIndex) {
+                    checkbox.checked = true;
+                }
+                checkbox.onchange = updatePrice;
+                
+                label.appendChild(checkbox);
+                label.append(` ${pack.name} - ₹${pack.price}`);
+                packSelector.appendChild(label);
+            });
+            
             updatePrice();
-        });
-    });
-
-    function updatePrice() {
-        let baseTotal = 0;
-        selectedIndices.forEach(index => {
-            baseTotal += Number(packItems[index].dataset.price);
-        });
-
-        const selectedCount = selectedIndices.size;
-        const discountRate = discounts[selectedCount] || 0;
-        const finalTotal = baseTotal * (1 - discountRate);
-
-        if (selectedCount > 0) {
-            priceSummary.textContent = `Total: ₹${Math.round(finalTotal)}`;
-            if(discountRate > 0) {
-                 priceSummary.textContent += ` (You Saved ₹${Math.round(baseTotal - finalTotal)}!)`;
-            }
-        } else {
-            priceSummary.textContent = 'Total: ₹0';
+            modal.style.display = 'block';
         }
-    }
-    
-    // Redirect logic on successful submission is handled by Netlify via the 'action' attribute in the form tag.
-    // Create a 'success.html' in your repo to show a custom success message.
-</script>
 
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        function updatePrice() {
+            let baseTotal = 0;
+            let selectedCount = 0;
+            const checkboxes = packSelector.querySelectorAll('input[type="checkbox"]');
+            
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    baseTotal += parseFloat(cb.dataset.price);
+                    selectedCount++;
+                }
+            });
+
+            const discountRate = discounts[selectedCount] || 0;
+            const finalTotal = baseTotal * (1 - discountRate);
+
+            if (selectedCount > 0) {
+                let summaryText = `Total: ₹${Math.round(finalTotal)}`;
+                if(discountRate > 0) {
+                    summaryText += ` (You Saved ₹${Math.round(baseTotal - finalTotal)}!)`;
+                }
+                priceSummary.textContent = summaryText;
+            } else {
+                priceSummary.textContent = 'Total: ₹0';
+            }
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
 </body>
 </html>
-
