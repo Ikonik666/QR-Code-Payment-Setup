@@ -74,7 +74,7 @@
         
         <div class="bundle-section">
             <h3>Want to buy in bulk or have questions?</h3>
-            <p>Get exciting discounts up to 30% OFF on bundles! For custom orders or any inquiries, contact me directly on Telegram.</p>
+            <p>Get exciting discounts on bundles! For custom orders or any inquiries, contact me directly on Telegram.</p>
             <p><a href="https://t.me/Its_DesiTease" target="_blank">DM @Its_DesiTease on Telegram</a></p>
         </div>
     </div>
@@ -119,7 +119,7 @@
             { name: "BBC-Guy Collection", price: 76 }
         ];
 
-        const discounts = { 2: 0.10, 3: 0.15, 4: 0.20, 5: 0.25 }; // Special case for 6 packs
+        const discounts = { 2: 0.10, 3: 0.15, 4: 0.20, 5: 0.25 };
 
         function openModal(initialPackIndex) {
             packSelector.innerHTML = '';
@@ -152,19 +152,18 @@
             
             checkboxes.forEach(cb => { if (cb.checked) { selectedCount++; } });
             
-            let finalTotal = 0;
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    baseTotal += packs[cb.dataset.index].price;
+                }
+            });
 
+            let finalTotal = baseTotal;
             if (selectedCount === 6) {
                 // Special combo price for all 6 packs
-                finalTotal = 100;
-                baseTotal = 599; // The original sum
-            } else {
-                const currentDiscount = discounts[selectedCount] || 0;
-                checkboxes.forEach(cb => {
-                    if (cb.checked) {
-                        baseTotal += packs[cb.dataset.index].price;
-                    }
-                });
+                finalTotal = 499;
+            } else if (selectedCount >= 2) {
+                const currentDiscount = discounts[selectedCount];
                 finalTotal = baseTotal * (1 - currentDiscount);
             }
 
@@ -178,17 +177,16 @@
                 if (cb.checked) {
                     selectedPackNames.push(pack.name);
                     label.classList.add('selected');
-                    textSpan.innerHTML = ` ${pack.name} - ₹${pack.price}`;
                 } else {
                     label.classList.remove('selected');
-                    textSpan.innerHTML = ` ${pack.name} - ₹${pack.price}`;
                 }
+                textSpan.innerHTML = ` ${pack.name} - ₹${pack.price}`;
             });
 
             if (selectedCount > 0) {
                 let summaryText = `Total: ₹${Math.round(finalTotal)}`;
                 if(baseTotal > finalTotal) { 
-                    summaryText += ` <span style="color: #ff6699; font-style: italic;">(Saved ₹${Math.round(baseTotal - finalTotal)}!)</span>`;
+                    summaryText += ` <span style="color: #ff6699; font-style: italic;">(You Save ₹${Math.round(baseTotal - finalTotal)}!)</span>`;
                 }
                 priceSummary.innerHTML = summaryText;
                 hiddenPacksInput.value = `Packs: ${selectedPackNames.join(', ')} | Total Paid: ₹${Math.round(finalTotal)}`;
