@@ -3,201 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DesiTease Premium Store</title>
+    <title>DesiTease Diwali Special Store</title>
     <style>
-        body { background-color: #121212; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 15px; -webkit-font-smoothing: antialiased; }
-        .container { max-width: 1200px; margin: auto; padding: 1rem; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { color: #ff3366; font-size: 2.5em; margin-bottom: 10px; line-height: 1.2; }
-        .header p { font-style: italic; font-size: 1.1em; color: #b0b0b0; }
+        body { background: linear-gradient(135deg, #fceabb, #f8b500); margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #54350a; padding: 20px; }
+        .container { max-width: 1100px; margin: auto; background: #fff3b8; border-radius: 15px; padding: 20px 30px; box-shadow: 0 10px 20px rgba(255, 181, 0, 0.4); }
+        .header h1 { color: #d35400; font-size: 2.8rem; text-align: center; margin-bottom: 10px; font-weight: 900; }
+        .header p { font-size: 1.2rem; text-align: center; margin-bottom: 35px; font-style: italic; color: #6e4205; }
         .packs-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-        .pack-card { background: #1e1e1e; border: 1px solid #333; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.4); transition: transform 0.3s; display: flex; flex-direction: column; }
-        .pack-card:hover { transform: scale(1.03); }
-        .pack-card img { width: 100%; height: 200px; object-fit: cover; }
-        .pack-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-        .pack-content h2 { color: #ff6699; margin: 0 0 10px; font-size: 1.4em; }
-        .pack-content p { color: #ccc; font-size: 0.95em; line-height: 1.5; flex-grow: 1; }
+        .pack-card { background-color: #ffd93b; border-radius: 15px; padding: 20px; box-shadow: 0 4px 10px rgba(212, 146, 10, 0.5); border: 2px solid #f5b041; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease; }
+        .pack-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(212, 146, 10, 0.7); }
+        .pack-content h2 { margin: 0 0 12px; color: #782d00; font-weight: 700; font-size: 1.5rem; }
+        .pack-content p { font-size: 1rem; color: #613600; margin-bottom: 15px; flex-grow: 1; }
         .price-buy { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
-        .price { font-size: 1.6em; font-weight: bold; color: #50c878; }
-        .buy-btn { background-color: #ff3366; color: white; border: none; padding: 12px 22px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; font-size: 1em; }
-        .buy-btn:hover { background-color: #e6004c; }
-        .buyers { margin-top: 10px; color: #4caf50; font-weight: bold; font-size: 1em; text-align: center; }
-        .bundle-section { margin: 30px 0; padding: 20px; background: #1a1a2e; border-radius: 15px; text-align: center; }
-        .bundle-section h3 { color: #ff6699; margin-top: 0; font-size: 1.5em; }
-        .bundle-section p { color: #ccc; font-size: 1.1em; line-height: 1.6; }
-        .bundle-section a { color: #33aaff; font-weight: bold; text-decoration: none; }
-        .bundle-section a:hover { text-decoration: underline; }
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px); }
-        .modal-content { background-color: #1e1e1e; margin: 5% auto; padding: 30px; border-radius: 15px; max-width: 500px; box-shadow: 0 0 25px rgba(255, 51, 102, 0.5); max-height: 90vh; overflow-y: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; color: #ff3366; margin-bottom: 20px; }
-        .modal-header h2 { margin: 0; font-size: 1.6em; }
-        .close-btn { font-size: 2em; font-weight: bold; color: #aaa; cursor: pointer; }
-        .modal-body { text-align: center; }
-        .qr-code { display: flex; flex-direction: column; align-items: center; }
-        .qr-code img { width: 180px; height: 180px; border-radius: 12px; border: 3px solid #ff3366; margin-bottom: 10px; }
-        .download-link { color: #50c878; cursor: pointer; font-weight: bold; margin-bottom: 15px; display: inline-block; text-decoration: none; }
-        .pack-selector { max-height: 220px; overflow-y: auto; text-align: left; margin-bottom: 20px; border: 1px solid #444; border-radius: 8px; padding: 10px; }
-        .pack-selector label { display: flex; align-items: center; background: #2c2c2c; padding: 12px; margin-bottom: 8px; border-radius: 8px; cursor: pointer; transition: all 0.2s; border: 2px solid transparent; }
-        .pack-selector label:hover { background-color: #444; }
-        .pack-selector label.selected { background-color: #1c3a1c; border-color: #50c878; }
-        .pack-selector input { margin-right: 10px; transform: scale(1.2); vertical-align: middle; }
-        .price-summary { font-size: 1.4em; font-weight: bold; color: #50c878; margin: 20px 0; }
-        .form-input { width: 100%; padding: 12px; box-sizing: border-box; border-radius: 8px; border: 1px solid #444; margin-bottom: 15px; background-color: #2c2c2c; color: white; font-size: 1em; resize: vertical; }
-        .submit-btn { width: 100%; padding: 15px; background-color: #ff3366; border: none; border-radius: 10px; color: #fff; font-weight: bold; font-size: 1.2em; cursor: pointer; transition: background-color 0.3s; }
-        del { color: #888; }
-        @media (max-width: 600px) {
-            body { padding: 10px; }
-            .header h1 { font-size: 1.8em; }
-            .packs-container { grid-template-columns: 1fr; gap: 20px; }
-            .modal-content { width: 90vw; margin: 5vh auto; padding: 20px; max-height: 90vh; }
-            .modal-header h2 { font-size: 1.4em; }
-            .price-buy { flex-direction: row; }
-        }
+        .price-container { display: flex; flex-direction: column; align-items: flex-start; }
+        .price { font-size: 1.8rem; font-weight: 900; color: #b03e00; }
+        .original-price { font-size: 1rem; text-decoration: line-through; color: #8a6d00; }
+        .buy-btn { background-color: #d35400; color: white; border: none; padding: 12px 24px; border-radius: 10px; font-size: 1rem; cursor: pointer; font-weight: 700; transition: background-color 0.3s ease; }
+        .buy-btn:hover { background-color: #af3e00; }
+        .bundle-section { background-color: #f5b041; padding: 20px; margin-top: 40px; text-align: center; border-radius: 12px; box-shadow: 0 5px 12px rgba(139, 75, 0, 0.4); }
+        .bundle-section h3 { font-size: 2rem; font-weight: 900; margin: 0 0 10px; color: #6e4205; }
+        .bundle-section p { font-size: 1.2rem; color: #4c2f00; margin-bottom: 15px; font-weight: 700; }
+        .bundle-section a { background-color: #782d00; color: white; padding: 12px 25px; border-radius: 8px; font-weight: 900; text-decoration: none; font-size: 1.1rem; transition: background-color 0.3s ease; }
+        .bundle-section a:hover { background-color: #5c2200; }
+        .modal { display: none; position: fixed; z-index: 10000; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
+        .modal-content { background-color: #fff3b8; border-radius: 15px; padding: 20px 30px; width: 500px; max-width: 90%; box-shadow: 0 10px 20px rgba(212, 146, 10, 0.7); position: relative; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; color: #782d00; }
+        .close-btn { font-weight: 900; font-size: 1.5rem; cursor: pointer; color: #6e4205; background: #f5b041; border-radius: 50%; width: 34px; height: 34px; text-align: center; line-height: 34px; }
+        .pack-selector { margin-bottom: 20px; max-height: 180px; overflow-y: auto; border: 2px solid #b48016; border-radius: 10px; padding: 10px; }
+        .pack-selector label { display: flex; align-items: center; padding: 10px; cursor: pointer; border-radius: 5px; margin-bottom: 8px; background-color: #f7dc6f; transition: background-color 0.2s ease; }
+        .pack-selector label:hover { background-color: #f5b041; }
+        .pack-selector label.selected { background-color: #f1c40f; font-weight: 800; border: 2px solid #a67c00; }
+        .pack-selector input { margin-right: 10px; transform: scale(1.2); margin-left: 5px; }
+        .price-summary { font-weight: 900; font-size: 1.4rem; color: #6e4205; margin-bottom: 20px; text-align: center; }
+        .form-input, textarea { width: 100%; padding: 10px; border-radius: 10px; border: 2px solid #b48016; background-color: #fff9db; font-weight: 700; color: #6e4205; resize: none; font-size: 1rem; box-sizing: border-box; }
+        .submit-btn { background-color: #6e4205; border: none; padding: 12px 0; border-radius: 10px; color: #f5b041; font-weight: 900; width: 100%; cursor: pointer; font-size: 1.2rem; transition: background-color 0.3s ease; }
+        .submit-btn:hover { background-color: #4c3000; }
+        .saving-text { color: #d35400; font-weight: 900; margin-left: 10px; font-size: 1.1rem; }
     </style>
 </head>
 <body>
+<div class="container">
+  <div class="header">
+    <h1>🪔 DesiTease Diwali Dhamaka! 🪔</h1>
+    <p>Celebrate the Festival of Lights with our Hottest Offers Ever - FLAT 50% OFF!</p>
+  </div>
 
-    <div class="container">
-        <div class="header">
-            <h1>Welcome to DesiTease Premium</h1>
-            <p>Instant Access to Exclusive Private Telegram Groups • Lifetime Updates</p>
-        </div>
+  <div class="packs-container">
+    <div class="pack-card"> <div class="pack-content"> <h2>📖 PDF Stories Pack</h2> <p>Hundreds of the hottest erotic tales to fuel your deepest fantasies.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹206</span> <span class="price">₹103</span> </div> <button class="buy-btn" onclick="openModal(0)">ADD TO CART</button> </div> </div> </div>
+    <div class="pack-card"> <div class="pack-content"> <h2>🎨 Animated Pack</h2> <p>Exclusive, uncensored animations bringing your wildest fantasies to life.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹266</span> <span class="price">₹133</span> </div> <button class="buy-btn" onclick="openModal(1)">ADD TO CART</button> </div> </div> </div>
+    <div class="pack-card"> <div class="pack-content"> <h2>🎬 Viral MMS Pack</h2> <p>A massive library of raw, unfiltered, viral moments involving stunning Indian beauties.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹206</span> <span class="price">₹103</span> </div> <button class="buy-btn" onclick="openModal(2)">ADD TO CART</button> </div> </div> </div>
+    <div class="pack-card"> <div class="pack-content"> <h2>⚡️ Incest Vault</h2> <p>Dive into forbidden family secrets with these provocative stories.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹332</span> <span class="price">₹166</span> </div> <button class="buy-btn" onclick="openModal(3)">ADD TO CART</button> </div> </div> </div>
+    <div class="pack-card"> <div class="pack-content"> <h2>🔞 The Secret Vault</h2> <p>Our most guarded collection. The explicit content others are too afraid to show.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹332</span> <span class="price">₹166</span> </div> <button class="buy-btn" onclick="openModal(4)">ADD TO CART</button> </div> </div> </div>
+    <div class="pack-card"> <div class="pack-content"> <h2>🖤 BBC-Guy Collection</h2> <p>300+ exclusive full-length scenes featuring powerful BBC dominance over innocent Indian girls.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹206</span> <span class="price">₹103</span> </div> <button class="buy-btn" onclick="openModal(5)">ADD TO CART</button> </div> </div> </div>
+  </div>
 
-        <div class="packs-container">
-            <div class="pack-card"> <img src="pdf-stories.jpg" alt="PDF Stories"> <div class="pack-content"> <h2>📖 PDF Stories Pack</h2> <p>Hundreds of the hottest erotic tales to fuel your deepest fantasies.</p> <div class="price-buy"> <span class="price">₹69</span> <button class="buy-btn" onclick="openModal(0)">BUY NOW</button> </div> <div class="buyers">1806+ Buyers</div> </div> </div>
-            <div class="pack-card"> <img src="animated-pack.jpg" alt="Animated Videos"> <div class="pack-content"> <h2>🎨 Animated Pack</h2> <p>Exclusive, uncensored animations bringing your wildest fantasies to life.</p> <div class="price-buy"> <span class="price">₹119</span> <button class="buy-btn" onclick="openModal(1)">BUY NOW</button> </div> <div class="buyers">1420+ Buyers</div> </div> </div>
-            <div class="pack-card"> <img src="viral-mms.jpg" alt="Viral MMS"> <div class="pack-content"> <h2>🎬 Viral MMS Pack</h2> <p>A massive library of raw, unfiltered, viral moments involving stunning Indian beauties.</p> <div class="price-buy"> <span class="price">₹89</span> <button class="buy-btn" onclick="openModal(2)">BUY NOW</button> </div> <div class="buyers">1205+ Buyers</div> </div> </div>
-            <div class="pack-card"> <img src="incest-vault.jpg" alt="Incest Vault"> <div class="pack-content"> <h2>⚡️ Incest Vault</h2> <p>Dive into forbidden family secrets with these provocative stories.</p> <div class="price-buy"> <span class="price">₹149</span> <button class="buy-btn" onclick="openModal(3)">BUY NOW</button> </div> <div class="buyers">985+ Buyers</div> </div> </div>
-            <div class="pack-card"> <img src="secret-vault.jpg" alt="The Secret Vault"> <div class="pack-content"> <h2>🔞 The Secret Vault</h2> <p>Our most guarded collection. The explicit content others are too afraid to show.</p> <div class="price-buy"> <span class="price">₹149</span> <button class="buy-btn" onclick="openModal(4)">BUY NOW</button> </div> <div class="buyers">1100+ Buyers</div> </div> </div>
-            <div class="pack-card"> <img src="bbc-guy.jpg" alt="BBC-Guy Collection"> <div class="pack-content"> <h2>🖤 BBC-Guy Collection</h2> <p>300+ exclusive full-length scenes featuring powerful BBC dominance over innocent Indian girls.</p> <div class="price-buy"> <span class="price">₹69</span> <button class="buy-btn" onclick="openModal(5)">BUY NOW</button> </div> <div class="buyers">1260+ Buyers</div> </div> </div>
-        </div>
-        
-        <div class="bundle-section">
-            <h3>Want to buy in bulk or have questions?</h3>
-            <p>Get exciting discounts up to 30% OFF on bundles! For custom orders or any inquiries, contact me directly on Telegram.</p>
-            <p><a href="https://t.me/Its_DesiTease" target="_blank">DM @Its_DesiTease on Telegram</a></p>
-        </div>
+  <div class="bundle-section">
+    <h3>✨ More Packs, More Fun! ✨</h3>
+    <p>Get an additional discount for buying multiple packs, up to <strong>30% OFF</strong> when you buy all 6 together!</p>
+    <p>For custom orders or inquiries, <a href="https://t.me/Its_DesiTease" target="_blank" style="color: #782d00;">DM me on Telegram</a>.</p>
+  </div>
+</div>
+
+<div id="paymentModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header"> <h2>Your Diwali Cart</h2> <span class="close-btn" onclick="closeModal()">&times;</span> </div>
+    <div class="modal-body">
+      <div class="qr-code"> <img src="upi-qr.png" alt="Scan to Pay UPI"> </div>
+      <p style="font-weight: 700; color: #613600;"><b>Step 1:</b> Scan the QR code to pay.<br><b>Step 2:</b> Fill the form below for <b>instant access!</b></p>
+      <form name="payment-proof" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/success.html">
+        <input type="hidden" name="form-name" value="payment-proof">
+        <input type="hidden" name="selected-packs-and-total" id="selected-packs-input">
+        <p style="display:none;"><label>Don’t fill this out if you're human: <input name="bot-field"></label></p>
+        <div id="pack-selector" class="pack-selector"></div>
+        <div class="price-summary" id="price-summary">Total: ₹0</div>
+        <label for="telegram-username" style="display: block; color: #6e4205; margin-bottom: 5px; text-align: left; font-weight: 700;">Your Telegram Username (e.g., @YourName):</label>
+        <input id="telegram-username" class="form-input" type="text" name="telegram_username" placeholder="Enter with @ for fastest delivery" required>
+        <small style="color:#8a6d00; display:block; text-align: left; margin-top: -10px; margin-bottom: 15px;">If you don't have a username, enter your phone number.</small>
+        <label for="screenshot-upload" style="display: block; color: #6e4205; margin-bottom: 5px; text-align: left; font-weight: 700;">Upload Payment Screenshot:</label>
+        <input id="screenshot-upload" class="form-input" type="file" name="screenshot" accept="image/*" required>
+        <button type="submit" class="submit-btn">GET MY CONTENT</button>
+      </form>
     </div>
+  </div>
+</div>
 
-    <div id="paymentModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"> <h2>Complete Your Purchase</h2> <span class="close-btn" onclick="closeModal()">&times;</span> </div>
-            <div class="modal-body">
-                <div class="qr-code">
-                    <a href="upi-qr.png" download="DesiTease-UPI-QR.png" title="Click to Download QR Code"> <img src="upi-qr.png" alt="Scan to Pay UPI"> </a>
-                    <a href="upi-qr.png" download="DesiTease-UPI-QR.png" class="download-link">Download QR Code</a>
-                </div>
-                <p><b>Step 1:</b> Scan or Download the QR code to pay.<br><b>Step 2:</b> Fill the form below to get <b>instant access!</b></p>
-                <form name="payment-proof" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/success.html">
-                    <input type="hidden" name="form-name" value="payment-proof">
-                    <input type="hidden" name="selected-packs-and-total" id="selected-packs-input">
-                    <p style="display:none;"><label>Don’t fill this out if you're human: <input name="bot-field"></label></p>
-                    <div id="pack-selector" class="pack-selector"></div>
-                    <div class="price-summary" id="price-summary">Total: ₹0</div>
-                    <label for="telegram-username" style="display: block; color: #ccc; margin-bottom: 5px; text-align: left;">Your Telegram Username (e.g., @YourName):</label>
-                    <input id="telegram-username" class="form-input" type="text" name="telegram_username" placeholder="Enter with @ for fastest delivery" required>
-                    <small style="color:#aaa; display:block; text-align: left; margin-top: -10px; margin-bottom: 15px;">If you don't have a username, enter your phone number.</small>
-                    <textarea class="form-input" name="additional-info" placeholder="Additional Info (Optional)" rows="2"></textarea>
-                    <label for="screenshot-upload" style="display: block; color: #ccc; margin-bottom: 10px;">Upload Payment Screenshot:</label>
-                    <input id="screenshot-upload" class="form-input" type="file" name="screenshot" accept="image/*" required>
-                    <button type="submit" class="submit-btn">SUBMIT PROOF & GET ACCESS</button>
-                </form>
-            </div>
-        </div>
-    </div>
+<script>
+const modal = document.getElementById('paymentModal');
+const packSelector = document.getElementById('pack-selector');
+const priceSummary = document.getElementById('price-summary');
+const hiddenPacksInput = document.getElementById('selected-packs-input');
 
-    <script>
-        const modal = document.getElementById('paymentModal');
-        const packSelector = document.getElementById('pack-selector');
-        const priceSummary = document.getElementById('price-summary');
-        const hiddenPacksInput = document.getElementById('selected-packs-input');
+const packs = [
+    { name: "📖 PDF Stories Pack", price: 103, original: 206 },
+    { name: "🎨 Animated Pack", price: 133, original: 266 },
+    { name: "🎬 Viral MMS Pack", price: 103, original: 206 },
+    { name: "⚡️ Incest Vault", price: 166, original: 332 },
+    { name: "🔞 The Secret Vault", price: 166, original: 332 },
+    { name: "🖤 BBC-Guy Collection", price: 103, original: 206 }
+];
+
+const discounts = { 2: 0.10, 3: 0.15, 4: 0.20, 5: 0.25, 6: 0.30 };
+
+function openModal(initialPackIndex) {
+    packSelector.innerHTML = '';
+    packs.forEach((pack, index) => {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.name = 'packs[]';
+        checkbox.value = pack.name;
+        checkbox.dataset.index = index;
+        if (index === initialPackIndex) checkbox.checked = true;
+        checkbox.onchange = updatePrice;
+        label.appendChild(checkbox);
+        const textNode = document.createElement('span');
+        textNode.className = 'pack-text';
+        label.appendChild(textNode);
+        packSelector.appendChild(label);
+    });
+    updatePrice();
+    modal.style.display = 'flex';
+}
+
+function closeModal() { modal.style.display = 'none'; }
+
+function updatePrice() {
+    let selectedCount = 0;
+    let baseTotal = 0;
+    const selectedPackNames = [];
+    const checkboxes = packSelector.querySelectorAll('input[type="checkbox"]');
+    
+    checkboxes.forEach(cb => {
+        if (cb.checked) {
+            selectedCount++;
+            baseTotal += packs[cb.dataset.index].price;
+            selectedPackNames.push(packs[cb.dataset.index].name);
+        }
+    });
+    
+    let finalTotal = baseTotal;
+    const discountPercent = discounts[selectedCount] || 0;
+    if (discountPercent > 0) {
+        finalTotal = baseTotal * (1 - discountPercent);
+    }
+    
+    checkboxes.forEach(cb => {
+        const index = cb.dataset.index;
+        const pack = packs[index];
+        const label = cb.parentElement;
+        const span = label.querySelector('.pack-text');
         
-        const packs = [
-            { name: "📖 PDF Stories Pack", price: 69 },
-            { name: "🎨 Animated Pack", price: 119 },
-            { name: "🎬 Viral MMS Pack", price: 89 },
-            { name: "⚡️ Incest Vault", price: 149 },
-            { name: "🔞 The Secret Vault", price: 149 },
-            { name: "🖤 BBC-Guy Collection", price: 69 }
-        ];
-
-        const discounts = {
-            2: 0.10, // 10% for 2 packs
-            3: 0.15, // 15% for 3 packs
-            4: 0.20, // 20% for 4 packs
-            5: 0.25, // 25% for 5 packs
-            6: 0.30  // 30% for all 6 packs
-        };
-
-        function openModal(initialPackIndex) {
-            packSelector.innerHTML = '';
-            packs.forEach((pack, index) => {
-                const label = document.createElement('label');
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.name = 'packs[]';
-                checkbox.value = pack.name;
-                checkbox.dataset.index = index;
-                if(index === initialPackIndex) { checkbox.checked = true; }
-                checkbox.onchange = updatePrice;
-                label.appendChild(checkbox);
-                const textNode = document.createElement('span');
-                textNode.className = 'pack-text';
-                label.appendChild(textNode);
-                packSelector.appendChild(label);
-            });
-            updatePrice();
-            modal.style.display = 'block';
+        if (cb.checked) {
+            label.classList.add('selected');
+        } else {
+            label.classList.remove('selected');
         }
-
-        function closeModal() { modal.style.display = 'none'; }
-
-        function updatePrice() {
-            let baseTotal = 0;
-            let selectedCount = 0;
-            const selectedPackNames = [];
-            const checkboxes = packSelector.querySelectorAll('input[type="checkbox"]');
-            
-            checkboxes.forEach(cb => {
-                if (cb.checked) {
-                    selectedCount++;
-                    baseTotal += packs[cb.dataset.index].price;
-                    selectedPackNames.push(packs[cb.dataset.index].name);
-                }
-            });
-
-            let finalTotal = baseTotal;
-            const currentDiscount = discounts[selectedCount] || 0;
-            finalTotal = baseTotal * (1 - currentDiscount);
-
-            // Update text and inputs
-            checkboxes.forEach(cb => {
-                const index = cb.dataset.index;
-                const pack = packs[index];
-                const label = cb.parentElement;
-                const textSpan = label.querySelector('.pack-text');
-                
-                if (cb.checked) {
-                    label.classList.add('selected');
-                } else {
-                    label.classList.remove('selected');
-                }
-                textSpan.innerHTML = ` ${pack.name} - ₹${pack.price}`;
-            });
-
-            if (selectedCount > 0) {
-                let summaryText = `Total: ₹${Math.round(finalTotal)}`;
-                if(baseTotal > finalTotal) { 
-                    summaryText += ` <span style="color: #ff6699; font-style: italic;">(You Save ₹${Math.round(baseTotal - finalTotal)}!)</span>`;
-                }
-                priceSummary.innerHTML = summaryText;
-                hiddenPacksInput.value = `Packs: ${selectedPackNames.join(', ')} | Total Paid: ₹${Math.round(finalTotal)}`;
-            } else {
-                priceSummary.textContent = 'Total: ₹0';
-                hiddenPacksInput.value = '';
-            }
+        span.innerHTML = ` ${pack.name} - <del>₹${pack.original}</del> ₹${pack.price}`;
+    });
+    
+    if (selectedCount > 0) {
+        let summary = `Total: ₹${Math.round(finalTotal)}`;
+        if (discountPercent > 0) {
+            summary += ` <span class="saving-text">(Diwali Saving: ₹${Math.round(baseTotal - finalTotal)}!)</span>`;
         }
-        window.onclick = function(event) { if (event.target == modal) { closeModal(); } }
-    </script>
+        priceSummary.innerHTML = summary;
+        hiddenPacksInput.value = `Packs: ${selectedPackNames.join(', ')} | Total Paid: ₹${Math.round(finalTotal)}`;
+    } else {
+        priceSummary.textContent = 'Total: ₹0';
+        hiddenPacksInput.value = '';
+    }
+}
+
+window.onclick = function(event) {
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+</script>
 </body>
 </html>
