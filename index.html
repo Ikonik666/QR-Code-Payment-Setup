@@ -26,6 +26,7 @@
         .modal { display: none; position: fixed; z-index: 10000; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
         .modal-content { background-color: #fff3b8; border-radius: 15px; padding: 20px 30px; width: 500px; max-width: 90%; box-shadow: 0 10px 20px rgba(212, 146, 10, 0.7); position: relative; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; color: #782d00; }
+        .modal-header h2 { text-align: center; width: 100%;}
         .close-btn { font-weight: 900; font-size: 1.7rem; cursor: pointer; color: #6e4205; background: #f5b041; border-radius: 50%; width: 36px; height: 36px; text-align: center; line-height: 36px; }
         .pack-selector { margin-bottom: 20px; max-height: 180px; overflow-y: auto; border: 2px solid #b48016; border-radius: 10px; padding: 10px; }
         .pack-selector label { display: flex; align-items: center; padding: 10px; cursor: pointer; border-radius: 5px; margin-bottom: 8px; background-color: #f7dc6f; transition: background-color 0.2s ease; }
@@ -36,7 +37,8 @@
         .form-input, textarea { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 10px; border: 2px solid #b48016; background-color: #fff9db; font-weight: 700; color: #6e4205; resize: vertical; font-size: 1rem; box-sizing: border-box; }
         .submit-btn { background-color: #6e4205; border: none; padding: 12px 0; border-radius: 10px; color: #f5b041; font-weight: 900; width: 100%; cursor: pointer; font-size: 1.2rem; transition: background-color 0.3s ease; }
         .submit-btn:hover { background-color: #4c3000; }
-        .download-link { color: #782d00; font-weight: 700; text-decoration: underline; display: block; margin: -5px auto 15px; cursor: pointer; width: fit-content; }
+        .qr-code { text-align: center; margin-bottom: 10px; }
+        .download-link { color: #782d00; font-weight: 700; text-decoration: underline; display: block; margin-top: 5px; cursor: pointer; }
         .saving-text { color: #d35400; font-weight: 900; margin-left: 10px; font-size: 1.1rem; }
     </style>
 </head>
@@ -77,7 +79,6 @@
       <form name="payment-proof" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/success.html">
         <input type="hidden" name="form-name" value="payment-proof">
         <input type="hidden" name="selected-packs-and-total" id="selected-packs-input">
-        <p style="display:none;"><label>Don’t fill this out if you're human: <input name="bot-field"></label></p>
         <div id="pack-selector" class="pack-selector"></div>
         <div class="price-summary" id="price-summary">Total: ₹0</div>
         <label for="telegram-username" style="display: block; color: #6e4205; margin-bottom: 5px; text-align: left; font-weight: 700;">Your Telegram Username (e.g., @YourName):</label>
