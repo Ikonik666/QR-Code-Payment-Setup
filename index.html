@@ -16,28 +16,27 @@
         .pack-content p { font-size: 1rem; color: #613600; margin-bottom: 15px; flex-grow: 1; }
         .price-buy { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
         .price-container { display: flex; flex-direction: column; align-items: flex-start; }
-        .price { font-size: 1.8rem; font-weight: 900; color: #b03e00; }
+        .price { font-size: 1.8rem; font-weight: 900; color: #b03e00; line-height: 1.2; }
         .original-price { font-size: 1rem; text-decoration: line-through; color: #8a6d00; }
         .buy-btn { background-color: #d35400; color: white; border: none; padding: 12px 24px; border-radius: 10px; font-size: 1rem; cursor: pointer; font-weight: 700; transition: background-color 0.3s ease; }
         .buy-btn:hover { background-color: #af3e00; }
         .bundle-section { background-color: #f5b041; padding: 20px; margin-top: 40px; text-align: center; border-radius: 12px; box-shadow: 0 5px 12px rgba(139, 75, 0, 0.4); }
         .bundle-section h3 { font-size: 2rem; font-weight: 900; margin: 0 0 10px; color: #6e4205; }
         .bundle-section p { font-size: 1.2rem; color: #4c2f00; margin-bottom: 15px; font-weight: 700; }
-        .bundle-section a { background-color: #782d00; color: white; padding: 12px 25px; border-radius: 8px; font-weight: 900; text-decoration: none; font-size: 1.1rem; transition: background-color 0.3s ease; }
-        .bundle-section a:hover { background-color: #5c2200; }
         .modal { display: none; position: fixed; z-index: 10000; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
         .modal-content { background-color: #fff3b8; border-radius: 15px; padding: 20px 30px; width: 500px; max-width: 90%; box-shadow: 0 10px 20px rgba(212, 146, 10, 0.7); position: relative; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; color: #782d00; }
-        .close-btn { font-weight: 900; font-size: 1.5rem; cursor: pointer; color: #6e4205; background: #f5b041; border-radius: 50%; width: 34px; height: 34px; text-align: center; line-height: 34px; }
+        .close-btn { font-weight: 900; font-size: 1.7rem; cursor: pointer; color: #6e4205; background: #f5b041; border-radius: 50%; width: 36px; height: 36px; text-align: center; line-height: 36px; }
         .pack-selector { margin-bottom: 20px; max-height: 180px; overflow-y: auto; border: 2px solid #b48016; border-radius: 10px; padding: 10px; }
         .pack-selector label { display: flex; align-items: center; padding: 10px; cursor: pointer; border-radius: 5px; margin-bottom: 8px; background-color: #f7dc6f; transition: background-color 0.2s ease; }
         .pack-selector label:hover { background-color: #f5b041; }
         .pack-selector label.selected { background-color: #f1c40f; font-weight: 800; border: 2px solid #a67c00; }
         .pack-selector input { margin-right: 10px; transform: scale(1.2); margin-left: 5px; }
         .price-summary { font-weight: 900; font-size: 1.4rem; color: #6e4205; margin-bottom: 20px; text-align: center; }
-        .form-input, textarea { width: 100%; padding: 10px; border-radius: 10px; border: 2px solid #b48016; background-color: #fff9db; font-weight: 700; color: #6e4205; resize: none; font-size: 1rem; box-sizing: border-box; }
+        .form-input, textarea { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 10px; border: 2px solid #b48016; background-color: #fff9db; font-weight: 700; color: #6e4205; resize: vertical; font-size: 1rem; box-sizing: border-box; }
         .submit-btn { background-color: #6e4205; border: none; padding: 12px 0; border-radius: 10px; color: #f5b041; font-weight: 900; width: 100%; cursor: pointer; font-size: 1.2rem; transition: background-color 0.3s ease; }
         .submit-btn:hover { background-color: #4c3000; }
+        .download-link { color: #782d00; font-weight: 700; text-decoration: underline; display: block; margin: -5px auto 15px; cursor: pointer; width: fit-content; }
         .saving-text { color: #d35400; font-weight: 900; margin-left: 10px; font-size: 1.1rem; }
     </style>
 </head>
@@ -49,18 +48,18 @@
   </div>
 
   <div class="packs-container">
-    <div class="pack-card"> <div class="pack-content"> <h2>📖 PDF Stories Pack</h2> <p>Hundreds of the hottest erotic tales to fuel your deepest fantasies.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹206</span> <span class="price">₹103</span> </div> <button class="buy-btn" onclick="openModal(0)">ADD TO CART</button> </div> </div> </div>
-    <div class="pack-card"> <div class="pack-content"> <h2>🎨 Animated Pack</h2> <p>Exclusive, uncensored animations bringing your wildest fantasies to life.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹266</span> <span class="price">₹133</span> </div> <button class="buy-btn" onclick="openModal(1)">ADD TO CART</button> </div> </div> </div>
-    <div class="pack-card"> <div class="pack-content"> <h2>🎬 Viral MMS Pack</h2> <p>A massive library of raw, unfiltered, viral moments involving stunning Indian beauties.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹206</span> <span class="price">₹103</span> </div> <button class="buy-btn" onclick="openModal(2)">ADD TO CART</button> </div> </div> </div>
-    <div class="pack-card"> <div class="pack-content"> <h2>⚡️ Incest Vault</h2> <p>Dive into forbidden family secrets with these provocative stories.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹332</span> <span class="price">₹166</span> </div> <button class="buy-btn" onclick="openModal(3)">ADD TO CART</button> </div> </div> </div>
-    <div class="pack-card"> <div class="pack-content"> <h2>🔞 The Secret Vault</h2> <p>Our most guarded collection. The explicit content others are too afraid to show.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹332</span> <span class="price">₹166</span> </div> <button class="buy-btn" onclick="openModal(4)">ADD TO CART</button> </div> </div> </div>
-    <div class="pack-card"> <div class="pack-content"> <h2>🖤 BBC-Guy Collection</h2> <p>300+ exclusive full-length scenes featuring powerful BBC dominance over innocent Indian girls.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹206</span> <span class="price">₹103</span> </div> <button class="buy-btn" onclick="openModal(5)">ADD TO CART</button> </div> </div> </div>
+    <div class="pack-card"> <div class="pack-content"> <h2>📖 PDF Stories Pack</h2> <p>Hundreds of the hottest erotic tales to fuel your deepest fantasies.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹206</span> <span class="price">₹103</span> </div> <button class="buy-btn" onclick="openModal(0)">BUY NOW</button> </div> </div> </div>
+    <div class="pack-card"> <div class="pack-content"> <h2>🎨 Animated Pack</h2> <p>Exclusive, uncensored animations bringing your wildest fantasies to life.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹266</span> <span class="price">₹133</span> </div> <button class="buy-btn" onclick="openModal(1)">BUY NOW</button> </div> </div> </div>
+    <div class="pack-card"> <div class="pack-content"> <h2>🎬 Viral MMS Pack</h2> <p>A massive library of raw, unfiltered, viral moments involving stunning Indian beauties.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹206</span> <span class="price">₹103</span> </div> <button class="buy-btn" onclick="openModal(2)">BUY NOW</button> </div> </div> </div>
+    <div class="pack-card"> <div class="pack-content"> <h2>⚡️ Incest Vault</h2> <p>Dive into forbidden family secrets with these provocative stories.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹332</span> <span class="price">₹166</span> </div> <button class="buy-btn" onclick="openModal(3)">BUY NOW</button> </div> </div> </div>
+    <div class="pack-card"> <div class="pack-content"> <h2>🔞 The Secret Vault</h2> <p>Our most guarded collection. The explicit content others are too afraid to show.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹332</span> <span class="price">₹166</span> </div> <button class="buy-btn" onclick="openModal(4)">BUY NOW</button> </div> </div> </div>
+    <div class="pack-card"> <div class="pack-content"> <h2>🖤 BBC-Guy Collection</h2> <p>300+ exclusive full-length scenes featuring powerful BBC dominance over innocent Indian girls.</p> <div class="price-buy"> <div class="price-container"> <span class="original-price">₹206</span> <span class="price">₹103</span> </div> <button class="buy-btn" onclick="openModal(5)">BUY NOW</button> </div> </div> </div>
   </div>
 
   <div class="bundle-section">
     <h3>✨ More Packs, More Fun! ✨</h3>
     <p>Get an additional discount for buying multiple packs, up to <strong>30% OFF</strong> when you buy all 6 together!</p>
-    <p>For custom orders or inquiries, <a href="https://t.me/Its_DesiTease" target="_blank" style="color: #782d00;">DM me on Telegram</a>.</p>
+    <p>For custom orders or inquiries, contact me directly on <a href="https://t.me/Its_DesiTease" target="_blank" style="color: #782d00; font-weight: 700; text-decoration: underline;">Telegram</a>.</p>
   </div>
 </div>
 
@@ -68,8 +67,13 @@
   <div class="modal-content">
     <div class="modal-header"> <h2>Your Diwali Cart</h2> <span class="close-btn" onclick="closeModal()">&times;</span> </div>
     <div class="modal-body">
-      <div class="qr-code"> <img src="upi-qr.png" alt="Scan to Pay UPI"> </div>
-      <p style="font-weight: 700; color: #613600;"><b>Step 1:</b> Scan the QR code to pay.<br><b>Step 2:</b> Fill the form below for <b>instant access!</b></p>
+      <div class="qr-code">
+        <a href="upi-qr.png" download="DesiTease-UPI-QR.png" title="Click to Download QR Code">
+          <img src="upi-qr.png" alt="Scan to Pay UPI" style="width:180px; height:180px; cursor:pointer; border-radius: 12px; border: 3px solid #d35400;">
+        </a>
+        <a href="upi-qr.png" download="DesiTease-UPI-QR.png" class="download-link">Download QR Code</a>
+      </div>
+      <p style="font-weight: 700; color: #613600; margin-bottom: 15px;"><b>Step 1:</b> Scan the QR code to pay.<br><b>Step 2:</b> Fill the form below for <b>instant access!</b></p>
       <form name="payment-proof" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/success.html">
         <input type="hidden" name="form-name" value="payment-proof">
         <input type="hidden" name="selected-packs-and-total" id="selected-packs-input">
@@ -78,10 +82,11 @@
         <div class="price-summary" id="price-summary">Total: ₹0</div>
         <label for="telegram-username" style="display: block; color: #6e4205; margin-bottom: 5px; text-align: left; font-weight: 700;">Your Telegram Username (e.g., @YourName):</label>
         <input id="telegram-username" class="form-input" type="text" name="telegram_username" placeholder="Enter with @ for fastest delivery" required>
-        <small style="color:#8a6d00; display:block; text-align: left; margin-top: -10px; margin-bottom: 15px;">If you don't have a username, enter your phone number.</small>
+        <small style="color:#8a6d00; display: block; text-align: left; margin-top: -10px; margin-bottom: 15px; font-weight: 600;">If you don't have a username, enter phone number.</small>
+        <textarea class="form-input" name="additional-info" placeholder="Additional Info (Optional)" rows="2"></textarea>
         <label for="screenshot-upload" style="display: block; color: #6e4205; margin-bottom: 5px; text-align: left; font-weight: 700;">Upload Payment Screenshot:</label>
         <input id="screenshot-upload" class="form-input" type="file" name="screenshot" accept="image/*" required>
-        <button type="submit" class="submit-btn">GET MY CONTENT</button>
+        <button type="submit" class="submit-btn">BUY NOW</button>
       </form>
     </div>
   </div>
