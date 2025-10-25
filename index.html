@@ -1,81 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>DesiTease Premium Store</title>
     <style>
-        body { background-color: #1a1a2d; color: #EAEAEA; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 15px; -webkit-font-smoothing: antialiased; }
-        .container { max-width: 1200px; margin: auto; padding: 1rem; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { color: #D4AF37; font-size: 2.5em; margin-bottom: 10px; line-height: 1.2; font-weight: 700; }
-        .header p { font-style: italic; font-size: 1.1em; color: #b0b0b0; }
-        .packs-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-        .pack-card { background: #2c2c54; border: 1px solid #40407a; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.4); transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; }
-        .pack-card:hover { transform: scale(1.03); box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2); }
-        .pack-card img { width: 100%; height: 200px; object-fit: cover; }
-        .pack-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-        .pack-content h2 { color: #D4AF37; margin: 0 0 10px; font-size: 1.4em; }
-        .pack-content p { color: #ccc; font-size: 0.95em; line-height: 1.5; flex-grow: 1; }
-        .price-buy { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
-        .price { font-size: 1.6em; font-weight: bold; color: #FFD700; }
-        .buyer-count { color: #aaa; font-weight: 700; font-size: 0.9em; text-align: right; margin-top: 5px; }
-        .buy-btn { background-color: #D4AF37; color: #121212; border: none; padding: 12px 22px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; font-size: 1em; }
-        .buy-btn:hover { background-color: #b8860b; }
-        .bundle-section { margin: 30px 0; padding: 25px; background: #2c2c54; border: 1px solid #40407a; border-radius: 15px; text-align: center; }
-        .bundle-section h3 { color: #D4AF37; margin-top: 0; font-size: 1.5em; }
-        .bundle-section p { color: #ccc; font-size: 1.1em; line-height: 1.6; }
-        .bundle-section a { color: #D4AF37; font-weight: bold; }
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px); }
-        .modal-content { background-color: #2c2c54; margin: 5% auto; padding: 30px; border-radius: 15px; max-width: 500px; box-shadow: 0 0 25px rgba(212, 175, 55, 0.5); max-height: 90vh; overflow-y: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; color: #D4AF37; margin-bottom: 20px; }
-        .modal-header h2 { margin: 0; font-size: 1.6em; text-align: center; width: 100%; }
-        .close-btn { font-size: 2em; font-weight: bold; color: #aaa; cursor: pointer; position: absolute; top: 20px; right: 30px; }
-        .modal-body { text-align: center; }
-        .qr-code { text-align: center; margin-bottom: 5px; }
-        .qr-code img { width: 180px; height: 180px; border-radius: 12px; border: 3px solid #D4AF37; object-fit: contain; }
-        .download-link { color: #D4AF37; cursor: pointer; font-weight: bold; margin-top: 3px; margin-bottom: 15px; display: block; text-decoration: none; text-align: center; }
-        .pack-selector { max-height: 220px; overflow-y: auto; text-align: left; margin-bottom: 10px; border: 1px solid #40407a; border-radius: 8px; padding: 10px; }
-        .bundle-promo { font-size: 0.9em; font-style: italic; color: #D4AF37; margin-bottom: 20px; }
-        .pack-selector label { display: flex; align-items: center; background: #40407a; padding: 12px; margin-bottom: 8px; border-radius: 8px; cursor: pointer; transition: all 0.2s; border: 2px solid transparent; }
-        .pack-selector label:hover { background-color: #53539b; }
-        .pack-selector label.selected { background-color: #3a3a2c; border-color: #D4AF37; }
-        .pack-selector input { margin-right: 10px; transform: scale(1.2); }
-        .price-summary { font-size: 1.4em; font-weight: bold; color: #FFD700; margin: 20px 0; }
-        .form-input { width: 100%; padding: 12px; box-sizing: border-box; border-radius: 8px; border: 1px solid #40407a; margin-bottom: 15px; background-color: #1a1a2d; color: white; font-size: 1em; resize: vertical; }
-        .submit-btn { width: 100%; padding: 15px; background-color: #D4AF37; border: none; border-radius: 10px; color: #121212; font-weight: bold; font-size: 1.2em; cursor: pointer; transition: background-color 0.3s; }
-        .submit-btn:hover { background-color: #b8860b; }
-        .saving-text { color: #b8860b; font-style: italic; }
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap');
+        
+        body {
+            margin: 0;
+            font-family: 'Baloo 2', cursive;
+            background: #fdfaf6;
+            color: #3d3d3d;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Fun background blobs */
+        body::before {
+            content: ''; position: fixed; top: -10%; left: -10%;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(249, 200, 14, 0.4) 0%, transparent 70%);
+            border-radius: 50%; z-index: -1;
+        }
+        body::after {
+            content: ''; position: fixed; bottom: -15%; right: -15%;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(248, 102, 36, 0.3) 0%, transparent 70%);
+            border-radius: 50%; z-index: -1;
+        }
+
+        .container { max-width: 1100px; margin: auto; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { color: #f86624; font-size: 3rem; margin-bottom: 5px; }
+        .header p { font-size: 1.25rem; color: #6b6b6b; margin-top: 0; }
+
+        .packs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+
+        .pack-card {
+            background: #ffffff; border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative; cursor: pointer; display: flex; flex-direction: column;
+        }
+        .pack-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 18px 35px rgba(0,0,0,0.15);
+        }
+        .pack-card:hover .background-image { opacity: 0.1; transform: scale(1.1); }
+
+        .background-image {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; border-radius: 20px;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .pack-content { padding: 20px; z-index: 1; flex-grow: 1; display: flex; flex-direction: column; }
+        .pack-card img.main-image { width: 100%; height: 200px; object-fit: cover; border-radius: 15px; margin-bottom: 15px; }
+
+        .pack-content h2 { color: #f86624; font-size: 1.5rem; margin: 0 0 8px; }
+        .pack-content p { color: #5c5c5c; font-size: 1rem; line-height: 1.5; flex-grow: 1; margin: 0 0 20px; }
+
+        .price-buy { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+        .price { font-weight: 700; font-size: 1.75rem; color: #3d3d3d; }
+
+        .buy-btn {
+            background: #f86624; color: #fff; border: none;
+            font-family: 'Baloo 2', cursive; font-weight: 700; font-size: 1.1rem;
+            padding: 12px 28px; border-radius: 50px; cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .buy-btn:hover { background-color: #ea580c; transform: scale(1.05); }
+
+        .info-section { margin: 45px 0; text-align: center; padding: 25px; background: #fff; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .info-section h3 { color: #f86624; font-size: 1.8rem; margin: 0 0 10px; }
+        .info-section p { color: #5c5c5c; font-size: 1.1rem; line-height: 1.6; margin: 0; }
+        .info-section p.international-note { margin-top: 15px; font-size: 1rem; }
+        .info-section a { color: #f86624; font-weight: 700; text-decoration: none; }
+        .info-section a:hover { text-decoration: underline; }
+        
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(30, 30, 30, 0.7); backdrop-filter: blur(8px); }
+        .modal-content { background-color: #fdfaf6; margin: 5% auto; padding: 35px; border-radius: 20px; max-width: 500px; box-shadow: 0 0 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; color: #3d3d3d; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #fde4d6; padding-bottom: 15px; margin-bottom: 20px;}
+        .modal-header h2 { color: #f86624; margin: 0; font-size: 1.8rem; }
+        .close-btn { font-size: 2rem; font-weight: bold; color: #aaa; cursor: pointer; }
+        .qr-code { text-align: center; }
+        .qr-code img { width: 200px; height: 200px; border-radius: 15px; border: 4px solid #fde4d6; margin-bottom: 10px; }
+        .download-link { text-align: center; display: block; color: #f86624; font-weight: 700; margin-bottom: 20px; }
+        .pack-selector { max-height: 220px; overflow-y: auto; text-align: left; margin: 20px 0 10px; }
+        .pack-selector label { display: flex; align-items: center; background: #fde4d6; padding: 12px; margin-bottom: 8px; border-radius: 12px; cursor: pointer; border: 2px solid transparent; }
+        .pack-selector label:hover { background-color: #fdd8c2; }
+        .pack-selector label.selected { background-color: #f9a826; border-color: #f86624; color: #fff; font-weight: 700; }
+        .pack-selector input { margin-right: 12px; transform: scale(1.3); }
+        .bundle-promo { text-align: center; color: #f86624; font-weight: 700; margin: 15px 0; }
+        .price-summary { text-align: center; font-size: 1.5em; font-weight: bold; color: #3d3d3d; margin: 20px 0; }
+        .form-input { width: 100%; padding: 12px; box-sizing: border-box; border-radius: 12px; border: 2px solid #fde4d6; margin: 5px 0 15px; background-color: #fff; color: #3d3d3d; font-size: 1em; }
+        .submit-btn { width: 100%; padding: 15px; background-color: #f86624; border: none; border-radius: 12px; color: #fff; font-weight: bold; font-size: 1.2em; cursor: pointer; transition: background-color 0.3s; }
+        .saving-text { color: #c2410c; font-style: italic; font-weight: 700; }
+
         @media (max-width: 600px) {
-            body { padding: 10px; }
-            .header h1 { font-size: 1.8em; }
-            .packs-container { grid-template-columns: 1fr; gap: 20px; }
-            .modal-content { width: 90vw; margin: 5vh auto; padding: 20px; }
-            .modal-header h2 { font-size: 1.4em; }
+            .header h1 { font-size: 2.2em; }
+            .modal-content { width: 90vw; margin: 5vh auto; padding: 25px; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="header">
+        <header class="header">
             <h1>DesiTease Premium Store</h1>
             <p>Instant access to our most exclusive collections.</p>
-        </div>
+        </header>
 
-        <div class="packs-container">
-            <div class="pack-card"> <img src="pdf-stories.jpg" alt="PDF Stories"> <div class="pack-content"> <h2>📖 PDF Stories Pack</h2> <p>Hundreds of the hottest erotic tales to fuel your deepest fantasies.</p> <div class="price-buy"> <span class="price">₹103</span> <button class="buy-btn" onclick="openModal(0)">BUY NOW</button> </div> <div class="buyer-count">1806+ Buyers</div> </div> </div>
-            <div class="pack-card"> <img src="animated-pack.jpg" alt="Animated Videos"> <div class="pack-content"> <h2>🎨 Animated Pack</h2> <p>Exclusive, uncensored animations bringing your wildest fantasies to life.</p> <div class="price-buy"> <span class="price">₹133</span> <button class="buy-btn" onclick="openModal(1)">BUY NOW</button> </div> <div class="buyer-count">1420+ Buyers</div> </div> </div>
-            <div class="pack-card"> <img src="viral-mms.jpg" alt="Viral MMS"> <div class="pack-content"> <h2>🎬 Viral MMS Pack</h2> <p>A massive library of raw, unfiltered, viral moments involving stunning Indian beauties.</p> <div class="price-buy"> <span class="price">₹113</span> <button class="buy-btn" onclick="openModal(2)">BUY NOW</button> </div> <div class="buyer-count">1550+ Buyers</div> </div> </div>
-            <div class="pack-card"> <img src="incest-vault.jpg" alt="Incest Vault"> <div class="pack-content"> <h2>⚡️ Incest Vault</h2> <p>Dive into forbidden family secrets with these provocative stories.</p> <div class="price-buy"> <span class="price">₹166</span> <button class="buy-btn" onclick="openModal(3)">BUY NOW</button> </div> <div class="buyer-count">985+ Buyers</div> </div> </div>
-            <div class="pack-card"> <img src="secret-vault.jpg" alt="The Secret Vault"> <div class="pack-content"> <h2>🔞 The Secret Vault</h2> <p>Our most guarded collection. The explicit content others are too afraid to show.</p> <div class="price-buy"> <span class="price">₹166</span> <button class="buy-btn" onclick="openModal(4)">BUY NOW</button> </div> <div class="buyer-count">1100+ Buyers</div> </div> </div>
-            <div class="pack-card"> <img src="bbc-guy.jpg" alt="BBC-Guy Collection"> <div class="pack-content"> <h2>🖤 BBC-Guy Collection</h2> <p>300+ exclusive full-length scenes featuring powerful BBC dominance over innocent Indian girls.</p> <div class="price-buy"> <span class="price">₹103</span> <button class="buy-btn" onclick="openModal(5)">BUY NOW</button> </div> <div class="buyer-count">1260+ Buyers</div> </div> </div>
+        <div class="packs-grid">
+            <div class="pack-card"> <img src="pdf-stories.jpg" class="background-image"> <div class="pack-content"> <img src="pdf-stories.jpg" alt="PDF Stories" class="main-image"> <h2>📖 PDF Stories Pack</h2> <p>Hundreds of the hottest erotic tales to fuel your deepest fantasies.</p> <div class="price-buy"> <span class="price">₹103</span> <button class="buy-btn" onclick="openModal(0)">BUY NOW</button> </div> </div> </div>
+            <div class="pack-card"> <img src="animated-pack.jpg" class="background-image"> <div class="pack-content"> <img src="animated-pack.jpg" alt="Animated Videos" class="main-image"> <h2>🎨 Animated Pack</h2> <p>Exclusive, uncensored animations bringing your wildest fantasies to life.</p> <div class="price-buy"> <span class="price">₹133</span> <button class="buy-btn" onclick="openModal(1)">BUY NOW</button> </div> </div> </div>
+            <div class="pack-card"> <img src="viral-mms.jpg" class="background-image"> <div class="pack-content"> <img src="viral-mms.jpg" alt="Viral MMS" class="main-image"> <h2>🎬 Viral MMS Pack</h2> <p>A massive library of raw, unfiltered, viral moments involving stunning Indian beauties.</p> <div class="price-buy"> <span class="price">₹113</span> <button class="buy-btn" onclick="openModal(2)">BUY NOW</button> </div> </div> </div>
+            <div class="pack-card"> <img src="incest-vault.jpg" class="background-image"> <div class="pack-content"> <img src="incest-vault.jpg" alt="Incest Vault" class="main-image"> <h2>⚡️ Incest Vault</h2> <p>Dive into forbidden family secrets with these provocative stories.</p> <div class="price-buy"> <span class="price">₹166</span> <button class="buy-btn" onclick="openModal(3)">BUY NOW</button> </div> </div> </div>
+            <div class="pack-card"> <img src="secret-vault.jpg" class="background-image"> <div class="pack-content"> <img src="secret-vault.jpg" alt="The Secret Vault" class="main-image"> <h2>🔞 The Secret Vault</h2> <p>Our most guarded collection. The explicit content others are too afraid to show.</p> <div class="price-buy"> <span class="price">₹166</span> <button class="buy-btn" onclick="openModal(4)">BUY NOW</button> </div> </div> </div>
+            <div class="pack-card"> <img src="bbc-guy.jpg" class="background-image"> <div class="pack-content"> <img src="bbc-guy.jpg" alt="BBC-Guy Collection" class="main-image"> <h2>🖤 BBC-Guy Collection</h2> <p>300+ exclusive full-length scenes featuring powerful BBC dominance.</p> <div class="price-buy"> <span class="price">₹103</span> <button class="buy-btn" onclick="openModal(5)">BUY NOW</button> </div> </div> </div>
         </div>
         
-        <div class="bundle-section">
+        <div class="info-section">
             <h3>The Complete Collection</h3>
             <p>Purchase all 6 packs at once and receive an exclusive <strong>30% OFF</strong> your entire order!</p>
-            <p>For questions or custom orders, <a href="https://t.me/Its_DesiTease" target="_blank">DM me on Telegram</a>.</p>
+            <p class="international-note">For questions, custom orders, or international payment methods, please <a href="https://t.me/Its_DesiTease" target="_blank">DM me on Telegram</a>.</p>
         </div>
     </div>
 
@@ -87,7 +138,7 @@
                     <img src="upi-qr.png" alt="Scan to Pay UPI">
                 </div>
                 <a href="upi-qr.png" download="DesiTease-UPI-QR.png" class="download-link">Download QR Code</a>
-                <p><b>Step 1:</b> Scan or Download the QR code to pay.<br><b>Step 2:</b> Fill the form below for <b>instant access!</b></p>
+                <p><b>Step 1:</b> Scan or Download the QR to pay.<br><b>Step 2:</b> Fill the form for <b>instant access!</b></p>
                 <form name="payment-proof" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/success.html">
                     <input type="hidden" name="form-name" value="payment-proof">
                     <input type="hidden" name="selected-packs-and-total" id="selected-packs-input">
@@ -95,11 +146,11 @@
                     <div id="pack-selector" class="pack-selector"></div>
                     <div class="bundle-promo">Selecting all 6 packs unlocks a 30% bundle discount!</div>
                     <div class="price-summary" id="price-summary">Total: ₹0</div>
-                    <label for="telegram-username" style="display: block; color: #ccc; margin-bottom: 5px; text-align: left;">Your Telegram Username (e.g., @YourName):</label>
+                    <label for="telegram-username" style="display: block; margin-bottom: 5px; text-align: left;">Your Telegram Username (e.g., @YourName):</label>
                     <input id="telegram-username" class="form-input" type="text" name="telegram_username" placeholder="Enter with @ for fastest delivery" required>
-                    <small style="color:#aaa; display:block; text-align: left; margin-top: -10px; margin-bottom: 15px;">If you don't have a username, enter your phone number.</small>
+                    <small style="color:#888; display:block; text-align: left; margin-top: -10px; margin-bottom: 15px;">If you don't have a username, enter your phone number.</small>
                     <textarea class="form-input" name="additional-info" placeholder="Additional Info (Optional)" rows="2"></textarea>
-                    <label for="screenshot-upload" style="display: block; color: #ccc; margin-bottom: 5px; text-align: left;">Upload Payment Screenshot:</label>
+                    <label for="screenshot-upload" style="display: block; margin-bottom: 5px; text-align: left;">Upload Payment Screenshot:</label>
                     <input id="screenshot-upload" class="form-input" type="file" name="screenshot" accept="image/*" required>
                     <button type="submit" class="submit-btn">SUBMIT PROOF & GET ACCESS</button>
                 </form>
@@ -121,10 +172,7 @@
             { name: "🔞 The Secret Vault", price: 166 },
             { name: "🖤 BBC-Guy Collection", price: 103 }
         ];
-
-        const discounts = {
-            6: 0.30
-        };
+        const discounts = { 6: 0.30 };
 
         function openModal(initialPackIndex) {
             packSelector.innerHTML = '';
@@ -165,9 +213,7 @@
 
             let finalTotal = baseTotal;
             const currentDiscount = discounts[selectedCount] || 0;
-            if (currentDiscount > 0) {
-                finalTotal = baseTotal * (1 - currentDiscount);
-            }
+            if (currentDiscount > 0) finalTotal = baseTotal * (1 - currentDiscount);
 
             checkboxes.forEach(cb => {
                 const index = cb.dataset.index;
@@ -175,11 +221,7 @@
                 const label = cb.parentElement;
                 const textSpan = label.querySelector('.pack-text');
                 
-                if (cb.checked) {
-                    label.classList.add('selected');
-                } else {
-                    label.classList.remove('selected');
-                }
+                label.classList.toggle('selected', cb.checked);
                 textSpan.innerHTML = ` ${pack.name} - ₹${pack.price}`;
             });
 
@@ -195,7 +237,7 @@
                 hiddenPacksInput.value = '';
             }
         }
-        window.onclick = function(event) { if (event.target == modal) { closeModal(); } }
+        window.onclick = function(event) { if (event.target == modal) closeModal(); }
     </script>
 </body>
 </html>
