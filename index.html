@@ -17,7 +17,6 @@
             position: relative;
         }
 
-        /* Fun background blobs */
         body::before {
             content: ''; position: fixed; top: -10%; left: -10%;
             width: 400px; height: 400px;
@@ -49,6 +48,14 @@
             box-shadow: 0 18px 35px rgba(0,0,0,0.15);
         }
         .pack-card:hover .background-image { opacity: 0.1; transform: scale(1.1); }
+        .new-label {
+            position: absolute; top: 15px; left: -8px;
+            background-color: #f86624; color: white;
+            padding: 5px 15px; font-weight: 700;
+            font-size: 1rem; border-radius: 5px;
+            z-index: 10; box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            transform: rotate(-20deg);
+        }
 
         .background-image {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -82,14 +89,24 @@
         .info-section a:hover { text-decoration: underline; }
         
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(30, 30, 30, 0.7); backdrop-filter: blur(8px); }
-        .modal-content { background-color: #fdfaf6; margin: 5% auto; padding: 35px; border-radius: 20px; max-width: 500px; box-shadow: 0 0 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; color: #3d3d3d; }
+        .modal-content {
+            background-color: #fdfaf6;
+            margin: 5vh auto;
+            padding: 25px;
+            border-radius: 20px;
+            max-width: 500px;
+            box-shadow: 0 0 35px rgba(0,0,0,0.2);
+            max-height: 90vh;
+            overflow-y: auto !important;
+            color: #3d3d3d;
+        }
         .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #fde4d6; padding-bottom: 15px; margin-bottom: 20px;}
         .modal-header h2 { color: #f86624; margin: 0; font-size: 1.8rem; }
         .close-btn { font-size: 2rem; font-weight: bold; color: #aaa; cursor: pointer; }
         .qr-code { text-align: center; }
         .qr-code img { width: 200px; height: 200px; border-radius: 15px; border: 4px solid #fde4d6; margin-bottom: 10px; }
         .download-link { text-align: center; display: block; color: #f86624; font-weight: 700; margin-bottom: 20px; }
-        .pack-selector { max-height: 220px; overflow-y: auto; text-align: left; margin: 20px 0 10px; }
+        .pack-selector { max-height: 200px; overflow-y: auto; text-align: left; margin: 20px 0 10px; border: 1px solid #fde4d6; border-radius: 12px; padding: 10px; }
         .pack-selector label { display: flex; align-items: center; background: #fde4d6; padding: 12px; margin-bottom: 8px; border-radius: 12px; cursor: pointer; border: 2px solid transparent; }
         .pack-selector label:hover { background-color: #fdd8c2; }
         .pack-selector label.selected { background-color: #f9a826; border-color: #f86624; color: #fff; font-weight: 700; }
@@ -101,8 +118,7 @@
         .saving-text { color: #c2410c; font-style: italic; font-weight: 700; }
 
         @media (max-width: 600px) {
-            .header h1 { font-size: 2.2em; }
-            .modal-content { width: 90vw; margin: 5vh auto; padding: 25px; }
+            .modal-content { width: 90vw; margin: 5vh auto; padding: 20px; }
         }
     </style>
 </head>
@@ -120,12 +136,13 @@
             <div class="pack-card"> <img src="viral-mms.jpg" class="background-image"> <div class="pack-content"> <img src="viral-mms.jpg" alt="Viral MMS" class="main-image"> <h2>🎬 Viral MMS Pack</h2> <p>A massive library of raw, unfiltered, viral moments involving stunning Indian beauties.</p> <div class="price-buy"> <span class="price">₹113</span> <button class="buy-btn" onclick="openModal(2)">BUY NOW</button> </div> </div> </div>
             <div class="pack-card"> <img src="incest-vault.jpg" class="background-image"> <div class="pack-content"> <img src="incest-vault.jpg" alt="Incest Vault" class="main-image"> <h2>⚡️ Incest Vault</h2> <p>Dive into forbidden family secrets with these provocative stories.</p> <div class="price-buy"> <span class="price">₹166</span> <button class="buy-btn" onclick="openModal(3)">BUY NOW</button> </div> </div> </div>
             <div class="pack-card"> <img src="secret-vault.jpg" class="background-image"> <div class="pack-content"> <img src="secret-vault.jpg" alt="The Secret Vault" class="main-image"> <h2>🔞 The Secret Vault</h2> <p>Our most guarded collection. The explicit content others are too afraid to show.</p> <div class="price-buy"> <span class="price">₹166</span> <button class="buy-btn" onclick="openModal(4)">BUY NOW</button> </div> </div> </div>
-            <div class="pack-card"> <img src="bbc-guy.jpg" class="background-image"> <div class="pack-content"> <img src="bbc-guy.jpg" alt="BBC-Guy Collection" class="main-image"> <h2>🖤 BBC-Guy Collection</h2> <p>300+ exclusive full-length scenes featuring powerful BBC dominance.</p> <div class="price-buy"> <span class="price">₹103</span> <button class="buy-btn" onclick="openModal(5)">BUY NOW</button> </div> </div> </div>
+            <div class="pack-card"> <img src="bbc-guy.jpg" class="background-image"> <div class="pack-content"> <img src="bbc-guy.jpg" alt="BBC-Guy Collection" class="main-image"> <h2>🖤 BBC-Guy Collection</h2> <p>300+ exclusive full-length scenes featuring powerful BBC dominance over innocent Indian girls.</p> <div class="price-buy"> <span class="price">₹103</span> <button class="buy-btn" onclick="openModal(5)">BUY NOW</button> </div> </div> </div>
+            <div class="pack-card"> <img src="spy-cam.jpg" class="background-image"> <div class="pack-content"> <div class="new-label">NEW</div> <img src="spy-cam.jpg" alt="Hidden Spy Cam" class="main-image"> <h2>👁️ Hidden Spy Cam</h2> <p>Raw, authentic, and unfiltered moments caught on hidden cameras worldwide.</p> <div class="price-buy"> <span class="price">₹149</span> <button class="buy-btn" onclick="openModal(6)">BUY NOW</button> </div> </div> </div>
         </div>
         
         <div class="info-section">
             <h3>The Complete Collection</h3>
-            <p>Purchase all 6 packs at once and receive an exclusive <strong>30% OFF</strong> your entire order!</p>
+            <p>Purchase all 7 packs at once and receive an exclusive <strong>30% OFF</strong> your entire order!</p>
             <p class="international-note">For questions, custom orders, or international payment methods, please <a href="https://t.me/Its_DesiTease" target="_blank">DM me on Telegram</a>.</p>
         </div>
     </div>
@@ -144,7 +161,7 @@
                     <input type="hidden" name="selected-packs-and-total" id="selected-packs-input">
                     <p style="display:none;"><label>Don’t fill this out if you're human: <input name="bot-field"></label></p>
                     <div id="pack-selector" class="pack-selector"></div>
-                    <div class="bundle-promo">Selecting all 6 packs unlocks a 30% bundle discount!</div>
+                    <div class="bundle-promo">Selecting all 7 packs unlocks a 30% bundle discount!</div>
                     <div class="price-summary" id="price-summary">Total: ₹0</div>
                     <label for="telegram-username" style="display: block; margin-bottom: 5px; text-align: left;">Your Telegram Username (e.g., @YourName):</label>
                     <input id="telegram-username" class="form-input" type="text" name="telegram_username" placeholder="Enter with @ for fastest delivery" required>
@@ -170,9 +187,10 @@
             { name: "🎬 Viral MMS Pack", price: 113 },
             { name: "⚡️ Incest Vault", price: 166 },
             { name: "🔞 The Secret Vault", price: 166 },
-            { name: "🖤 BBC-Guy Collection", price: 103 }
+            { name: "🖤 BBC-Guy Collection", price: 103 },
+            { name: "👁️ Hidden Spy Cam", price: 149 }
         ];
-        const discounts = { 6: 0.30 };
+        const discounts = { 7: 0.30 };
 
         function openModal(initialPackIndex) {
             packSelector.innerHTML = '';
