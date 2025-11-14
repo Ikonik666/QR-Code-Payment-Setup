@@ -7,88 +7,317 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap');
 
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             margin: 0;
             font-family: 'Baloo 2', cursive;
-            background: #fdfaf6;
+            background: linear-gradient(135deg, #fdfaf6 0%, #fff5eb 100%);
             color: #3d3d3d;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             padding: 20px;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(249, 200, 14, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -15%;
+            right: -15%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(248, 102, 36, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: float 10s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
         }
 
         .success-container {
             background: #ffffff;
             padding: 40px 30px;
             border-radius: 25px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-            max-width: 480px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 100%;
             text-align: center;
             position: relative;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .emoji {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         h1 {
             color: #f86624;
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 15px;
+            line-height: 1.2;
         }
 
         p {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: #5c5c5c;
             margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff5eb, #fef3c7);
+            border-left: 4px solid #f86624;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .highlight-box h3 {
+            color: #f86624;
+            font-size: 1.3rem;
+            margin: 0 0 10px;
+        }
+
+        .highlight-box p {
+            margin: 8px 0;
+            font-size: 1rem;
+        }
+
+        .order-summary {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: left;
+            border: 2px solid #fde4d6;
+        }
+
+        .order-summary h4 {
+            color: #f86624;
+            margin: 0 0 10px;
+            font-size: 1.1rem;
+        }
+
+        .order-summary p {
+            margin: 5px 0;
+            font-size: 0.95rem;
+            color: #3d3d3d;
             line-height: 1.5;
         }
 
-        .emoji {
-            font-size: 4rem;
-            margin-bottom: 30px;
-        }
-
-        a.button {
+        .telegram-btn {
             display: inline-block;
-            padding: 15px 35px;
-            background-color: #f86624;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #0088cc, #0077b5);
             color: white;
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             border-radius: 50px;
             text-decoration: none;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.4);
+        }
+
+        .telegram-btn:hover {
+            background: linear-gradient(135deg, #0077b5, #006699);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.6);
+        }
+
+        .telegram-btn:active {
+            transform: translateY(0);
+        }
+
+        .info-text {
+            font-size: 0.95rem;
+            color: #888;
             margin-top: 20px;
+            line-height: 1.5;
         }
 
-        a.button:hover {
-            background-color: #ea580c;
+        .share-section {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 2px solid #fde4d6;
         }
 
-        .telegram-instruction {
-            margin-top: 20px;
-            font-size: 1rem;
-            color: #5c5c5c;
-        }
-
-        .telegram-instruction a {
-            font-weight: 700;
+        .share-section h3 {
             color: #f86624;
-            text-decoration: none;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
         }
 
-        .telegram-instruction a:hover {
-            text-decoration: underline;
+        .share-section p {
+            font-size: 0.95rem;
+            color: #5c5c5c;
+            margin-bottom: 15px;
         }
 
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f86624, #ea580c);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin: 5px;
+            box-shadow: 0 3px 10px rgba(248, 102, 36, 0.3);
+        }
+
+        @media (max-width: 600px) {
+            .success-container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .emoji {
+                font-size: 4rem;
+            }
+
+            .telegram-btn {
+                font-size: 1rem;
+                padding: 12px 28px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="success-container">
         <div class="emoji">🎉</div>
         <h1>Purchase Successful!</h1>
-        <p>Thank you for your order. We've received your details and will grant you access on Telegram shortly.</p>
-        <p class="telegram-instruction">For faster access, you can also <a href="https://t.me/DesiTease_2" target="_blank">DM me on Telegram</a> with your payment screenshot.</p>
-        <a href="/" class="button">Back to Store</a>
+        <p>Thank you for your order! We've received your payment details and will grant you access within the next <strong>few minutes</strong>.</p>
+
+        <div class="order-summary" id="orderSummary">
+            <h4>📦 Your Order Summary</h4>
+            <p id="orderDetails">Loading order details...</p>
+        </div>
+
+        <div class="highlight-box">
+            <h3>⚡️ What Happens Next?</h3>
+            <p>✓ Your purchase is being processed</p>
+            <p>✓ Access will be granted on Telegram shortly</p>
+            <p>✓ Check your Telegram DMs for your content</p>
+        </div>
+
+        <a href="#" id="telegramBtn" class="telegram-btn">
+            📱 Get Instant Access on Telegram
+        </a>
+
+        <p class="info-text">
+            <strong>Click the button above</strong> to open Telegram with your order details pre-filled for instant delivery!
+        </p>
+
+        <div class="share-section">
+            <h3>💰 Earn Rewards!</h3>
+            <p>Share DesiTease with your friends and get exclusive discounts on future purchases.</p>
+            <div class="badge">Premium Quality</div>
+            <div class="badge">Instant Access</div>
+            <div class="badge">24/7 Support</div>
+        </div>
+
+        <p class="info-text" style="margin-top: 25px; font-size: 0.85rem;">
+            Questions or issues? Contact us anytime at <a href="https://t.me/DesiTease_2" target="_blank" style="color: #f86624; font-weight: 700; text-decoration: none;">@DesiTease_2</a>
+        </p>
     </div>
+
+    <script>
+        // Get order details from localStorage
+        function getOrderDetails() {
+            const orderInfo = localStorage.getItem('lastOrder');
+            return orderInfo || 'Order details not available';
+        }
+
+        // Display order summary on the page
+        function displayOrderSummary() {
+            const orderDetails = getOrderDetails();
+            const orderSummaryDiv = document.getElementById('orderDetails');
+            
+            if (orderDetails && orderDetails !== 'Order details not available') {
+                // Replace pipe separators with line breaks for display
+                const formattedDetails = orderDetails.replace(/ \| /g, '<br>');
+                orderSummaryDiv.innerHTML = formattedDetails;
+            } else {
+                orderSummaryDiv.innerHTML = 'Your order has been successfully submitted!';
+            }
+        }
+
+        // Generate Telegram deep link with prefilled message
+        function generateTelegramLink() {
+            const orderDetails = getOrderDetails();
+            
+            // Create the message that will be pre-filled
+            const message = `Hi! I just completed my purchase on DesiTease.
+
+📦 Order Details:
+${orderDetails.replace(/ \| /g, '\n')}
+
+Please grant me access. Thank you! 🙏`;
+
+            // Encode the message for URL
+            const encodedMessage = encodeURIComponent(message);
+            
+            // Your Telegram username (change if needed)
+            const telegramUsername = 'DesiTease_2';
+            
+            // Create the deep link
+            const telegramUrl = `https://t.me/${telegramUsername}?text=${encodedMessage}`;
+            
+            // Set the button href
+            document.getElementById('telegramBtn').href = telegramUrl;
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            displayOrderSummary();
+            generateTelegramLink();
+        });
+    </script>
 </body>
 </html>
