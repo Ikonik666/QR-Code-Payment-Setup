@@ -3,321 +3,130 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Purchase Successful - DesiTease Premium Store</title>
+    <title>Purchase Successful - DesiTease Premium</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap');
-
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Baloo 2', cursive;
-            background: linear-gradient(135deg, #fdfaf6 0%, #fff5eb 100%);
-            color: #3d3d3d;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            position: relative;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: -10%;
-            left: -10%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(249, 200, 14, 0.4) 0%, transparent 70%);
-            border-radius: 50%;
-            z-index: -1;
-            animation: float 8s ease-in-out infinite;
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
-            bottom: -15%;
-            right: -15%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(248, 102, 36, 0.3) 0%, transparent 70%);
-            border-radius: 50%;
-            z-index: -1;
-            animation: float 10s ease-in-out infinite reverse;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(30px, -30px); }
-        }
-
-        .success-container {
-            background: #ffffff;
-            padding: 40px 30px;
-            border-radius: 25px;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-            position: relative;
-            animation: slideUp 0.6s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .emoji {
-            font-size: 5rem;
-            margin-bottom: 20px;
-            animation: bounce 1s ease infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        h1 {
-            color: #f86624;
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            line-height: 1.2;
-        }
-
-        p {
-            font-size: 1.1rem;
-            color: #5c5c5c;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #fff5eb, #fef3c7);
-            border-left: 4px solid #f86624;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 25px 0;
-            text-align: left;
-        }
-
-        .highlight-box h3 {
-            color: #f86624;
-            font-size: 1.3rem;
-            margin: 0 0 10px;
-        }
-
-        .highlight-box p {
-            margin: 8px 0;
-            font-size: 1rem;
-        }
-
-        .order-summary {
-            background: #f8f8f8;
-            padding: 15px;
-            border-radius: 12px;
-            margin: 20px 0;
-            text-align: left;
-            border: 2px solid #fde4d6;
-        }
-
-        .order-summary h4 {
-            color: #f86624;
-            margin: 0 0 10px;
-            font-size: 1.1rem;
-        }
-
-        .order-summary p {
-            margin: 5px 0;
-            font-size: 0.95rem;
-            color: #3d3d3d;
-            line-height: 1.5;
-        }
-
-        .telegram-btn {
-            display: inline-block;
-            padding: 14px 32px;
-            background: linear-gradient(135deg, #0088cc, #0077b5);
-            color: white;
-            font-weight: 700;
-            font-size: 1.15rem;
-            border-radius: 50px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            margin: 15px 0;
-            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.4);
-        }
-
-        .telegram-btn:hover {
-            background: linear-gradient(135deg, #0077b5, #006699);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.6);
-        }
-
-        .telegram-btn:active {
-            transform: translateY(0);
-        }
-
-        .info-text {
-            font-size: 0.95rem;
-            color: #888;
-            margin-top: 20px;
-            line-height: 1.5;
-        }
-
-        .share-section {
-            margin-top: 30px;
-            padding-top: 25px;
-            border-top: 2px solid #fde4d6;
-        }
-
-        .share-section h3 {
-            color: #f86624;
-            font-size: 1.2rem;
-            margin-bottom: 12px;
-        }
-
-        .share-section p {
-            font-size: 0.95rem;
-            color: #5c5c5c;
-            margin-bottom: 15px;
-        }
-
-        .badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #f86624, #ea580c);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            margin: 5px;
-            box-shadow: 0 3px 10px rgba(248, 102, 36, 0.3);
-        }
-
-        @media (max-width: 600px) {
-            .success-container {
-                padding: 30px 20px;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            .emoji {
-                font-size: 4rem;
-            }
-
-            .telegram-btn {
-                font-size: 1rem;
-                padding: 12px 28px;
-            }
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Baloo 2', cursive; background: linear-gradient(135deg, #fdfaf6 0%, #fff5eb 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .container { max-width: 520px; width: 100%; background: #fff; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow: hidden; }
+        .content { padding: 35px 25px; text-align: center; }
+        .emoji { font-size: 4rem; margin-bottom: 15px; }
+        h1 { color: #f86624; font-size: 1.9rem; margin-bottom: 10px; }
+        p { color: #6b6b6b; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; }
+        .order-summary { background: linear-gradient(135deg, #fff9f0, #fff5eb); border: 2px solid #fde4d6; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: left; }
+        .order-summary h3 { color: #f86624; font-size: 1.2rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .pack-list { list-style: none; margin: 10px 0; }
+        .pack-list li { padding: 6px 0; color: #3d3d3d; font-size: 0.9rem; border-bottom: 1px solid #fde4d6; }
+        .pack-list li:last-child { border-bottom: none; }
+        .total { font-size: 1.1rem; font-weight: 700; color: #f86624; margin-top: 12px; padding-top: 12px; border-top: 2px solid #f86624; }
+        .telegram-btn { display: inline-block; background: linear-gradient(135deg, #0088cc, #0077b5); color: #fff; padding: 14px 30px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1rem; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,136,204,0.4); transition: all 0.3s; }
+        .telegram-btn:hover { background: linear-gradient(135deg, #0077b5, #006699); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,136,204,0.6); }
+        .optional-note { background: #e0f2fe; border: 2px solid #0ea5e9; border-radius: 10px; padding: 15px; margin: 20px 0; font-size: 0.88rem; color: #0c4a6e; line-height: 1.5; }
+        .optional-note strong { color: #0369a1; }
+        .what-next { background: #fff5eb; border-left: 4px solid #f9a826; padding: 18px; border-radius: 10px; margin: 20px 0; text-align: left; }
+        .what-next h4 { color: #f9a826; margin-bottom: 10px; font-size: 1.05rem; }
+        .what-next ul { list-style: none; margin: 8px 0; }
+        .what-next li { padding: 4px 0; font-size: 0.88rem; color: #3d3d3d; }
+        .what-next li::before { content: "✓ "; color: #10b981; font-weight: 700; }
+        .support { font-size: 0.85rem; color: #888; margin-top: 20px; }
+        .support a { color: #f86624; font-weight: 700; text-decoration: none; }
+        @media(max-width: 600px) { .content { padding: 25px 18px; } h1 { font-size: 1.6rem; } .emoji { font-size: 3.5rem; } }
     </style>
 </head>
 <body>
-    <div class="success-container">
-        <div class="emoji">🎉</div>
-        <h1>Purchase Successful!</h1>
-        <p>Thank you for your order! We've received your payment details and will grant you access within the next <strong>few minutes</strong>.</p>
+    <div class="container">
+        <div class="content">
+            <div class="emoji">🎉</div>
+            <h1>Payment Received!</h1>
+            <p>Your order is confirmed. Sit back and relax — we'll send you access when we're online!</p>
 
-        <div class="order-summary" id="orderSummary">
-            <h4>📦 Your Order Summary</h4>
-            <p id="orderDetails">Loading order details...</p>
+            <div class="order-summary">
+                <h3>📦 Your Order Summary</h3>
+                <ul class="pack-list" id="packList">
+                    <!-- Packs will be inserted here by JS -->
+                </ul>
+                <div class="total">Total Paid: <span id="totalAmount">₹0</span></div>
+            </div>
+
+            <div class="optional-note">
+                <strong>⚡ Want faster access?</strong><br>
+                Click the button below to send us your order on Telegram. This is <strong>optional</strong> — we'll process your order anyway when we come online!
+            </div>
+
+            <a href="#" id="telegramBtn" class="telegram-btn" target="_blank">
+                📱 Send Order on Telegram (Optional)
+            </a>
+
+            <div class="what-next">
+                <h4>What happens next?</h4>
+                <ul>
+                    <li>We'll verify your payment</li>
+                    <li>You'll receive access within a few hours</li>
+                    <li>Lifetime access + regular updates included!</li>
+                </ul>
+            </div>
+
+            <p class="support">Questions? Contact <a href="https://t.me/DesiTease_2" target="_blank">@DesiTease_2</a></p>
         </div>
-
-        <div class="highlight-box">
-            <h3>⚡️ What Happens Next?</h3>
-            <p>✓ Your purchase is being processed</p>
-            <p>✓ Access will be granted on Telegram shortly</p>
-            <p>✓ Check your Telegram DMs for your content</p>
-        </div>
-
-        <a href="#" id="telegramBtn" class="telegram-btn">
-            📱 Get Instant Access on Telegram
-        </a>
-
-        <p class="info-text">
-            <strong>Click the button above</strong> to open Telegram with your order details pre-filled for instant delivery!
-        </p>
-
-        <div class="share-section">
-            <h3>💰 Earn Rewards!</h3>
-            <p>Share DesiTease with your friends and get exclusive discounts on future purchases.</p>
-            <div class="badge">Premium Quality</div>
-            <div class="badge">Instant Access</div>
-            <div class="badge">24/7 Support</div>
-        </div>
-
-        <p class="info-text" style="margin-top: 25px; font-size: 0.85rem;">
-            Questions or issues? Contact us anytime at <a href="https://t.me/DesiTease_2" target="_blank" style="color: #f86624; font-weight: 700; text-decoration: none;">@DesiTease_2</a>
-        </p>
     </div>
 
     <script>
-        // Get order details from localStorage
-        function getOrderDetails() {
-            const orderInfo = localStorage.getItem('lastOrder');
-            return orderInfo || 'Order details not available';
-        }
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Get selected packs
+        const selectedPacks = urlParams.getAll('selected_packs');
+        const telegramUsername = urlParams.get('telegram_username') || 'Not provided';
+        const additionalInfo = urlParams.get('additional_info') || '';
+        const screenshotUrl = urlParams.get('screenshot') || '';
 
-        // Display order summary on the page
-        function displayOrderSummary() {
-            const orderDetails = getOrderDetails();
-            const orderSummaryDiv = document.getElementById('orderDetails');
-            
-            if (orderDetails && orderDetails !== 'Order details not available') {
-                // Replace pipe separators with line breaks for display
-                const formattedDetails = orderDetails.replace(/ \| /g, '<br>');
-                orderSummaryDiv.innerHTML = formattedDetails;
-            } else {
-                orderSummaryDiv.innerHTML = 'Your order has been successfully submitted!';
+        // Calculate total
+        const packs = [
+            { name: "🎧 Audio Erotica Pack", price: 139 },
+            { name: "📖 PDF Stories Pack", price: 103 },
+            { name: "🎨 Animated Pack", price: 169 },
+            { name: "📱 Viral MMS Pack", price: 149 },
+            { name: "⚡️ Incest Vault", price: 219 },
+            { name: "🔐 Secret Vault", price: 260 },
+            { name: "🖤 BBC-Guy Collection", price: 189 },
+            { name: "📹 Hidden Spy Cam", price: 199 }
+        ];
+
+        let totalPrice = 0;
+        const packListElement = document.getElementById('packList');
+        
+        selectedPacks.forEach(packName => {
+            const pack = packs.find(p => p.name === packName);
+            if (pack) {
+                totalPrice += pack.price;
+                const li = document.createElement('li');
+                li.textContent = pack.name;
+                packListElement.appendChild(li);
             }
-        }
-
-        // Generate Telegram deep link with prefilled message
-        function generateTelegramLink() {
-            const orderDetails = getOrderDetails();
-            
-            // Create the message that will be pre-filled
-            const message = `Hi! I just completed my purchase on DesiTease.
-
-📦 Order Details:
-${orderDetails.replace(/ \| /g, '\n')}
-
-Please grant me access. Thank you! 🙏`;
-
-            // Encode the message for URL
-            const encodedMessage = encodeURIComponent(message);
-            
-            // Your Telegram username (change if needed)
-            const telegramUsername = 'DesiTease_2';
-            
-            // Create the deep link
-            const telegramUrl = `https://t.me/${telegramUsername}?text=${encodedMessage}`;
-            
-            // Set the button href
-            document.getElementById('telegramBtn').href = telegramUrl;
-        }
-
-        // Initialize on page load
-        window.addEventListener('DOMContentLoaded', function() {
-            displayOrderSummary();
-            generateTelegramLink();
         });
+
+        // Apply 30% discount if all 8 packs selected
+        if (selectedPacks.length === 8) {
+            totalPrice = 999; // Bundle price
+        }
+
+        document.getElementById('totalAmount').textContent = `₹${totalPrice}`;
+
+        // Create Telegram message
+        const packNames = selectedPacks.join(', ');
+        let message = `🛒 NEW ORDER - DesiTease Premium\n\n📦 Packs: ${packNames}\n💰 Total Paid: ₹${totalPrice}\n👤 Telegram: ${telegramUsername}`;
+        
+        if (additionalInfo) {
+            message += `\n📝 Additional Info: ${additionalInfo}`;
+        }
+        
+        if (screenshotUrl) {
+            message += `\n📸 Payment Screenshot: ${screenshotUrl}`;
+        }
+
+        message += `\n\n⚡ Please send access. Thank you!`;
+
+        const encodedMessage = encodeURIComponent(message);
+        document.getElementById('telegramBtn').href = `https://t.me/DesiTease_2?text=${encodedMessage}`;
     </script>
 </body>
 </html>
