@@ -131,7 +131,7 @@
                 <a href="upi-qr.jpg" download="DesiTease-UPI-QR.jpg" class="download-link">📥 Download QR Code</a>
                 <p style="text-align:center;margin:0 0 10px;font-size:.82rem"><b>Step 1:</b> Scan or Download the QR to pay.<br><b>Step 2:</b> Fill the form for <b>instant access!</b></p>
                 
-                <form id="payment-form" name="payment-proof" method="POST" data-netlify="true" enctype="multipart/form-data" action="/success.html">
+                <form id="payment-form" name="payment-proof" method="POST" data-netlify="true" enctype="multipart/form-data">
                     <input type="hidden" name="form-name" value="payment-proof">
                     
                     <div id="pack-selector" class="pack-selector"></div>
@@ -158,6 +158,7 @@
         const packSelector = document.getElementById('pack-selector');
         const priceSummary = document.getElementById('price-summary');
         const packsGrid = document.querySelector('.packs-grid');
+        const paymentForm = document.getElementById('payment-form');
 
         const packs = [
             { name: "🎧 Audio Erotica Pack", price: 139, originalPrice: 189, desc: "Immersive erotic audio stories. Perfect for discreet listening—no screen required.", image: "audio-erotica" },
@@ -255,6 +256,54 @@
                 priceSummary.textContent = 'Total: ₹0';
             }
         }
+
+        // Handle form submission
+        paymentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(paymentForm);
+            const telegramUsername = formData.get('telegram_username');
+            const additionalInfo = formData.get('additional_info') || '';
+            
+            // Get selected packs
+            const checkboxes = packSelector.querySelectorAll('input[type="checkbox"]:checked');
+            const selectedPacks = [];
+            let totalPrice = 0;
+            let originalTotal = 0;
+            
+            checkboxes.forEach(cb => {
+                const pack = packs[cb.dataset.index];
+                selectedPacks.push(pack.name);
+                totalPrice += pack.price;
+                originalTotal += pack.originalPrice;
+            });
+            
+            // Apply bundle discount if all 8 selected
+            if (selectedPacks.length === 8) {
+                totalPrice = 999;
+            }
+            
+            const savedAmount = originalTotal - totalPrice;
+            
+            // Build URL with parameters
+            const params = new URLSearchParams();
+            selectedPacks.forEach(pack => params.append('pack', pack));
+            params.append('total', totalPrice);
+            params.append('saved', savedAmount);
+            params.append('telegram', telegramUsername);
+            if (additionalInfo) params.append('info', additionalInfo);
+            
+            // Submit to Netlify in background (for email notification)
+            fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(formData).toString()
+            }).catch(err => console.log(err));
+            
+            // Redirect to success page with data
+            window.location.href = `/success.html?${params.toString()}`;
+        });
 
         window.onclick = e => {
             if (e.target == modal) closeModal();
