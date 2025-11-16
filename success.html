@@ -14,11 +14,8 @@
         h1 { color: #f86624; font-size: 1.9rem; margin-bottom: 10px; }
         p { color: #6b6b6b; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; }
         .order-summary { background: linear-gradient(135deg, #fff9f0, #fff5eb); border: 2px solid #fde4d6; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: left; }
-        .order-summary h3 { color: #f86624; font-size: 1.2rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .pack-list { list-style: none; margin: 10px 0; }
-        .pack-list li { padding: 6px 0; color: #3d3d3d; font-size: 0.9rem; border-bottom: 1px solid #fde4d6; }
-        .pack-list li:last-child { border-bottom: none; }
-        .total { font-size: 1.1rem; font-weight: 700; color: #f86624; margin-top: 12px; padding-top: 12px; border-top: 2px solid #f86624; }
+        .order-summary h3 { color: #f86624; font-size: 1.2rem; margin-bottom: 12px; }
+        .order-details { color: #3d3d3d; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; }
         .telegram-btn { display: inline-block; background: linear-gradient(135deg, #0088cc, #0077b5); color: #fff; padding: 14px 30px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1rem; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,136,204,0.4); transition: all 0.3s; }
         .telegram-btn:hover { background: linear-gradient(135deg, #0077b5, #006699); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,136,204,0.6); }
         .optional-note { background: #e0f2fe; border: 2px solid #0ea5e9; border-radius: 10px; padding: 15px; margin: 20px 0; font-size: 0.88rem; color: #0c4a6e; line-height: 1.5; }
@@ -41,11 +38,10 @@
             <p>Your order is confirmed. Sit back and relax — we'll send you access when we're online!</p>
 
             <div class="order-summary">
-                <h3>📦 Your Order Summary</h3>
-                <ul class="pack-list" id="packList">
-                    <!-- Packs will be inserted here by JS -->
-                </ul>
-                <div class="total">Total Paid: <span id="totalAmount">₹0</span></div>
+                <h3>📦 Your Order Details</h3>
+                <div class="order-details" id="orderDetails">
+                    Loading your order information...
+                </div>
             </div>
 
             <div class="optional-note">
@@ -53,8 +49,8 @@
                 Click the button below to send us your order on Telegram. This is <strong>optional</strong> — we'll process your order anyway when we come online!
             </div>
 
-            <a href="#" id="telegramBtn" class="telegram-btn" target="_blank">
-                📱 Send Order on Telegram (Optional)
+            <a href="https://t.me/DesiTease_2" id="telegramBtn" class="telegram-btn" target="_blank">
+                📱 Contact on Telegram (Optional)
             </a>
 
             <div class="what-next">
@@ -71,62 +67,40 @@
     </div>
 
     <script>
+        // Get form data from Netlify's query parameters
         const urlParams = new URLSearchParams(window.location.search);
         
-        // Get data from URL parameters
-        const selectedPacks = urlParams.getAll('selected_packs');
         const telegramUsername = urlParams.get('telegram_username') || 'Not provided';
+        const selectedPacksAndTotal = urlParams.get('selected_packs_and_total') || '';
         const additionalInfo = urlParams.get('additional_info') || '';
-        const screenshotUrl = urlParams.get('screenshot') || '';
 
-        // Calculate total
-        const packs = [
-            { name: "🎧 Audio Erotica Pack", price: 139 },
-            { name: "📖 PDF Stories Pack", price: 103 },
-            { name: "🎨 Animated Pack", price: 169 },
-            { name: "📱 Viral MMS Pack", price: 149 },
-            { name: "⚡️ Incest Vault", price: 219 },
-            { name: "🔐 Secret Vault", price: 260 },
-            { name: "🖤 BBC-Guy Collection", price: 189 },
-            { name: "📹 Hidden Spy Cam", price: 199 }
-        ];
-
-        let totalPrice = 0;
-        const packListElement = document.getElementById('packList');
+        // Display order details
+        const orderDetailsElement = document.getElementById('orderDetails');
         
-        selectedPacks.forEach(packName => {
-            const pack = packs.find(p => p.name.startsWith(packName.split(' (₹')[0]));
-            if (pack) {
-                totalPrice += pack.price;
-                const li = document.createElement('li');
-                li.textContent = pack.name;
-                packListElement.appendChild(li);
+        if (selectedPacksAndTotal) {
+            let displayText = `${selectedPacksAndTotal}\n\nYour Telegram Username: ${telegramUsername}`;
+            
+            if (additionalInfo) {
+                displayText += `\n\nAdditional Info: ${additionalInfo}`;
             }
-        });
-
-        // Apply 30% discount if all 8 packs selected
-        if (selectedPacks.length === 8) {
-            totalPrice = 999;
+            
+            orderDetailsElement.textContent = displayText;
+            
+            // Create Telegram message with proper formatting
+            let telegramMessage = `🛒 NEW ORDER - DesiTease Premium\n\n${selectedPacksAndTotal}\n\n👤 Telegram: ${telegramUsername}`;
+            
+            if (additionalInfo) {
+                telegramMessage += `\n📝 Additional Info: ${additionalInfo}`;
+            }
+            
+            telegramMessage += `\n\n⚡ Please send access. Thank you!`;
+            
+            const encodedMessage = encodeURIComponent(telegramMessage);
+            document.getElementById('telegramBtn').href = `https://t.me/DesiTease_2?text=${encodedMessage}`;
+        } else {
+            // Fallback if no data in URL
+            orderDetailsElement.innerHTML = `<strong>✅ Your order has been submitted successfully!</strong><br><br>We have received all your details via email and will process your order soon.`;
         }
-
-        document.getElementById('totalAmount').textContent = `₹${totalPrice}`;
-
-        // Create Telegram message
-        const packNames = selectedPacks.map(p => p.split(' (₹')[0]).join(', ');
-        let message = `🛒 NEW ORDER - DesiTease Premium\n\n📦 Packs: ${packNames}\n💰 Total Paid: ₹${totalPrice}\n👤 Telegram: ${telegramUsername}`;
-        
-        if (additionalInfo) {
-            message += `\n📝 Additional Info: ${additionalInfo}`;
-        }
-        
-        if (screenshotUrl) {
-            message += `\n📸 Payment Screenshot: ${screenshotUrl}`;
-        }
-
-        message += `\n\n⚡ Please send access. Thank you!`;
-
-        const encodedMessage = encodeURIComponent(message);
-        document.getElementById('telegramBtn').href = `https://t.me/DesiTease_2?text=${encodedMessage}`;
     </script>
 </body>
 </html>
