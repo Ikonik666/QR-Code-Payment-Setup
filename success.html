@@ -74,43 +74,53 @@
         const urlParams = new URLSearchParams(window.location.search);
         
         // Get data from URL parameters
-        const selectedPacks = urlParams.getAll('pack');
-        const totalPrice = parseInt(urlParams.get('total')) || 0;
-        const savedAmount = parseInt(urlParams.get('saved')) || 0;
-        const telegramUsername = urlParams.get('telegram') || 'Not provided';
-        const additionalInfo = urlParams.get('info') || '';
+        const selectedPacks = urlParams.getAll('selected_packs');
+        const telegramUsername = urlParams.get('telegram_username') || 'Not provided';
+        const additionalInfo = urlParams.get('additional_info') || '';
+        const screenshotUrl = urlParams.get('screenshot') || '';
 
-        // Display packs
+        // Calculate total
+        const packs = [
+            { name: "🎧 Audio Erotica Pack", price: 139 },
+            { name: "📖 PDF Stories Pack", price: 103 },
+            { name: "🎨 Animated Pack", price: 169 },
+            { name: "📱 Viral MMS Pack", price: 149 },
+            { name: "⚡️ Incest Vault", price: 219 },
+            { name: "🔐 Secret Vault", price: 260 },
+            { name: "🖤 BBC-Guy Collection", price: 189 },
+            { name: "📹 Hidden Spy Cam", price: 199 }
+        ];
+
+        let totalPrice = 0;
         const packListElement = document.getElementById('packList');
         
-        if (selectedPacks.length > 0) {
-            selectedPacks.forEach(packName => {
+        selectedPacks.forEach(packName => {
+            const pack = packs.find(p => p.name.startsWith(packName.split(' (₹')[0]));
+            if (pack) {
+                totalPrice += pack.price;
                 const li = document.createElement('li');
-                li.textContent = packName;
+                li.textContent = pack.name;
                 packListElement.appendChild(li);
-            });
-        } else {
-            const li = document.createElement('li');
-            li.textContent = 'No packs selected';
-            li.style.color = '#dc2626';
-            packListElement.appendChild(li);
+            }
+        });
+
+        // Apply 30% discount if all 8 packs selected
+        if (selectedPacks.length === 8) {
+            totalPrice = 999;
         }
 
-        // Display total
         document.getElementById('totalAmount').textContent = `₹${totalPrice}`;
 
         // Create Telegram message
-        const packNames = selectedPacks.join(', ');
-        let message = `🛒 NEW ORDER - DesiTease Premium\n\n📦 Packs: ${packNames}\n💰 Total Paid: ₹${totalPrice}`;
-        
-        if (savedAmount > 0) {
-            message += `\n💸 You Saved: ₹${savedAmount}`;
-        }
-        
-        message += `\n👤 Telegram: ${telegramUsername}`;
+        const packNames = selectedPacks.map(p => p.split(' (₹')[0]).join(', ');
+        let message = `🛒 NEW ORDER - DesiTease Premium\n\n📦 Packs: ${packNames}\n💰 Total Paid: ₹${totalPrice}\n👤 Telegram: ${telegramUsername}`;
         
         if (additionalInfo) {
             message += `\n📝 Additional Info: ${additionalInfo}`;
+        }
+        
+        if (screenshotUrl) {
+            message += `\n📸 Payment Screenshot: ${screenshotUrl}`;
         }
 
         message += `\n\n⚡ Please send access. Thank you!`;
