@@ -261,6 +261,10 @@
         paymentForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
+            const submitBtn = paymentForm.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+            
             // Get form data
             const formData = new FormData(paymentForm);
             const telegramUsername = formData.get('telegram_username');
@@ -286,7 +290,28 @@
             
             const savedAmount = originalTotal - totalPrice;
             
-            // Build URL with parameters
+            // Create hidden input for pack names list (for email)
+            const packsInput = document.createElement('input');
+            packsInput.type = 'hidden';
+            packsInput.name = 'packs_purchased';
+            packsInput.value = selectedPacks.join(', ');
+            paymentForm.appendChild(packsInput);
+            
+            // Create hidden input for total price (for email)
+            const totalInput = document.createElement('input');
+            totalInput.type = 'hidden';
+            totalInput.name = 'total_paid';
+            totalInput.value = `₹${totalPrice}`;
+            paymentForm.appendChild(totalInput);
+            
+            // Create hidden input for savings (for email)
+            const savedInput = document.createElement('input');
+            savedInput.type = 'hidden';
+            savedInput.name = 'amount_saved';
+            savedInput.value = `₹${savedAmount}`;
+            paymentForm.appendChild(savedInput);
+            
+            // Build success page URL with parameters
             const params = new URLSearchParams();
             selectedPacks.forEach(pack => params.append('pack', pack));
             params.append('total', totalPrice);
@@ -294,15 +319,24 @@
             params.append('telegram', telegramUsername);
             if (additionalInfo) params.append('info', additionalInfo);
             
-            // Submit to Netlify in background (for email notification)
+            // Submit to Netlify using standard form submission
+            const formDataForSubmit = new FormData(paymentForm);
+            
             fetch('/', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(formData).toString()
-            }).catch(err => console.log(err));
-            
-            // Redirect to success page with data
-            window.location.href = `success.html?${params.toString()}`;
+                body: formDataForSubmit
+            }).then(() => {
+                // After successful submission, redirect to success page
+                setTimeout(() => {
+                    window.location.href = `success.html?${params.toString()}`;
+                }, 500);
+            }).catch(err => {
+                console.error('Submission error:', err);
+                // Redirect anyway
+                setTimeout(() => {
+                    window.location.href = `success.html?${params.toString()}`;
+                }, 500);
+            });
         });
 
         window.onclick = e => {
