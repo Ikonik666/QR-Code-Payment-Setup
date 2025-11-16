@@ -138,6 +138,9 @@
                     <div class="bundle-promo">🎁 Get all 8 packs for just ₹999 (30% OFF!)</div>
                     <div class="price-summary" id="price-summary">Total: ₹0</div>
                     
+                    <!-- This hidden field will store the summary for Netlify -->
+                    <input type="hidden" name="Order Summary" id="order-summary-input">
+
                     <label for="telegram-username">Your Telegram Username (e.g., @YourName):</label>
                     <input id="telegram-username" class="form-input" type="text" name="telegram_username" placeholder="Enter with @ for fastest delivery" required>
                     <small>If you don't have a username, enter your phone number.</small>
@@ -158,6 +161,7 @@
         const packSelector = document.getElementById('pack-selector');
         const priceSummary = document.getElementById('price-summary');
         const packsGrid = document.querySelector('.packs-grid');
+        const orderSummaryInput = document.getElementById('order-summary-input');
 
         const packs = [
             { name: "🎧 Audio Erotica Pack", price: 139, originalPrice: 189, desc: "Immersive erotic audio stories. Perfect for discreet listening—no screen required.", image: "audio-erotica" },
@@ -207,7 +211,7 @@
                 const isChecked = index === initialIndex;
                 const label = document.createElement('label');
                 label.innerHTML = `
-                    <input type="checkbox" name="selected_packs" value="${pack.name} (₹${pack.price})" data-index="${index}" onchange="updatePrice()" ${isChecked ? 'checked' : ''}>
+                    <input type="checkbox" name="selected_packs" value="${pack.name}" data-index="${index}" onchange="updatePrice()">
                     <span class="pack-text">${pack.name} - ₹${pack.price}</span>
                 `;
                 packSelector.appendChild(label);
@@ -244,15 +248,20 @@
             if (currentDiscount > 0) {
                 finalTotal = baseTotal * (1 - currentDiscount);
             }
+            finalTotal = Math.round(finalTotal);
 
             if (selectedCount > 0) {
-                let summaryText = `Total: ₹${Math.round(finalTotal)}`;
+                let summaryText = `Total: ₹${finalTotal}`;
+                let summaryForInput = `Total Paid: ₹${finalTotal}`;
                 if (baseTotal > finalTotal) {
                     summaryText += ` <span style="color:#dc2626;font-style:italic;font-weight:700">(You Save: ₹${Math.round(baseTotal - finalTotal)}!)</span>`;
+                    summaryForInput += ` (Saved: ₹${Math.round(baseTotal - finalTotal)})`;
                 }
                 priceSummary.innerHTML = summaryText;
+                orderSummaryInput.value = summaryForInput;
             } else {
                 priceSummary.textContent = 'Total: ₹0';
+                orderSummaryInput.value = 'Total Paid: ₹0';
             }
         }
 
