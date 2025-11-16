@@ -136,11 +136,8 @@
                     
                     <div id="pack-selector" class="pack-selector"></div>
                     <div class="bundle-promo">🎁 Get all 8 packs for just ₹999 (30% OFF!)</div>
-                    <div class="price-summary" id="price-summary">Total: ₹0</div>
+                    <input type="text" id="selected-packs-input" name="Selected Packs And Total" style="display:none;">
                     
-                    <!-- This hidden field will store the summary for Netlify -->
-                    <input type="hidden" name="Order Summary" id="order-summary-input">
-
                     <label for="telegram-username">Your Telegram Username (e.g., @YourName):</label>
                     <input id="telegram-username" class="form-input" type="text" name="telegram_username" placeholder="Enter with @ for fastest delivery" required>
                     <small>If you don't have a username, enter your phone number.</small>
@@ -159,9 +156,8 @@
     <script>
         const modal = document.getElementById('paymentModal');
         const packSelector = document.getElementById('pack-selector');
-        const priceSummary = document.getElementById('price-summary');
+        const selectedPacksInput = document.getElementById('selected-packs-input');
         const packsGrid = document.querySelector('.packs-grid');
-        const orderSummaryInput = document.getElementById('order-summary-input');
 
         const packs = [
             { name: "🎧 Audio Erotica Pack", price: 139, originalPrice: 189, desc: "Immersive erotic audio stories. Perfect for discreet listening—no screen required.", image: "audio-erotica" },
@@ -229,6 +225,7 @@
         function updatePrice() {
             let baseTotal = 0;
             let selectedCount = 0;
+            const selectedPackNames = [];
             const checkboxes = packSelector.querySelectorAll('input[type="checkbox"]');
             
             checkboxes.forEach(cb => {
@@ -237,6 +234,7 @@
                     selectedCount++;
                     const pack = packs[cb.dataset.index];
                     baseTotal += pack.price;
+                    selectedPackNames.push(pack.name);
                     label.classList.add('selected');
                 } else {
                     label.classList.remove('selected');
@@ -248,21 +246,12 @@
             if (currentDiscount > 0) {
                 finalTotal = baseTotal * (1 - currentDiscount);
             }
-            finalTotal = Math.round(finalTotal);
 
-            if (selectedCount > 0) {
-                let summaryText = `Total: ₹${finalTotal}`;
-                let summaryForInput = `Total Paid: ₹${finalTotal}`;
-                if (baseTotal > finalTotal) {
-                    summaryText += ` <span style="color:#dc2626;font-style:italic;font-weight:700">(You Save: ₹${Math.round(baseTotal - finalTotal)}!)</span>`;
-                    summaryForInput += ` (Saved: ₹${Math.round(baseTotal - finalTotal)})`;
-                }
-                priceSummary.innerHTML = summaryText;
-                orderSummaryInput.value = summaryForInput;
-            } else {
-                priceSummary.textContent = 'Total: ₹0';
-                orderSummaryInput.value = 'Total Paid: ₹0';
-            }
+            const totalText = `Total: ₹${Math.round(finalTotal)}`;
+            const savedText = baseTotal > finalTotal ? ` (You Save: ₹${Math.round(baseTotal - finalTotal)}!)` : '';
+            
+            const summaryString = `Packs: ${selectedPackNames.join(', ')} | ${totalText}${savedText}`;
+            selectedPacksInput.value = summaryString;
         }
 
         window.onclick = e => {
