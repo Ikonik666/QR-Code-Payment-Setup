@@ -131,12 +131,13 @@
                 <a href="upi-qr.jpg" download="DesiTease-UPI-QR.jpg" class="download-link">📥 Download QR Code</a>
                 <p style="text-align:center;margin:0 0 10px;font-size:.82rem"><b>Step 1:</b> Scan or Download the QR to pay.<br><b>Step 2:</b> Fill the form for <b>instant access!</b></p>
                 
-                <form id="payment-form" name="payment-proof" method="POST" data-netlify="true" enctype="multipart/form-data" action="success.html">
+                <form id="payment-form" name="payment-proof" method="POST" data-netlify="true" enctype="multipart/form-data" action="success.html" onsubmit="return prepareFormSubmission()">
                     <input type="hidden" name="form-name" value="payment-proof">
+                    <input type="hidden" id="selected-packs-and-total" name="selected_packs_and_total" value="">
                     
                     <div id="pack-selector" class="pack-selector"></div>
                     <div class="bundle-promo">🎁 Get all 8 packs for just ₹999 (30% OFF!)</div>
-                    <input type="text" id="selected-packs-input" name="Selected Packs And Total" style="display:none;">
+                    <div class="price-summary" id="price-summary">Total: ₹0</div>
                     
                     <label for="telegram-username">Your Telegram Username (e.g., @YourName):</label>
                     <input id="telegram-username" class="form-input" type="text" name="telegram_username" placeholder="Enter with @ for fastest delivery" required>
@@ -156,7 +157,7 @@
     <script>
         const modal = document.getElementById('paymentModal');
         const packSelector = document.getElementById('pack-selector');
-        const selectedPacksInput = document.getElementById('selected-packs-input');
+        const priceSummary = document.getElementById('price-summary');
         const packsGrid = document.querySelector('.packs-grid');
 
         const packs = [
@@ -207,7 +208,7 @@
                 const isChecked = index === initialIndex;
                 const label = document.createElement('label');
                 label.innerHTML = `
-                    <input type="checkbox" name="selected_packs" value="${pack.name}" data-index="${index}" onchange="updatePrice()">
+                    <input type="checkbox" data-index="${index}" onchange="updatePrice()" ${isChecked ? 'checked' : ''}>
                     <span class="pack-text">${pack.name} - ₹${pack.price}</span>
                 `;
                 packSelector.appendChild(label);
@@ -225,7 +226,6 @@
         function updatePrice() {
             let baseTotal = 0;
             let selectedCount = 0;
-            const selectedPackNames = [];
             const checkboxes = packSelector.querySelectorAll('input[type="checkbox"]');
             
             checkboxes.forEach(cb => {
@@ -234,7 +234,6 @@
                     selectedCount++;
                     const pack = packs[cb.dataset.index];
                     baseTotal += pack.price;
-                    selectedPackNames.push(pack.name);
                     label.classList.add('selected');
                 } else {
                     label.classList.remove('selected');
@@ -247,11 +246,41 @@
                 finalTotal = baseTotal * (1 - currentDiscount);
             }
 
-            const totalText = `Total: ₹${Math.round(finalTotal)}`;
-            const savedText = baseTotal > finalTotal ? ` (You Save: ₹${Math.round(baseTotal - finalTotal)}!)` : '';
+            if (selectedCount > 0) {
+                let summaryText = `Total: ₹${Math.round(finalTotal)}`;
+                if (baseTotal > finalTotal) {
+                    summaryText += ` <span style="color:#dc2626;font-style:italic;font-weight:700">(You Save: ₹${Math.round(baseTotal - finalTotal)}!)</span>`;
+                }
+                priceSummary.innerHTML = summaryText;
+            } else {
+                priceSummary.textContent = 'Total: ₹0';
+            }
+        }
+
+        function prepareFormSubmission() {
+            const checkboxes = packSelector.querySelectorAll('input[type="checkbox"]:checked');
+            const selectedPacksArray = [];
+            let totalPrice = 0;
             
-            const summaryString = `Packs: ${selectedPackNames.join(', ')} | ${totalText}${savedText}`;
-            selectedPacksInput.value = summaryString;
+            checkboxes.forEach(cb => {
+                const pack = packs[cb.dataset.index];
+                selectedPacksArray.push(pack.name);
+                totalPrice += pack.price;
+            });
+            
+            // Apply bundle discount if all 8 selected
+            if (selectedPacksArray.length === 8) {
+                totalPrice = 999;
+            }
+            
+            // Create the summary string for email
+            const packsList = selectedPacksArray.map(name => `${name.split(' (')[0]}`).join(', ');
+            const summaryText = `Selected Packs And Total:\nPacks: ${packsList} | Total Paid: ₹${totalPrice}`;
+            
+            // Set hidden field value
+            document.getElementById('selected-packs-and-total').value = summaryText;
+            
+            return true; // Allow form submission
         }
 
         window.onclick = e => {
