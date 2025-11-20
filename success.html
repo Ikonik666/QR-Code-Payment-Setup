@@ -276,8 +276,8 @@
             document.getElementById('paid-amount').textContent = "₹" + order.total;
             
             // Generate Item List text for Telegram
-            let itemList = order.items.map(i => `• ${i.name}`).join('%0A');
-            let msg = `Hi DesiTease! I just paid ₹${order.total}.%0A%0A📦 Order Details:%0A${itemList}%0A%0APlease verify and send access. Thanks!`;
+            let itemList = order.items.map(i => `• ${i.name} - ₹${i.price}`).join('%0A');
+            let msg = `Hi DesiTease! 👋%0A%0AI just paid: ₹${order.total}%0A%0A📦 My Order:%0A${itemList}%0A%0APlease verify my payment screenshot and send access! 🚀`;
             
             // Set Telegram button link
             document.getElementById('tg-link').href = `https://t.me/DesiTease_2?text=${msg}`;
