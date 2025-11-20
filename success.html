@@ -1,105 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Purchase Successful - DesiTease Premium</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - DesiTease</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Baloo 2', cursive; background: linear-gradient(135deg, #fdfaf6 0%, #fff5eb 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .container { max-width: 520px; width: 100%; background: #fff; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow: hidden; }
-        .content { padding: 35px 25px; text-align: center; }
-        .emoji { font-size: 4rem; margin-bottom: 15px; }
-        h1 { color: #f86624; font-size: 1.9rem; margin-bottom: 10px; }
-        p { color: #6b6b6b; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; }
-        .order-summary { background: linear-gradient(135deg, #fff9f0, #fff5eb); border: 2px solid #fde4d6; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: left; }
-        .order-summary h3 { color: #f86624; font-size: 1.2rem; margin-bottom: 12px; }
-        .order-details { color: #3d3d3d; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; }
-        .telegram-btn { display: inline-block; background: linear-gradient(135deg, #0088cc, #0077b5); color: #fff; padding: 14px 30px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1rem; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,136,204,0.4); transition: all 0.3s; }
-        .telegram-btn:hover { background: linear-gradient(135deg, #0077b5, #006699); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,136,204,0.6); }
-        .optional-note { background: #e0f2fe; border: 2px solid #0ea5e9; border-radius: 10px; padding: 15px; margin: 20px 0; font-size: 0.88rem; color: #0c4a6e; line-height: 1.5; }
-        .optional-note strong { color: #0369a1; }
-        .what-next { background: #fff5eb; border-left: 4px solid #f9a826; padding: 18px; border-radius: 10px; margin: 20px 0; text-align: left; }
-        .what-next h4 { color: #f9a826; margin-bottom: 10px; font-size: 1.05rem; }
-        .what-next ul { list-style: none; margin: 8px 0; }
-        .what-next li { padding: 4px 0; font-size: 0.88rem; color: #3d3d3d; }
-        .what-next li::before { content: "✓ "; color: #10b981; font-weight: 700; }
-        .support { font-size: 0.85rem; color: #888; margin-top: 20px; }
-        .support a { color: #f86624; font-weight: 700; text-decoration: none; }
-        @media(max-width: 600px) { .content { padding: 25px 18px; } h1 { font-size: 1.6rem; } .emoji { font-size: 3.5rem; } }
+        :root {
+            --primary: #ff5e57;
+            --success: #2ed573;
+            --telegram: #0088cc;
+            --glass: rgba(20, 20, 20, 0.92);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1a0505;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background matching index page */
+        #bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, rgba(255,94,87,0.4), transparent 60%),
+                        linear-gradient(180deg, #1a0505 0%, #0a0505 50%, #000000 100%);
+            animation: pulseGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { filter: saturate(1.0) brightness(1.0); }
+            100% { filter: saturate(1.2) brightness(1.1); }
+        }
+
+        .success-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+            border: 1px solid var(--border);
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-family: 'Baloo 2', cursive;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+        .logo .desi { 
+            color: #fff; 
+            text-shadow: 0 0 12px rgba(255,255,255,0.4); 
+        }
+        .logo .tease {
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(255, 94, 87, 0.5);
+        }
+
+        .icon-box {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: bounce 2s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-family: 'Baloo 2', cursive;
+            color: var(--success);
+            margin-bottom: 10px;
+            font-size: 2rem;
+            text-shadow: 0 0 15px rgba(46, 213, 115, 0.5);
+        }
+
+        p.sub {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
+        .order-summary {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #bbb;
+            padding: 5px 0;
+        }
+
+        .summary-row span:first-child {
+            font-weight: 600;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .fast-track-box {
+            background: linear-gradient(145deg, rgba(0, 136, 204, 0.15), rgba(0, 136, 204, 0.05));
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 136, 204, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .fast-track-box strong {
+            color: #4db8ff;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            font-family: 'Baloo 2', cursive;
+        }
+
+        .fast-track-box p {
+            font-size: 0.85rem;
+            margin: 0;
+            color: #ddd;
+            line-height: 1.5;
+        }
+
+        .telegram-btn {
+            background: linear-gradient(135deg, var(--telegram), #0099dd);
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: 800;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 136, 204, 0.4);
+            margin-bottom: 15px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .telegram-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 136, 204, 0.6);
+        }
+
+        .telegram-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: #888;
+            line-height: 1.6;
+        }
+
+        .contact-link {
+            color: var(--telegram);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        .contact-link:hover {
+            color: #4db8ff;
+        }
+
+        /* Floating particles effect */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 94, 87, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 15s infinite;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+
+        .particle:nth-child(2) { left: 20%; animation-delay: 2s; }
+        .particle:nth-child(3) { left: 40%; animation-delay: 4s; }
+        .particle:nth-child(4) { left: 60%; animation-delay: 6s; }
+        .particle:nth-child(5) { left: 80%; animation-delay: 8s; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="content">
-            <div class="emoji">🎉</div>
-            <h1>Payment Received!</h1>
-            <p>Your order is confirmed. Sit back and relax — we'll send you access when we're online!</p>
 
-            <div class="order-summary">
-                <h3>📦 Your Order Details</h3>
-                <div class="order-details" id="orderDetails">
-                    Loading your order information...
-                </div>
+    <div id="bg-layer"></div>
+
+    <!-- Floating particles -->
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <div class="success-card">
+        <div class="logo"><span class="desi">Desi</span><span class="tease">Tease</span></div>
+        
+        <div class="icon-box">🎉</div>
+        <h1>Payment Received!</h1>
+        <p class="sub">Sit back and relax. We have your details safe and will verify your order shortly.</p>
+
+        <div class="order-summary" id="summary-box">
+            <div class="summary-total">
+                <span>Total Paid:</span>
+                <span id="paid-amount">₹0</span>
             </div>
-
-            <div class="optional-note">
-                <strong>⚡ Want faster access?</strong><br>
-                Click the button below to send us your order on Telegram. This is <strong>optional</strong> — we'll process your order anyway when we come online!
-            </div>
-
-            <a href="https://t.me/DesiTease_2" id="telegramBtn" class="telegram-btn" target="_blank">
-                📱 Contact on Telegram (Optional)
-            </a>
-
-            <div class="what-next">
-                <h4>What happens next?</h4>
-                <ul>
-                    <li>We'll verify your payment</li>
-                    <li>You'll receive access within a few hours</li>
-                    <li>Lifetime access + regular updates included!</li>
-                </ul>
-            </div>
-
-            <p class="support">Questions? Contact <a href="https://t.me/DesiTease_2" target="_blank">@DesiTease_2</a></p>
         </div>
+
+        <div class="fast-track-box">
+            <strong>⚡ Fast Track (Recommended)</strong>
+            <p>Click below to send your order details directly on Telegram. Helps us verify faster and get you access immediately!</p>
+        </div>
+
+        <a href="#" id="tg-link" class="telegram-btn">
+            📨 Send Order on Telegram
+        </a>
+
+        <p class="note">Or wait for us to come online and verify manually. Usually takes 5-30 minutes.<br>Questions? Contact <a href="https://t.me/DesiTease_2" class="contact-link">@DesiTease_2</a></p>
     </div>
 
     <script>
-        // Get form data from Netlify's query parameters
-        const urlParams = new URLSearchParams(window.location.search);
+        // Retrieve order details from localStorage
+        const orderData = localStorage.getItem('desiOrder');
         
-        const telegramUsername = urlParams.get('telegram_username') || 'Not provided';
-        const selectedPacksAndTotal = urlParams.get('selected_packs_and_total') || '';
-        const additionalInfo = urlParams.get('additional_info') || '';
+        if (orderData) {
+            const order = JSON.parse(orderData);
+            
+            // Update total amount
+            document.getElementById('paid-amount').textContent = "₹" + order.total;
+            
+            // Generate Item List text for Telegram
+            let itemList = order.items.map(i => `• ${i.name}`).join('%0A');
+            let msg = `Hi DesiTease! I just paid ₹${order.total}.%0A%0A📦 Order Details:%0A${itemList}%0A%0APlease verify and send access. Thanks!`;
+            
+            // Set Telegram button link
+            document.getElementById('tg-link').href = `https://t.me/DesiTease_2?text=${msg}`;
 
-        // Display order details
-        const orderDetailsElement = document.getElementById('orderDetails');
-        
-        if (selectedPacksAndTotal) {
-            let displayText = `${selectedPacksAndTotal}\n\nYour Telegram Username: ${telegramUsername}`;
-            
-            if (additionalInfo) {
-                displayText += `\n\nAdditional Info: ${additionalInfo}`;
-            }
-            
-            orderDetailsElement.textContent = displayText;
-            
-            // Create Telegram message with proper formatting
-            let telegramMessage = `🛒 NEW ORDER - DesiTease Premium\n\n${selectedPacksAndTotal}\n\n👤 Telegram: ${telegramUsername}`;
-            
-            if (additionalInfo) {
-                telegramMessage += `\n📝 Additional Info: ${additionalInfo}`;
-            }
-            
-            telegramMessage += `\n\n⚡ Please send access. Thank you!`;
-            
-            const encodedMessage = encodeURIComponent(telegramMessage);
-            document.getElementById('telegramBtn').href = `https://t.me/DesiTease_2?text=${encodedMessage}`;
+            // Fill summary box with items
+            const box = document.getElementById('summary-box');
+            let html = '';
+            order.items.forEach(item => {
+                html += `<div class="summary-row"><span>✓ ${item.name}</span><span>₹${item.price}</span></div>`;
+            });
+            html += `<div class="summary-total"><span>Total Paid:</span><span>₹${order.total}</span></div>`;
+            box.innerHTML = html;
+
         } else {
-            // Fallback if no data in URL
-            orderDetailsElement.innerHTML = `<strong>✅ Your order has been submitted successfully!</strong><br><br>We have received all your details via email and will process your order soon.`;
+            // Fallback if accessed directly without order
+            document.querySelector('.sub').textContent = "Order details not found. Please contact admin directly on Telegram.";
+            document.getElementById('tg-link').href = "https://t.me/DesiTease_2";
         }
     </script>
 </body>
