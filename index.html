@@ -871,7 +871,7 @@
       
       <div class="co-total">Payable Amount: <span id="checkoutTotal">₹0</span></div>
 
-      <form name="desi-orders" method="POST" data-netlify="true" enctype="multipart/form-data" action="success.html">
+      <form name="desi-orders" method="POST" data-netlify="true" enctype="multipart/form-data" action="success.html" onsubmit="saveOrderData()">
         <input type="hidden" name="form-name" value="desi-orders">
         <input type="hidden" name="items" id="formItems">
         <input type="hidden" name="amount" id="formAmount">
@@ -1025,6 +1025,18 @@
       document.getElementById('formAmount').value=t;
       document.getElementById('formItems').value=cart.map(i=>i.name).join(', ');
       document.getElementById('stickyCart').style.display = cart.length>0?'flex':'none';
+    }
+    
+    function saveOrderData() {
+      const totalText = document.getElementById('checkoutTotal').innerText.replace('₹', '');
+      const items = cart.map(i => ({ name: i.name, price: i.price }));
+      
+      const orderData = {
+        total: totalText,
+        items: items
+      };
+      
+      localStorage.setItem('desiOrder', JSON.stringify(orderData));
     }
     
     const data = {
