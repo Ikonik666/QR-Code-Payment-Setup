@@ -1,291 +1,1127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="DesiTease Premium Store - Exclusive audio erotica, PDF stories, and adult content collections. Instant access.">
-    <title>DesiTease Premium Store - Exclusive Content</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap');
-        *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-        body{margin:0;font-family:'Baloo 2',cursive;background:linear-gradient(135deg,#fdfaf6 0%,#fff5eb 100%);color:#3d3d3d;padding:12px;overflow-x:hidden;position:relative;-webkit-font-smoothing:antialiased}
-        body::before{content:'';position:fixed;top:-10%;left:-10%;width:300px;height:300px;background:radial-gradient(circle,rgba(249,200,14,.4) 0%,transparent 70%);border-radius:50%;z-index:-1;animation:float 8s ease-in-out infinite}
-        body::after{content:'';position:fixed;bottom:-15%;right:-15%;width:400px;height:400px;background:radial-gradient(circle,rgba(248,102,36,.3) 0%,transparent 70%);border-radius:50%;z-index:-1;animation:float 10s ease-in-out infinite reverse}
-        @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-20px)}}
-        .container{max-width:1200px;margin:auto}
-        .header{text-align:center;margin-bottom:25px}
-        .header h1{color:#f86624;font-size:clamp(1.6rem,5vw,3.5rem);margin-bottom:6px;text-shadow:2px 2px 4px rgba(0,0,0,.1);line-height:1.2}
-        .header p{font-size:clamp(.85rem,3vw,1.35rem);color:#6b6b6b;margin:8px 0 0;line-height:1.3}
-        .badge-strip{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:15px 0}
-        .badge{background:linear-gradient(135deg,#f86624,#ea580c);color:#fff;padding:4px 10px;border-radius:16px;font-size:.75rem;font-weight:700;box-shadow:0 3px 12px rgba(248,102,36,.3);white-space:nowrap}
-        .packs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:30px}
-        .pack-card{background:#fff;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.12);transition:all .35s cubic-bezier(.175,.885,.32,1.275);position:relative;cursor:pointer;display:flex;flex-direction:column;overflow:hidden}
-        .pack-card:active{transform:scale(.97)}
-        .pack-card .main-image{width:100%;height:140px;object-fit:cover;transition:transform .35s ease;display:block}
-        .new-label,.hot-label{position:absolute;top:8px;right:8px;background:linear-gradient(135deg,#f86624,#ea580c);color:#fff;padding:3px 9px;font-weight:700;font-size:.7rem;border-radius:6px;z-index:10;box-shadow:2px 2px 8px rgba(0,0,0,.25);animation:pulse 2s infinite}
-        .hot-label{background:linear-gradient(135deg,#ec4899,#db2777);left:8px;right:auto}
-        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
-        .pack-content{padding:12px;z-index:1;flex-grow:1;display:flex;flex-direction:column}
-        .pack-content h2{color:#f86624;font-size:1.15rem;margin:6px 0 4px;line-height:1.25}
-        .pack-content p{color:#5c5c5c;font-size:.82rem;line-height:1.35;flex-grow:1;margin:0 0 10px}
-        .price-buy{display:flex;justify-content:space-between;align-items:center;margin-top:auto;gap:8px}
-        .price{font-weight:700;font-size:1.4rem;color:#3d3d3d;white-space:nowrap}
-        .price del{font-size:.9rem;color:#aaa;margin-right:4px}
-        .buy-btn{background:linear-gradient(135deg,#f86624,#ea580c);color:#fff;border:none;font-family:'Baloo 2',cursive;font-weight:700;font-size:.9rem;padding:8px 16px;border-radius:50px;cursor:pointer;transition:all .3s ease;box-shadow:0 3px 12px rgba(248,102,36,.4);white-space:nowrap;flex-shrink:0}
-        .buy-btn:active{transform:scale(.95);box-shadow:0 2px 8px rgba(248,102,36,.6)}
-        .info-section{margin:30px 0 20px;text-align:center;padding:20px;background:linear-gradient(135deg,#fff 0%,#fef3c7 100%);border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.1);border:2px solid #fde4d6}
-        .info-section h3{color:#f86624;font-size:1.5rem;margin:0 0 8px;line-height:1.2}
-        .info-section p{color:#5c5c5c;font-size:.95rem;line-height:1.5;margin:5px 0}
-        .discount-badge{display:inline-block;background:#dc2626;color:#fff;padding:6px 15px;border-radius:50px;font-size:1.15rem;font-weight:700;margin:10px 0;box-shadow:0 3px 12px rgba(220,38,38,.4)}
-        .info-section a{color:#f86624;font-weight:700;text-decoration:none;border-bottom:2px solid #f86624}
-        .modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background:rgba(30,30,30,.9);backdrop-filter:blur(6px);will-change:opacity}
-        .modal-content{background:linear-gradient(135deg,#fdfaf6 0%,#fff5eb 100%);margin:3vh auto;padding:18px;border-radius:16px;max-width:95vw;width:480px;box-shadow:0 0 40px rgba(0,0,0,.3);max-height:94vh;overflow-y:auto;color:#3d3d3d;will-change:transform}
-        .modal-header{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #f86624;padding-bottom:10px;margin-bottom:15px}
-        .modal-header h2{color:#f86624;margin:0;font-size:1.4rem;line-height:1.2}
-        .close-btn{font-size:1.8rem;font-weight:bold;color:#aaa;cursor:pointer;transition:color .3s;line-height:1;padding:0 5px}
-        .close-btn:active{color:#f86624}
-        .qr-code{text-align:center;margin:10px 0}
-        .qr-code img{width:160px;height:160px;border-radius:12px;border:3px solid #f86624;box-shadow:0 5px 15px rgba(0,0,0,.15)}
-        .download-link{text-align:center;display:block;color:#f86624;font-weight:700;margin:8px 0 15px;text-decoration:none;font-size:.85rem}
-        .download-link:active{opacity:.7}
-        .pack-selector{max-height:200px;overflow-y:auto;text-align:left;margin:15px 0 8px;border:2px solid #fde4d6;border-radius:10px;padding:8px;background:#fff;-webkit-overflow-scrolling:touch}
-        .pack-selector label{display:flex;align-items:center;background:#fef3c7;padding:8px;margin-bottom:6px;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:all .2s ease}
-        .pack-selector label:active{background:#fde4d6;transform:scale(.98)}
-        .pack-selector label.selected{background:linear-gradient(135deg,#f9a826,#f86624);border-color:#ea580c;color:#fff;font-weight:700}
-        .pack-selector input{margin-right:8px;transform:scale(1.1);cursor:pointer;flex-shrink:0}
-        .pack-selector .pack-text{font-size:.85rem}
-        .bundle-promo{text-align:center;color:#dc2626;font-weight:700;margin:10px 0;font-size:.9rem;animation:pulse 2s infinite}
-        .price-summary{text-align:center;font-size:1.35em;font-weight:bold;color:#f86624;margin:15px 0;padding:8px;background:#fff5eb;border-radius:10px}
-        .form-input{width:100%;padding:10px;border-radius:10px;border:2px solid #fde4d6;margin:4px 0 10px;background:#fff;color:#3d3d3d;font-size:.88em;font-family:'Baloo 2',cursive;transition:border-color .3s}
-        .form-input:focus{outline:none;border-color:#f86624}
-        .submit-btn{width:100%;padding:12px;background:linear-gradient(135deg,#f86624,#ea580c);border:none;border-radius:10px;color:#fff;font-weight:bold;font-size:1.05em;cursor:pointer;transition:all .3s;font-family:'Baloo 2',cursive;box-shadow:0 4px 15px rgba(248,102,36,.4)}
-        .submit-btn:active{transform:scale(.97);box-shadow:0 3px 12px rgba(248,102,36,.6)}
-        label[for="telegram-username"]{display:block;margin-bottom:4px;text-align:left;font-weight:700;font-size:.8rem}
-        small{color:#888;display:block;text-align:left;margin-top:-6px;margin-bottom:10px;font-size:.72rem}
-        @media(min-width:600px){
-            body{padding:15px}
-            .packs-grid{grid-template-columns:repeat(3,1fr);gap:18px}
-            .pack-card .main-image{height:180px}
-            .pack-content{padding:15px}
-            .pack-content h2{font-size:1.35rem;margin:8px 0 6px}
-            .pack-content p{font-size:.92rem;margin:0 0 12px}
-            .price{font-size:1.65rem}
-            .buy-btn{font-size:1rem;padding:10px 22px}
-            .badge{font-size:.8rem;padding:5px 12px}
-            .new-label,.hot-label{padding:4px 10px;font-size:.75rem;top:10px}
-            .hot-label{left:10px}
-            .pack-card:hover{transform:translateY(-10px) scale(1.02);box-shadow:0 16px 35px rgba(248,102,36,.25)}
-            .pack-card:hover .main-image{transform:scale(1.08)}
-            .buy-btn:hover{background:linear-gradient(135deg,#ea580c,#c2410c);transform:scale(1.05);box-shadow:0 5px 18px rgba(248,102,36,.6)}
-            .modal-content{padding:22px;margin:4vh auto}
-            .qr-code img{width:190px;height:190px}
-        }
-        @media(min-width:900px){
-            .packs-grid{grid-template-columns:repeat(4,1fr);gap:20px}
-            .pack-card .main-image{height:200px}
-            .pack-content{padding:16px}
-            .pack-content h2{font-size:1.45rem}
-            .pack-content p{font-size:.98rem}
-            .price{font-size:1.8rem}
-            .buy-btn{font-size:1.08rem;padding:11px 26px}
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+  <title>DesiTease Premium Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    :root {
+      --primary: #ff5e57;
+      --gold: #ffd700;
+      --purple: #c77dff;
+      --emerald: #06ffa5;
+      --glass: rgba(20, 20, 20, 0.92);
+      --border: rgba(255, 255, 255, 0.1);
+
+      --aura-1: #1a0505;
+      --aura-2: #18081e;
+      --aura-3: #021a12;
+      --aura-4: #00010a;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+
+    body {
+      background: var(--aura-1);
+      color: white;
+      padding-bottom: 0;
+      overflow-x: hidden;
+      transition: background-color 1s ease;
+    }
+    
+    #bg-layer {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      background: radial-gradient(circle at top, rgba(255,94,87,0.32), transparent 60%),
+                  linear-gradient(180deg, var(--aura-1) 0%, var(--aura-2) 50%, var(--aura-3) 80%, var(--aura-4) 100%);
+      transition: background 1.2s ease, filter 1.2s ease;
+      filter: saturate(1.1);
+    }
+
+    /* Rising bubble particles - start from bottom */
+    .bubble {
+      position: fixed;
+      bottom: -20px;
+      background: rgba(255, 94, 87, 0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: riseFromBottom 15s infinite ease-in;
+      z-index: 0;
+      box-shadow: 0 0 10px currentColor;
+      transition: background 1s ease, box-shadow 1s ease;
+      opacity: 0;
+    }
+
+    @keyframes riseFromBottom {
+      0% { transform: translateY(0) translateX(0) scale(0); opacity: 0; }
+      5% { transform: translateY(-10vh) translateX(10px) scale(0.3); opacity: 0.3; }
+      10% { transform: translateY(-20vh) translateX(20px) scale(0.6); opacity: 0.6; }
+      20% { transform: translateY(-40vh) translateX(-15px) scale(0.8); opacity: 0.8; }
+      40% { transform: translateY(-70vh) translateX(40px) scale(1); opacity: 0.9; }
+      60% { transform: translateY(-90vh) translateX(-20px) scale(0.9); opacity: 0.8; }
+      80% { transform: translateY(-110vh) translateX(30px) scale(0.6); opacity: 0.5; }
+      100% { transform: translateY(-130vh) translateX(-10px) scale(0.2); opacity: 0; }
+    }
+
+    /* Stagger bubble animations */
+    .bubble:nth-child(2) { left: 10%; animation-delay: 0s; width: 6px; height: 6px; }
+    .bubble:nth-child(3) { left: 20%; animation-delay: 3s; width: 10px; height: 10px; }
+    .bubble:nth-child(4) { left: 30%; animation-delay: 6s; width: 7px; height: 7px; }
+    .bubble:nth-child(5) { left: 40%; animation-delay: 2s; width: 9px; height: 9px; }
+    .bubble:nth-child(6) { left: 50%; animation-delay: 9s; width: 8px; height: 8px; }
+    .bubble:nth-child(7) { left: 60%; animation-delay: 5s; width: 6px; height: 6px; }
+    .bubble:nth-child(8) { left: 70%; animation-delay: 12s; width: 10px; height: 10px; }
+    .bubble:nth-child(9) { left: 80%; animation-delay: 8s; width: 7px; height: 7px; }
+    .bubble:nth-child(10) { left: 90%; animation-delay: 11s; width: 9px; height: 9px; }
+
+    /* Bubble color themes */
+    .bubble.theme-red {
+      background: rgba(255, 94, 87, 0.5);
+      box-shadow: 0 0 15px rgba(255, 94, 87, 0.6);
+    }
+    .bubble.theme-purple {
+      background: rgba(199, 125, 255, 0.5);
+      box-shadow: 0 0 15px rgba(199, 125, 255, 0.6);
+    }
+    .bubble.theme-emerald {
+      background: rgba(6, 255, 165, 0.5);
+      box-shadow: 0 0 15px rgba(6, 255, 165, 0.6);
+    }
+
+    header {
+      text-align: center;
+      padding: 35px 15px 15px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.95), transparent);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .logo {
+      font-family: 'Baloo 2', cursive;
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    .logo .desi { 
+      color: #fff; 
+      text-shadow: 0 0 12px rgba(255,255,255,0.4); 
+      font-family: 'Baloo 2', cursive; 
+    }
+    .logo .tease {
+      color: var(--primary);
+      text-shadow: 0 0 20px rgba(255, 94, 87, 0.5);
+      font-family: 'Baloo 2', cursive;
+    }
+    
+    .tagline {
+      color: #aaa;
+      font-size: 0.85rem;
+      margin-bottom: 15px;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+    
+    .trust-bar {
+      display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+    .trust-badge {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 5px 14px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex; align-items: center; gap: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cat-title {
+      font-family: 'Baloo 2', cursive;
+      font-size: 1.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 30px 0 15px;
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 800;
+      position: relative;
+      z-index: 1;
+    }
+    .cat-title::after { content: ''; height: 1px; background: rgba(255, 255, 255, 0.15); flex: 1; }
+
+    .cat-title.tier-red { color: white; text-shadow: 0 0 12px rgba(255,255,255,0.3); }
+    .cat-title.tier-purple { color: var(--purple); text-shadow: 0 0 12px rgba(199,125,255,0.6); }
+    .cat-title.tier-emerald { color: var(--emerald); text-shadow: 0 0 12px rgba(6,255,165,0.6); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    @media (min-width: 768px) { .grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
+
+    .card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.25s ease;
+    }
+    .card:active { transform: scale(0.98); }
+    .card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
+    
+    .card.tier-red:hover { border-color: var(--primary); box-shadow: 0 8px 25px rgba(255, 94, 87, 0.4); }
+    .card.tier-purple:hover { border-color: var(--purple); box-shadow: 0 8px 25px rgba(199, 125, 255, 0.5); }
+    .card.tier-emerald:hover { border-color: var(--emerald); box-shadow: 0 8px 25px rgba(6, 255, 165, 0.5); }
+    .card.tier-gold:hover { border-color: var(--gold); box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5); }
+
+    .card-img-wrap { position: relative; cursor: pointer; }
+    .card-img-wrap::after {
+      content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%;
+      background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%);
+      pointer-events: none; z-index: 1;
+    }
+    .card-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+
+    .type-badge {
+      position: absolute; bottom: 10px; left: 10px; z-index: 2;
+      background: rgba(255,255,255,0.15); color: white;
+      padding: 4px 10px; border-radius: 6px;
+      font-size: 0.7rem; font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(4px);
+    }
+    .info-icon {
+      position: absolute; bottom: 10px; right: 10px; z-index: 2;
+      width: 26px; height: 26px;
+      background: rgba(255,255,255,0.25); backdrop-filter: blur(5px);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; color: white;
+      border: 1px solid rgba(255,255,255,0.5);
+      font-size: 0.9rem; pointer-events: none;
+    }
+
+    .card-body { padding: 14px; }
+    .card-name {
+      font-family: 'Baloo 2', cursive;
+      font-size: 1.1rem; font-weight: 700; margin-bottom: 5px;
+      color: white; line-height: 1.1;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .card-text {
+      font-size: 0.75rem; color: #bbb; margin-bottom: 10px;
+      line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden; height: 2.6em;
+    }
+    .card-price-row {
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;
+    }
+    .price-block { display: flex; flex-direction: column; line-height: 1; }
+    .old-price { font-size: 0.75rem; color: #888; text-decoration: line-through; margin-bottom: 2px; }
+    .price { font-size: 1.1rem; font-weight: 800; color: white; }
+    
+    .btn-add {
+      background: #333; color: white; border: none;
+      padding: 8px 12px; border-radius: 8px;
+      font-size: 0.7rem; font-weight: 700; cursor: pointer;
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+    .btn-add.active { transform: scale(1.05); }
+
+    /* Theme-specific button colors */
+    .tier-red .btn-add.active { background: var(--primary); color: white; }
+    .tier-purple .btn-add.active { background: var(--purple); color: white; }
+    .tier-emerald .btn-add.active { background: var(--emerald); color: black; }
+    .tier-gold .btn-add.active {
+      background: linear-gradient(135deg, var(--gold), #ffed4e, var(--gold));
+      background-size: 200% 200%;
+      color: black;
+      font-weight: 900;
+      animation: shimmer 2s infinite;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    /* Dynamic Bundle Section */
+    .bundle-section {
+        max-width: 360px; margin: 40px auto 20px;
+        background: linear-gradient(145deg, #1a0505, #000);
+        border: 1px solid var(--primary);
+        border-radius: 16px;
+        padding: 15px;
+        text-align: center;
+        box-shadow: 0 0 15px rgba(229, 80, 57, 0.2);
+        position: relative;
+        z-index: 1;
+        transition: all 0.8s ease;
+    }
+
+    .bundle-section.theme-red {
+        background: linear-gradient(145deg, #1a0505, #000);
+        border-color: var(--primary);
+        box-shadow: 0 0 20px rgba(255, 94, 87, 0.3);
+    }
+
+    .bundle-section.theme-purple {
+        background: linear-gradient(145deg, #18081e, #000);
+        border-color: var(--purple);
+        box-shadow: 0 0 20px rgba(199, 125, 255, 0.3);
+    }
+
+    .bundle-section.theme-emerald {
+        background: linear-gradient(145deg, #021a12, #000);
+        border-color: var(--emerald);
+        box-shadow: 0 0 20px rgba(6, 255, 165, 0.3);
+    }
+
+    .bundle-title {
+        font-family: 'Montserrat', sans-serif; 
+        font-size: 0.9rem; 
+        font-weight: 800;
+        color: var(--primary); 
+        margin-bottom: 5px; 
+        text-transform: uppercase; 
+        letter-spacing: 1px;
+        transition: color 0.8s ease, text-shadow 0.8s ease;
+    }
+
+    .bundle-section.theme-purple .bundle-title {
+        color: var(--purple);
+        text-shadow: 0 0 12px rgba(199, 125, 255, 0.5);
+    }
+
+    .bundle-section.theme-emerald .bundle-title {
+        color: var(--emerald);
+        text-shadow: 0 0 12px rgba(6, 255, 165, 0.5);
+    }
+
+    .bundle-section.theme-red .bundle-title {
+        color: var(--primary);
+        text-shadow: 0 0 12px rgba(255, 94, 87, 0.5);
+    }
+
+    .bundle-title i { margin-right: 5px; }
+    
+    .bundle-desc { font-size: 0.9rem; color: #ccc; margin-bottom: 10px; }
+    
+    .bundle-price-row { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 15px; }
+    .bundle-price { font-size: 2.2rem; font-weight: 900; color: white; line-height: 1; }
+    .bundle-old { font-size: 1rem; color: #666; text-decoration: line-through; font-weight: 600; }
+    
+    .bundle-btn {
+      background: white; color: black; border: none;
+      padding: 12px 35px; border-radius: 50px;
+      font-weight: 800; font-size: 0.95rem; cursor: pointer;
+      text-transform: uppercase; transition: transform 0.2s;
+    }
+    .bundle-btn:active { transform: scale(0.95); }
+
+    footer {
+      margin-top: 50px; 
+      padding: 30px 20px 20px;
+      background: radial-gradient(circle at top, rgba(255,94,87,0.25), transparent 55%),
+                  linear-gradient(to bottom, #130103, #050003);
+      border-top: 1px solid rgba(255, 94, 87, 0.6);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .footer-logo {
+      font-family: 'Baloo 2', cursive;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      display: block;
+    }
+    .footer-logo .desi { color: white; }
+    .footer-logo .tease { 
+      color: var(--primary); 
+      text-shadow: 0 0 15px rgba(255, 94, 87, 0.5);
+    }
+    
+    .footer-msg { 
+      color: #ddd; 
+      font-size: 0.9rem; 
+      margin-bottom: 20px; 
+      max-width: 500px; 
+      margin-left: auto; 
+      margin-right: auto; 
+    }
+    .social-links { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
+    .social-btn {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(20, 20, 20, 0.85); 
+      color: white; 
+      text-decoration: none;
+      padding: 10px 25px; 
+      border-radius: 50px; 
+      border: 1px solid rgba(255, 94, 87, 0.7);
+      font-size: 0.9rem; 
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .social-btn:hover {
+      border-color: #fff;
+      background: rgba(255, 94, 87, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 94, 87, 0.4);
+    }
+
+    .sticky-cart {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px);
+      border: 1px solid #444; color: white;
+      padding: 12px 20px; border-radius: 12px;
+      width: 90%; max-width: 450px; z-index: 1000;
+      display: none; align-items: center; justify-content: space-between; gap: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+
+    .cart-info {
+      flex: 1;
+    }
+
+    .cart-buttons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .clear-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ff6b6b;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border: 1px solid rgba(255, 107, 107, 0.3);
+      transition: all 0.2s;
+    }
+
+    .clear-btn:hover {
+      background: rgba(255, 107, 107, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .checkout-arrow {
+      background: var(--primary);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .checkout-arrow:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 94, 87, 0.4);
+    }
+
+    .modal {
+      display: none; position: fixed; top:0; left:0; width:100%; height:100%;
+      background: rgba(0,0,0,0.95); z-index: 2000; padding: 15px;
+      overflow-y: auto; align-items: center; justify-content: center;
+    }
+    .detail-box {
+      background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+      width: 100%; max-width: 420px;
+      border-radius: 20px; 
+      overflow: hidden; 
+      border: 1px solid #444; 
+      margin: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+    }
+    .detail-img { width: 100%; height: 240px; object-fit: cover; }
+    .detail-content { padding: 25px; }
+    .detail-content h2 {
+      margin-bottom: 12px; 
+      font-family:'Baloo 2', cursive;
+      font-size: 1.5rem;
+    }
+    .detail-content p {
+      color: #ccc; 
+      font-size: 0.95rem; 
+      line-height: 1.6; 
+      margin-bottom: 20px;
+    }
+    
+    .spec-grid { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 12px; 
+      margin: 20px 0; 
+    }
+    .spec-item { 
+      background: rgba(255,255,255,0.05); 
+      padding: 12px; 
+      border-radius: 10px; 
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+    }
+    .spec-item:hover {
+      background: rgba(255,255,255,0.08);
+      transform: translateY(-2px);
+    }
+    .spec-label { 
+      font-size: 0.7rem; 
+      color: #888; 
+      display: block; 
+      text-transform: uppercase; 
+      margin-bottom: 6px; 
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .spec-val { 
+      font-size: 1rem; 
+      font-weight: 800; 
+      color: white; 
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .detail-box.tier-red h2 { color: white; }
+    .detail-box.tier-red .spec-item { border-color: rgba(255, 94, 87, 0.4); }
+    
+    .detail-box.tier-purple h2 { color: var(--purple); text-shadow: 0 0 12px rgba(199,125,255,0.5); }
+    .detail-box.tier-purple .spec-item { border-color: rgba(199, 125, 255, 0.4); }
+    
+    .detail-box.tier-emerald h2 { color: var(--emerald); text-shadow: 0 0 12px rgba(6,255,165,0.5); }
+    .detail-box.tier-emerald .spec-item { border-color: rgba(6, 255, 165, 0.4); }
+    
+    .detail-box.tier-gold h2 { color: var(--gold); text-shadow: 0 0 12px rgba(255,215,0,0.7); }
+    .detail-box.tier-gold .spec-item { border-color: rgba(255, 215, 0, 0.5); }
+
+    .detail-close-btn {
+      width: 100%; 
+      padding: 12px; 
+      background: rgba(255,255,255,0.1); 
+      border: 1px solid rgba(255,255,255,0.2); 
+      color: white; 
+      border-radius: 10px; 
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+    .detail-close-btn:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateY(-2px);
+    }
+
+    .checkout-box {
+      background: #fff; color: #000; width: 100%; max-width: 420px;
+      border-radius: 20px; padding: 25px; margin: auto;
+      position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+    .modal-close-btn {
+      position: absolute; top: 15px; right: 15px;
+      font-size: 1.5rem; color: #888; cursor: pointer; font-weight: bold; line-height: 1;
+    }
+    .co-title {
+      color: #e55039; font-family: 'Baloo 2', cursive;
+      font-size: 1.6rem; font-weight: 800; text-align: center; margin-bottom: 20px;
+    }
+    
+    .co-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+    .co-tab {
+      flex: 1; padding: 12px; text-align: center;
+      background: #f1f2f6; border-radius: 10px;
+      font-size: 0.9rem; font-weight: 700; color: #333; cursor: pointer;
+      border: 2px solid transparent; display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .co-tab.active { background: #fff; border-color: #e55039; color: #e55039; }
+    
+    .co-section { display: none; text-align: center; margin-bottom: 20px; }
+    .co-section.active { display: block; }
+    
+    .order-summary {
+      background: #fff9c4; border: 1px solid #f0e68c;
+      border-radius: 10px; padding: 10px;
+      margin-bottom: 20px;
+      max-height: 160px; 
+      overflow-y: auto;
+      padding-right: 5px; 
+    }
+    .order-summary::-webkit-scrollbar { width: 5px; }
+    .order-summary::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+    .order-summary::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
+
+    .summary-item {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.9rem; font-weight: 600; border-bottom: 1px solid #eee; padding: 8px 5px;
+    }
+    .summary-item:last-child { border-bottom: none; }
+    .summary-remove { 
+      color: #d63031; cursor: pointer; margin-left: 12px; 
+      font-weight: 900; font-size: 1.1rem; padding: 0 5px;
+    }
+    .bundle-tag { color: #20bf6b; font-weight: 800; font-size: 0.85rem; margin-top: 10px; display: block; text-align: center; }
+    
+    .co-total {
+      text-align: center; font-size: 1.4rem; font-weight: 800;
+      color: #e55039; margin-bottom: 20px; font-family: 'Montserrat', sans-serif;
+    }
+    
+    .co-input {
+      width: 100%; 
+      padding: 12px; 
+      border: 1px solid #ddd;
+      border-radius: 10px; 
+      margin-bottom: 8px; 
+      font-size: 0.85rem;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .co-help {
+      font-size: 0.75rem;
+      color: #888;
+      text-align: left;
+      margin: -4px 0 10px;
+    }
+
+    .co-btn {
+      width: 100%; padding: 16px; border-radius: 10px;
+      background: #e55039; color: white; border: none;
+      font-size: 1.1rem; font-weight: 800; cursor: pointer;
+      box-shadow: 0 5px 15px rgba(229, 80, 57, 0.3);
+    }
+
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>🔥 DesiTease Premium Store</h1>
-            <p>Where fantasy meets reality — your secret pleasure awaits</p>
-            <div class="badge-strip">
-                <span class="badge">✓ Lifetime Access</span>
-                <span class="badge">✓ Regular Updates</span>
-                <span class="badge">✓ 24/7 Support</span>
-            </div>
-        </header>
 
-        <div class="packs-grid">
-            <!-- Packs will be dynamically inserted here by JavaScript -->
-        </div>
+  <div id="bg-layer"></div>
 
-        <div class="info-section">
-            <h3>💎 The Complete Collection</h3>
-            <div class="discount-badge">30% OFF - Only ₹999!</div>
-            <p>Purchase all 8 packs at once and receive an exclusive <strong>30% bundle discount</strong>!</p>
-            <p style="font-size:.85rem;color:#888;margin-top:15px">
-                For questions, custom orders, or international payment methods, 
-                <a href="https://t.me/DesiTease_2" target="_blank">DM us on Telegram</a>.
-            </p>
+  <!-- Rising bubble particles -->
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+
+  <header>
+    <div class="logo"><span class="desi">Desi</span><span class="tease">Tease</span></div>
+    <p class="tagline">Where Fantasy Meets Reality. India's most exclusive premium archive.</p>
+    
+    <div class="trust-bar">
+      <div class="trust-badge"><i class="fas fa-check-circle"></i> Lifetime Access</div>
+      <div class="trust-badge"><i class="fas fa-sync-alt"></i> Regular Updates</div>
+      <div class="trust-badge"><i class="fas fa-headset"></i> 24/7 Support</div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <div class="cat-title tier-red">Best Selling</div>
+    <div class="grid">
+      <div class="card tier-red" onclick="showDetails('pdf')">
+        <div class="card-img-wrap">
+          <img src="pdf-stories.webp" class="card-img">
+          <div class="type-badge">📖 Text</div>
+          <div class="info-icon">i</div>
         </div>
+        <div class="card-body">
+          <div class="card-name">PDF Stories Pack</div>
+          <div class="card-text">Best seller. Read thousands of hot stories anywhere.</div>
+          <div class="card-price-row">
+            <div class="price-block"><span class="old-price">₹139</span><span class="price">₹103</span></div>
+            <button class="btn-add" data-id="pdf" data-price="103" data-name="PDF Pack" onclick="event.stopPropagation(); toggleItem(this)"><i class="fas fa-cart-plus"></i> ADD</button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div id="paymentModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Complete Your Purchase</h2>
-                <span class="close-btn" onclick="closeModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="qr-code">
-                    <img src="upi-qr.jpg" alt="Scan to Pay UPI">
-                </div>
-                <a href="upi-qr.jpg" download="DesiTease-UPI-QR.jpg" class="download-link">📥 Download QR Code</a>
-                <p style="text-align:center;margin:0 0 10px;font-size:.82rem"><b>Step 1:</b> Scan or Download the QR to pay.<br><b>Step 2:</b> Fill the form for <b>instant access!</b></p>
-                
-                <form id="payment-form" name="payment-proof" method="POST" data-netlify="true" enctype="multipart/form-data" action="success.html" onsubmit="return prepareFormSubmission()">
-                    <input type="hidden" name="form-name" value="payment-proof">
-                    <input type="hidden" id="selected-packs-and-total" name="selected_packs_and_total" value="">
-                    
-                    <div id="pack-selector" class="pack-selector"></div>
-                    <div class="bundle-promo">🎁 Get all 8 packs for just ₹999 (30% OFF!)</div>
-                    <div class="price-summary" id="price-summary">Total: ₹0</div>
-                    
-                    <label for="telegram-username">Your Telegram Username (e.g., @YourName):</label>
-                    <input id="telegram-username" class="form-input" type="text" name="telegram_username" placeholder="Enter with @ for fastest delivery" required>
-                    <small>If you don't have a username, enter your phone number.</small>
-                    
-                    <textarea class="form-input" name="additional_info" placeholder="Additional Info (Optional)" rows="2"></textarea>
-                    
-                    <label for="screenshot-upload">Upload Payment Screenshot:</label>
-                    <input id="screenshot-upload" class="form-input" type="file" name="screenshot" accept="image/*" required>
-                    
-                    <button type="submit" class="submit-btn">🚀 SUBMIT & GET INSTANT ACCESS</button>
-                </form>
-            </div>
+    <div class="cat-title tier-purple">Trending Media</div>
+    <div class="grid">
+      <div class="card tier-purple" onclick="showDetails('audio')">
+        <div class="card-img-wrap">
+          <img src="audio-erotica.webp" class="card-img">
+          <div class="type-badge">🎧 Audio</div>
+          <div class="info-icon">i</div>
         </div>
+        <div class="card-body">
+          <div class="card-name">Audio Erotica</div>
+          <div class="card-text">Sex stories in Hindi, Punjabi, English. Put on headphones.</div>
+          <div class="card-price-row">
+            <div class="price-block"><span class="old-price">₹189</span><span class="price">₹139</span></div>
+            <button class="btn-add" data-id="audio" data-price="139" data-name="Audio Pack" onclick="event.stopPropagation(); toggleItem(this)"><i class="fas fa-cart-plus"></i> ADD</button>
+          </div>
+        </div>
+      </div>
+      <div class="card tier-purple" onclick="showDetails('mms')">
+        <div class="card-img-wrap">
+          <img src="viral-mms.webp" class="card-img">
+          <div class="type-badge">📱 Video</div>
+          <div class="info-icon">i</div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Viral MMS Pack</div>
+          <div class="card-text">Real leaked videos from colleges and hotels. Unfiltered.</div>
+          <div class="card-price-row">
+            <div class="price-block"><span class="old-price">₹199</span><span class="price">₹149</span></div>
+            <button class="btn-add" data-id="mms" data-price="149" data-name="MMS Pack" onclick="event.stopPropagation(); toggleItem(this)"><i class="fas fa-cart-plus"></i> ADD</button>
+          </div>
+        </div>
+      </div>
+      <div class="card tier-purple" onclick="showDetails('anim')">
+        <div class="card-img-wrap">
+          <img src="animated-pack.webp" class="card-img">
+          <div class="type-badge">🎨 3D</div>
+          <div class="info-icon">i</div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Animated Pack</div>
+          <div class="card-text">3D Hentai and comics. Fantasy uncensored.</div>
+          <div class="card-price-row">
+            <div class="price-block"><span class="old-price">₹229</span><span class="price">₹169</span></div>
+            <button class="btn-add" data-id="anim" data-price="169" data-name="Animated Pack" onclick="event.stopPropagation(); toggleItem(this)"><i class="fas fa-cart-plus"></i> ADD</button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <script>
-        const modal = document.getElementById('paymentModal');
-        const packSelector = document.getElementById('pack-selector');
-        const priceSummary = document.getElementById('price-summary');
-        const packsGrid = document.querySelector('.packs-grid');
+    <div class="cat-title tier-emerald">Premium Vaults</div>
+    <div class="grid">
+      <div class="card tier-emerald" onclick="showDetails('bbc')">
+        <div class="card-img-wrap">
+          <img src="bbc-guy.webp" class="card-img">
+          <div class="type-badge">🖤 Niche</div>
+          <div class="info-icon">i</div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">BBC Collection</div>
+          <div class="card-text">Powerful dominance. Black men with Indian girls.</div>
+          <div class="card-price-row">
+            <div class="price-block"><span class="old-price">₹249</span><span class="price">₹189</span></div>
+            <button class="btn-add" data-id="bbc" data-price="189" data-name="BBC Pack" onclick="event.stopPropagation(); toggleItem(this)"><i class="fas fa-cart-plus"></i> ADD</button>
+          </div>
+        </div>
+      </div>
+      <div class="card tier-emerald" onclick="showDetails('spy')">
+        <div class="card-img-wrap">
+          <img src="spy-cam.webp" class="card-img">
+          <div class="type-badge">📹 Hidden</div>
+          <div class="info-icon">i</div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Spy Cam</div>
+          <div class="card-text">Hidden camera footage from changing rooms and hotels.</div>
+          <div class="card-price-row">
+            <div class="price-block"><span class="old-price">₹269</span><span class="price">₹199</span></div>
+            <button class="btn-add" data-id="spy" data-price="199" data-name="Spy Pack" onclick="event.stopPropagation(); toggleItem(this)"><i class="fas fa-cart-plus"></i> ADD</button>
+          </div>
+        </div>
+      </div>
+      <div class="card tier-emerald" onclick="showDetails('incest')">
+        <div class="card-img-wrap">
+          <img src="incest-vault.webp" class="card-img">
+          <div class="type-badge">⚡ Taboo</div>
+          <div class="info-icon">i</div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Incest Vault</div>
+          <div class="card-text">Forbidden family secrets. Taboo videos and stories.</div>
+          <div class="card-price-row">
+            <div class="price-block"><span class="old-price">₹289</span><span class="price">₹219</span></div>
+            <button class="btn-add" data-id="incest" data-price="219" data-name="Incest Pack" onclick="event.stopPropagation(); toggleItem(this)"><i class="fas fa-cart-plus"></i> ADD</button>
+          </div>
+        </div>
+      </div>
+      <div class="card tier-gold" onclick="showDetails('secret')">
+        <div class="card-img-wrap">
+          <img src="secret-vault.webp" class="card-img">
+          <div class="type-badge" style="background:var(--gold); color:black;">🔐 VIP</div>
+          <div class="info-icon">i</div>
+        </div>
+        <div class="card-body">
+          <div class="card-name" style="color:var(--gold);">Secret Vault</div>
+          <div class="card-text">Extreme content. Not for everyone.</div>
+          <div class="card-price-row">
+            <div class="price-block"><span class="old-price">₹349</span><span class="price" style="color:var(--gold);">₹260</span></div>
+            <button class="btn-add" data-id="secret" data-price="260" data-name="Secret Vault" onclick="event.stopPropagation(); toggleItem(this)"><i class="fas fa-cart-plus"></i> ADD</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        const packs = [
-            { name: "🎧 Audio Erotica Pack", price: 139, originalPrice: 189, desc: "Immersive erotic audio stories. Perfect for discreet listening—no screen required.", image: "audio-erotica" },
-            { name: "📖 PDF Stories Pack", price: 103, originalPrice: 139, desc: "Hundreds of the hottest erotic tales to fuel your deepest fantasies.", image: "pdf-stories", label: "BESTSELLER" },
-            { name: "🎨 Animated Pack", price: 169, originalPrice: 229, desc: "Exclusive, uncensored animations bringing your wildest fantasies to life.", image: "animated-pack" },
-            { name: "📱 Viral MMS Pack", price: 149, originalPrice: 199, desc: "A massive library of raw, unfiltered viral moments.", image: "viral-mms" },
-            { name: "⚡️ Incest Vault", price: 219, originalPrice: 289, desc: "Dive into forbidden family secrets with these provocative stories.", image: "incest-vault" },
-            { name: "🔐 Secret Vault", price: 260, originalPrice: 349, desc: "Our most guarded collection. The explicit content others are too afraid to show.", image: "secret-vault" },
-            { name: "🖤 BBC-Guy Collection", price: 189, originalPrice: 249, desc: "300+ exclusive full-length scenes featuring powerful BBC dominance over innocent Indian girls.", image: "bbc-guy" },
-            { name: "📹 Hidden Spy Cam", price: 199, originalPrice: 269, desc: "Raw, authentic, and unfiltered moments caught on hidden cameras worldwide.", image: "spy-cam" }
-        ];
+    <div class="bundle-section theme-red">
+      <div class="bundle-title"><i class="fas fa-fire"></i> 30% OFF BUNDLE</div>
+      <div class="bundle-desc">Get ALL 8 Packs for one low price</div>
+      <div class="bundle-price-row">
+        <span class="bundle-price">₹999</span>
+        <span class="bundle-old">₹1427</span>
+      </div>
+      <button class="bundle-btn" onclick="addAllItems()">Grab Deal Now</button>
+    </div>
 
-        const discounts = { 8: 0.30 };
+  </div>
 
-        // Dynamically create pack cards
-        packs.forEach((pack, index) => {
-            const card = document.createElement('div');
-            card.className = 'pack-card';
+  <footer>
+    <div class="footer-logo"><span class="desi">Desi</span><span class="tease">Tease</span></div>
+    <p class="footer-msg">Have a question, custom request, or want international payment options? DM us directly.</p>
+    <div class="social-links">
+      <a href="https://t.me/DesiTease_2" class="social-btn"><i class="fab fa-telegram-plane"></i> Telegram</a>
+      <a href="https://instagram.com/DesiTease_" class="social-btn"><i class="fab fa-instagram"></i> Instagram</a>
+    </div>
+    <p style="color:#ccc; font-size:0.7rem;">&copy; 2025 DesiTease Premium Store. All Rights Reserved.</p>
+  </footer>
 
-            let labelHtml = '';
-            if (pack.label) {
-                const labelClass = pack.label === 'BESTSELLER' ? 'hot-label' : 'new-label';
-                labelHtml = `<div class="${labelClass}">${pack.label}</div>`;
-            }
+  <div class="sticky-cart" id="stickyCart">
+    <div class="cart-info">
+      <div style="font-size:0.65rem; color:#aaa; text-transform:uppercase; margin-bottom: 3px;">Total Payable</div>
+      <div style="font-size:1.1rem; font-weight:800;" id="stickyTotal">₹0</div>
+    </div>
+    <div class="cart-buttons">
+      <button class="clear-btn" onclick="clearCart()">
+        <i class="fas fa-trash-alt"></i> Clear
+      </button>
+      <button class="checkout-arrow" onclick="openCheckout()">
+        Checkout <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
 
-            card.innerHTML = `
-                ${labelHtml}
-                <picture>
-                    <source srcset="${pack.image}.webp" type="image/webp">
-                    <img src="${pack.image}.jpg" alt="${pack.name}" class="main-image">
-                </picture>
-                <div class="pack-content">
-                    <h2>${pack.name}</h2>
-                    <p>${pack.desc}</p>
-                    <div class="price-buy">
-                        <span class="price"><del>₹${pack.originalPrice}</del> ₹${pack.price}</span>
-                        <button class="buy-btn" onclick="openModal(${index})">BUY NOW</button>
-                    </div>
-                </div>
-            `;
-            packsGrid.appendChild(card);
-        });
+  <div class="modal" id="detailModal" onclick="if(event.target===this) closeDetail()">
+    <div class="detail-box" id="detailBox">
+      <button onclick="closeDetail()" style="position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.6); color:white; border:none; width:30px; height:30px; border-radius:50%; font-weight:bold; cursor:pointer; z-index:10;">&times;</button>
+      <img src="" id="dImg" class="detail-img">
+      <div class="detail-content">
+        <h2 id="dTitle">Title</h2>
+        <p id="dDesc">Description</p>
+        <div class="spec-grid" id="dSpecs"></div>
+        <button onclick="closeDetail()" class="detail-close-btn">Close Preview</button>
+      </div>
+    </div>
+  </div>
 
-        function openModal(initialIndex) {
-            packSelector.innerHTML = '';
-            packs.forEach((pack, index) => {
-                const isChecked = index === initialIndex;
-                const label = document.createElement('label');
-                label.innerHTML = `
-                    <input type="checkbox" data-index="${index}" onchange="updatePrice()" ${isChecked ? 'checked' : ''}>
-                    <span class="pack-text">${pack.name} - ₹${pack.price}</span>
-                `;
-                packSelector.appendChild(label);
-            });
-            updatePrice();
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
+  <div class="modal" id="checkoutModal">
+    <div class="checkout-box">
+      <span class="modal-close-btn" onclick="closeCheckout()">&times;</span>
+      <h2 class="co-title">Complete Your Purchase</h2>
+      
+      <div class="co-tabs">
+        <div class="co-tab active" onclick="switchPayment('upi')"><i class="fas fa-qrcode"></i> UPI</div>
+        <div class="co-tab" onclick="switchPayment('paypal')"><i class="fab fa-paypal"></i> PayPal</div>
+        <div class="co-tab" onclick="switchPayment('binance')"><i class="fab fa-bitcoin"></i> Crypto</div>
+      </div>
+      
+      <div class="co-section active" id="pay-upi">
+        <p style="color:#666; font-size:0.9rem; margin-bottom:10px; font-weight:600;">Scan to pay with any UPI App</p>
+        <img src="upi-qr.jpg" style="width:140px; border:2px solid #333; border-radius:10px; margin-bottom:10px;">
+        <br>
+        <a href="upi-qr.jpg" download style="color:#e55039; font-weight:700; font-size:0.85rem; text-decoration:underline;">Download QR Code</a>
+      </div>
+      
+      <div class="co-section" id="pay-paypal">
+        <p style="margin-bottom:10px; font-weight:600;">International Payment (PayPal)</p>
+        <a href="https://paypal.me/gursherweb" target="_blank"
+           style="background:#0070ba; color:white; padding:12px 25px; border-radius:30px; text-decoration:none; font-weight:700; display:inline-block;">
+          <i class="fab fa-paypal"></i> Pay with PayPal
+        </a>
+      </div>
+      
+      <div class="co-section" id="pay-binance">
+        <p style="margin-bottom:5px;">USDT (TRC20)</p>
+        <code style="display:block; background:#eee; padding:8px; border-radius:5px; font-size:0.75rem; margin-bottom:10px; word-break:break-all;">
+          TLquccw7uU4A6fTJekDsrsQbJEvnFv1eTD
+        </code>
+        <button onclick="copyAddress()" style="padding:5px 10px; cursor:pointer;">Copy Address</button>
+      </div>
 
-        function closeModal() {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
+      <div class="order-summary" id="orderList"></div>
+      
+      <div class="co-total">Payable Amount: <span id="checkoutTotal">₹0</span></div>
 
-        function updatePrice() {
-            let baseTotal = 0;
-            let selectedCount = 0;
-            const checkboxes = packSelector.querySelectorAll('input[type="checkbox"]');
-            
-            checkboxes.forEach(cb => {
-                const label = cb.closest('label');
-                if (cb.checked) {
-                    selectedCount++;
-                    const pack = packs[cb.dataset.index];
-                    baseTotal += pack.price;
-                    label.classList.add('selected');
-                } else {
-                    label.classList.remove('selected');
-                }
-            });
+      <form name="desi-orders" method="POST" data-netlify="true" enctype="multipart/form-data" action="success.html">
+        <input type="hidden" name="form-name" value="desi-orders">
+        <input type="hidden" name="items" id="formItems">
+        <input type="hidden" name="amount" id="formAmount">
+        
+        <input 
+          type="text" 
+          name="telegram" 
+          class="co-input" 
+          placeholder="Your Telegram Username (@YourName)" 
+          required
+        >
+        <div class="co-help">If you don't have a username, enter your registered Telegram phone number.</div>
 
-            let finalTotal = baseTotal;
-            const currentDiscount = discounts[selectedCount] || 0;
-            if (currentDiscount > 0) {
-                finalTotal = baseTotal * (1 - currentDiscount);
-            }
+        <label style="display:block; text-align:left; font-size:0.85rem; color:#666; margin:10px 0 5px; font-weight:600;">
+          Upload Payment Screenshot
+        </label>
+        <input type="file" name="screenshot" class="co-input" accept="image/*" required>
+        
+        <button type="submit" class="co-btn">🚀 Submit & Get Access</button>
+      </form>
+    </div>
+  </div>
 
-            if (selectedCount > 0) {
-                let summaryText = `Total: ₹${Math.round(finalTotal)}`;
-                if (baseTotal > finalTotal) {
-                    summaryText += ` <span style="color:#dc2626;font-style:italic;font-weight:700">(You Save: ₹${Math.round(baseTotal - finalTotal)}!)</span>`;
-                }
-                priceSummary.innerHTML = summaryText;
-            } else {
-                priceSummary.textContent = 'Total: ₹0';
-            }
-        }
+  <script>
+    const bg = document.getElementById('bg-layer');
+    const catTitles = document.querySelectorAll('.cat-title');
+    const bundleSection = document.querySelector('.bundle-section');
+    const bubbles = document.querySelectorAll('.bubble');
 
-        function prepareFormSubmission() {
-            const checkboxes = packSelector.querySelectorAll('input[type="checkbox"]:checked');
-            const selectedPacksArray = [];
-            let totalPrice = 0;
-            
-            checkboxes.forEach(cb => {
-                const pack = packs[cb.dataset.index];
-                selectedPacksArray.push(pack.name);
-                totalPrice += pack.price;
-            });
-            
-            // Apply bundle discount if all 8 selected
-            if (selectedPacksArray.length === 8) {
-                totalPrice = 999;
-            }
-            
-            // Create the summary string for email
-            const packsList = selectedPacksArray.map(name => `${name.split(' (')[0]}`).join(', ');
-            const summaryText = `Selected Packs And Total:\nPacks: ${packsList} | Total Paid: ₹${totalPrice}`;
-            
-            // Set hidden field value
-            document.getElementById('selected-packs-and-total').value = summaryText;
-            
-            return true; // Allow form submission
-        }
+    const auraTiers = [];
+    window.addEventListener('load', () => {
+      auraTiers.length = 0;
+      auraTiers.push(catTitles[0].offsetTop);
+      auraTiers.push(catTitles[1].offsetTop);
+      auraTiers.push(catTitles[2].offsetTop);
+      auraTiers.push(bundleSection.offsetTop);
+      updateAura();
+    });
+    window.addEventListener('resize', () => {
+      auraTiers.length = 0;
+      auraTiers.push(catTitles[0].offsetTop);
+      auraTiers.push(catTitles[1].offsetTop);
+      auraTiers.push(catTitles[2].offsetTop);
+      auraTiers.push(bundleSection.offsetTop);
+      updateAura();
+    });
 
-        window.onclick = e => {
-            if (e.target == modal) closeModal();
-        };
-    </script>
+    window.addEventListener('scroll', updateAura);
+
+    function updateAura() {
+      const y = window.scrollY + window.innerHeight * 0.35;
+      let tierIndex = 0;
+      if (y >= auraTiers[3]) tierIndex = 3;
+      else if (y >= auraTiers[2]) tierIndex = 2;
+      else if (y >= auraTiers[1]) tierIndex = 1;
+      else tierIndex = 0;
+
+      let themeClass = 'theme-red';
+
+      switch (tierIndex) {
+        case 0:
+          bg.style.background =
+            'radial-gradient(circle at top, rgba(255,94,87,0.35), transparent 60%)' +
+            ',linear-gradient(180deg, var(--aura-1) 0%, #12040b 40%, #0a050b 100%)';
+          bg.style.filter = 'saturate(1.05)';
+          themeClass = 'theme-red';
+          break;
+        case 1:
+          bg.style.background =
+            'radial-gradient(circle at center, rgba(180,70,255,0.45), transparent 65%)' +
+            ',linear-gradient(180deg, var(--aura-2) 0%, #0d061a 45%, #05030f 100%)';
+          bg.style.filter = 'saturate(1.1)';
+          themeClass = 'theme-purple';
+          break;
+        case 2:
+          bg.style.background =
+            'radial-gradient(circle at center, rgba(0,255,180,0.22), transparent 60%)' +
+            ',linear-gradient(180deg, var(--aura-3) 0%, #00140e 40%, #00040b 100%)';
+          bg.style.filter = 'saturate(1.15)';
+          themeClass = 'theme-emerald';
+          break;
+        case 3:
+          bg.style.background =
+            'radial-gradient(circle at bottom, rgba(255,94,87,0.35), transparent 65%)' +
+            ',linear-gradient(180deg, #140104 0%, #020001 100%)';
+          bg.style.filter = 'saturate(1.2)';
+          themeClass = 'theme-red';
+          break;
+      }
+
+      bundleSection.className = 'bundle-section ' + themeClass;
+      bubbles.forEach(bubble => {
+        bubble.className = 'bubble ' + themeClass;
+      });
+    }
+
+    let cart = [];
+    
+    function toggleItem(btn) {
+      const id = btn.dataset.id;
+      const price = parseInt(btn.dataset.price);
+      const name = btn.dataset.name;
+      const idx = cart.findIndex(i=>i.id===id);
+      
+      if(idx>-1) {
+        cart.splice(idx,1);
+        btn.classList.remove('active');
+        btn.innerHTML = '<i class="fas fa-cart-plus"></i> ADD';
+      } else {
+        cart.push({id,price,name});
+        btn.classList.add('active');
+        btn.innerHTML = '<i class="fas fa-check"></i> ADDED';
+      }
+      updateTotal();
+    }
+    
+    function removeFromCart(id) {
+      cart = cart.filter(i=>i.id!==id);
+      const btn = document.querySelector(`.btn-add[data-id="${id}"]`);
+      if(btn) { 
+        btn.classList.remove('active'); 
+        btn.innerHTML = '<i class="fas fa-cart-plus"></i> ADD';
+      }
+      updateTotal(); renderOrderList();
+    }
+
+    function clearCart() {
+      if(cart.length === 0) return;
+      document.querySelectorAll('.btn-add.active').forEach(btn => {
+        btn.classList.remove('active');
+        btn.innerHTML = '<i class="fas fa-cart-plus"></i> ADD';
+      });
+      cart = [];
+      updateTotal();
+    }
+    
+    function addAllItems() {
+      cart=[];
+      document.querySelectorAll('.btn-add').forEach(b=>{
+        cart.push({id:b.dataset.id, price:parseInt(b.dataset.price), name:b.dataset.name});
+        b.classList.add('active');
+        b.innerHTML = '<i class="fas fa-check"></i> ADDED';
+      });
+      updateTotal(); openCheckout();
+    }
+    
+    function updateTotal() {
+      let t=0; cart.forEach(c=>t+=c.price); if(cart.length===8) t=999;
+      document.getElementById('stickyTotal').innerText="₹"+t;
+      document.getElementById('checkoutTotal').innerText="₹"+t;
+      document.getElementById('formAmount').value=t;
+      document.getElementById('formItems').value=cart.map(i=>i.name).join(', ');
+      document.getElementById('stickyCart').style.display = cart.length>0?'flex':'none';
+    }
+    
+    const data = {
+      'pdf': { 
+        t:'PDF Stories Pack', 
+        d:'Huge collection. 15,000+ text stories. Simple English, Hindi, Punjabi and Urdu. Read about Bhabhi, Neighbors and more.', 
+        img:'pdf-stories.webp', 
+        s:[['FILES','15,000+'],['FORMAT','PDF/Text'],['LANGUAGE','Hindi/Eng'],['ACCESS','Lifetime']],
+        tier: 'tier-red'
+      },
+      'audio': { 
+        t:'Audio Erotica', 
+        d:'Audio sex stories in Hindi, Punjabi, English, Urdu. Clear sound. Hear real Indian voices enjoying.', 
+        img:'audio-erotica.webp', 
+        s:[['HOURS','300+'],['AUDIO','HQ Stereo'],['LANGUAGE','Hindi/Puj'],['UPDATES','Weekly']],
+        tier: 'tier-purple'
+      },
+      'mms': { 
+        t:'Viral MMS Pack', 
+        d:'Videos leaked from phones. Real Indian girls in hostels, hotels and colleges. Very raw.', 
+        img:'viral-mms.webp', 
+        s:[['VIDEOS','5,000+'],['SOURCE','Leaked'],['TYPE','Raw/Real'],['REGION','Pan India']],
+        tier: 'tier-purple'
+      },
+      'anim': { 
+        t:'Animated Pack', 
+        d:'Cartoons and 3D videos. Like Savita Bhabhi but video. Full color and HD quality.', 
+        img:'animated-pack.webp', 
+        s:[['STYLE','3D/2D'],['QUALITY','1080p HD'],['CENSORED','No'],['CONTENT','Fantasy']],
+        tier: 'tier-purple'
+      },
+      'bbc': { 
+        t:'BBC Collection', 
+        d:'300+ exclusive full-length scenes featuring powerful BBC dominance over innocent Indian girls.', 
+        img:'bbc-guy.webp', 
+        s:[['VIDEOS','300+'],['THEME','Blacked'],['FOCUS','Hardcore'],['LENGTH','Full Scenes']],
+        tier: 'tier-emerald'
+      },
+      'spy': { 
+        t:'Spy Cam', 
+        d:'Cameras hidden in rooms. Watch girls changing clothes without them knowing. Very secret.', 
+        img:'spy-cam.webp', 
+        s:[['TYPE','Hidden Cam'],['LOCATIONS','Hotels/Rooms'],['VIBE','Voyeur'],['RARITY','High']],
+        tier: 'tier-emerald'
+      },
+      'incest': { 
+        t:'Incest Vault', 
+        d:'Family secret videos. Brothers, sisters, moms. The things you cannot tell anyone.', 
+        img:'incest-vault.webp', 
+        s:[['THEME','Family'],['TABOO','Extreme'],['MEDIA','Video/Text'],['DEMAND','High']],
+        tier: 'tier-emerald'
+      },
+      'secret': { 
+        t:'Secret Vault', 
+        d:'The most dangerous collection. Content that is too hot. Only for people who want everything.', 
+        img:'secret-vault.webp', 
+        s:[['STATUS','VIP'],['CONTENT','Unlisted'],['RISK','High'],['ACCESS','Restricted']],
+        tier: 'tier-gold'
+      }
+    };
+
+    function showDetails(id) {
+      const i = data[id];
+      const detailBox = document.getElementById('detailBox');
+      detailBox.className = 'detail-box ' + i.tier;
+      document.getElementById('dImg').src = i.img;
+      document.getElementById('dTitle').innerText = i.t;
+      document.getElementById('dDesc').innerText = i.d;
+      const g = document.getElementById('dSpecs'); 
+      g.innerHTML = '';
+      i.s.forEach(s => {
+        g.innerHTML += `<div class="spec-item"><span class="spec-label">${s[0]}</span><div class="spec-val">${s[1]}</div></div>`;
+      });
+      document.getElementById('detailModal').style.display = 'flex';
+    }
+    
+    function closeDetail() { document.getElementById('detailModal').style.display='none'; }
+    function openCheckout() { renderOrderList(); document.getElementById('checkoutModal').style.display='flex'; }
+    function closeCheckout() { document.getElementById('checkoutModal').style.display='none'; }
+    
+    function renderOrderList() {
+      const l=document.getElementById('orderList'); l.innerHTML='';
+      if(cart.length===0) { l.innerHTML='<div style="text-align:center;color:#666;font-size:0.8rem;">No items</div>'; return; }
+      cart.forEach(i=>{
+        l.innerHTML+=`<div class="summary-item"><span>✓ ${i.name}</span><div><span>₹${i.price}</span><span class="summary-remove" onclick="removeFromCart('${i.id}')">&times;</span></div></div>`;
+      });
+      if(cart.length===8) l.innerHTML+='<span class="bundle-tag">🎉 Bundle Discount Applied!</span>';
+    }
+    function switchPayment(t) {
+      document.querySelectorAll('.co-tab').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('.co-section').forEach(x=>x.classList.remove('active'));
+      event.target.classList.add('active'); document.getElementById('pay-'+t).classList.add('active');
+    }
+    function copyAddress() {
+      const addr = 'TLquccw7uU4A6fTJekDsrsQbJEvnFv1eTD';
+      navigator.clipboard.writeText(addr).then(()=>alert('USDT address copied!'));
+    }
+  </script>
 </body>
 </html>
