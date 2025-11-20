@@ -30,11 +30,11 @@
             min-height: 100vh;
             padding: 20px;
             text-align: center;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
             position: relative;
         }
 
-        /* Animated background matching index page */
         #bg-layer {
             position: fixed;
             top: 0;
@@ -63,6 +63,7 @@
             border: 1px solid var(--border);
             position: relative;
             z-index: 1;
+            margin: 20px 0;
         }
 
         .logo {
@@ -106,14 +107,24 @@
             font-size: 0.95rem;
         }
 
-        .order-summary {
+        .order-summary-wrapper {
             background: rgba(255,255,255,0.05);
-            padding: 15px;
             border-radius: 12px;
             margin-bottom: 25px;
-            text-align: left;
             border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
         }
+
+        .order-summary {
+            padding: 15px;
+            text-align: left;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        
+        .order-summary::-webkit-scrollbar { width: 5px; }
+        .order-summary::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        .order-summary::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
 
         .summary-row {
             display: flex;
@@ -122,7 +133,9 @@
             font-size: 0.9rem;
             color: #bbb;
             padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
+        .summary-row:last-child { border-bottom: none; }
 
         .summary-row span:first-child {
             font-weight: 600;
@@ -131,12 +144,12 @@
         .summary-total {
             display: flex;
             justify-content: space-between;
-            margin-top: 12px;
-            padding-top: 12px;
+            padding: 15px;
             border-top: 1px solid rgba(255,255,255,0.2);
             font-weight: 800;
             font-size: 1.2rem;
             color: white;
+            background: rgba(0, 0, 0, 0.3);
         }
 
         .fast-track-box {
@@ -203,7 +216,6 @@
             color: #4db8ff;
         }
 
-        /* Floating particles effect */
         .particle {
             position: fixed;
             width: 4px;
@@ -232,7 +244,6 @@
 
     <div id="bg-layer"></div>
 
-    <!-- Floating particles -->
     <div class="particle"></div>
     <div class="particle"></div>
     <div class="particle"></div>
@@ -246,7 +257,10 @@
         <h1>Payment Received!</h1>
         <p class="sub">Sit back and relax. We have your details safe and will verify your order shortly.</p>
 
-        <div class="order-summary" id="summary-box">
+        <div class="order-summary-wrapper">
+            <div class="order-summary" id="items-list">
+                <!-- Order items will be injected here -->
+            </div>
             <div class="summary-total">
                 <span>Total Paid:</span>
                 <span id="paid-amount">₹0</span>
@@ -266,7 +280,6 @@
     </div>
 
     <script>
-        // Retrieve order details from localStorage
         const orderData = localStorage.getItem('desiOrder');
         
         if (orderData) {
@@ -275,24 +288,22 @@
             // Update total amount
             document.getElementById('paid-amount').textContent = "₹" + order.total;
             
-            // Generate Item List text for Telegram
+            // Generate Item List for Telegram
             let itemList = order.items.map(i => `• ${i.name} - ₹${i.price}`).join('%0A');
             let msg = `Hi DesiTease! 👋%0A%0AI just paid: ₹${order.total}%0A%0A📦 My Order:%0A${itemList}%0A%0APlease verify my payment screenshot and send access! 🚀`;
             
             // Set Telegram button link
             document.getElementById('tg-link').href = `https://t.me/DesiTease_2?text=${msg}`;
 
-            // Fill summary box with items
-            const box = document.getElementById('summary-box');
+            // Fill items list (separate from total)
+            const itemsList = document.getElementById('items-list');
             let html = '';
             order.items.forEach(item => {
                 html += `<div class="summary-row"><span>✓ ${item.name}</span><span>₹${item.price}</span></div>`;
             });
-            html += `<div class="summary-total"><span>Total Paid:</span><span>₹${order.total}</span></div>`;
-            box.innerHTML = html;
+            itemsList.innerHTML = html;
 
         } else {
-            // Fallback if accessed directly without order
             document.querySelector('.sub').textContent = "Order details not found. Please contact admin directly on Telegram.";
             document.getElementById('tg-link').href = "https://t.me/DesiTease_2";
         }
