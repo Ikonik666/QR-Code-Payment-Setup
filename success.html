@@ -1,312 +1,469 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Confirmed - DesiTease</title>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --primary: #ff5e57;
-            --success: #2ed573;
-            --telegram: #0088cc;
-            --glass: rgba(20, 20, 20, 0.92);
-            --border: rgba(255, 255, 255, 0.1);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+  <title>Order Received - DesiTease</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-        body {
-            background: #1a0505;
-            color: white;
-            font-family: 'Montserrat', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            text-align: center;
-            overflow-y: auto;
-            overflow-x: hidden;
-            position: relative;
-        }
+  <style>
+    :root {
+      --primary: #00d2ff;
+      --primary-dark: #0984e3;
+      --success: #00b894;
+    }
 
-        #bg-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, rgba(255,94,87,0.4), transparent 60%),
-                        linear-gradient(180deg, #1a0505 0%, #0a0505 50%, #000000 100%);
-            animation: pulseGlow 4s ease-in-out infinite alternate;
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background: linear-gradient(180deg, #e3f2fd 0%, #fdfbfb 100%);
+      color: #000000;
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+    }
 
-        @keyframes pulseGlow {
-            0% { filter: saturate(1.0) brightness(1.0); }
-            100% { filter: saturate(1.2) brightness(1.1); }
-        }
+    /* Slow Gentle Snow */
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.7;
+      pointer-events: none;
+      box-shadow: 0 0 8px rgba(255,255,255,0.6);
+      animation: fall linear infinite;
+      z-index: 0;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0.8; }
+      100% { transform: translateY(110vh) translateX(40px) rotate(360deg); opacity: 0.2; }
+    }
 
-        .success-card {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            padding: 40px 30px;
-            border-radius: 20px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
-            border: 1px solid var(--border);
-            position: relative;
-            z-index: 1;
-            margin: 20px 0;
-        }
+    .frost-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at top, rgba(255,255,255,0.2) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+      animation: frostPulse 12s ease-in-out infinite;
+    }
+    @keyframes frostPulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.2; }
+    }
 
-        .logo {
-            font-family: 'Baloo 2', cursive;
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-        }
-        .logo .desi { 
-            color: #fff; 
-            text-shadow: 0 0 12px rgba(255,255,255,0.4); 
-        }
-        .logo .tease {
-            color: var(--primary);
-            text-shadow: 0 0 20px rgba(255, 94, 87, 0.5);
-        }
+    .success-container {
+      max-width: 500px;
+      width: 100%;
+      background: white;
+      border-radius: 24px;
+      padding: 40px 30px;
+      box-shadow: 0 20px 60px rgba(9, 132, 227, 0.15);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      border: 2px solid rgba(174, 214, 241, 0.3);
+    }
 
-        .icon-box {
-            font-size: 4rem;
-            margin-bottom: 15px;
-            animation: bounce 2s ease infinite;
-        }
+    @media (max-width: 768px) {
+      .success-container {
+        padding: 35px 20px;
+      }
+    }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+    /* Animated Success Icon */
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: successPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      box-shadow: 0 10px 30px rgba(0, 184, 148, 0.3);
+    }
 
-        h1 {
-            font-family: 'Baloo 2', cursive;
-            color: var(--success);
-            margin-bottom: 10px;
-            font-size: 2rem;
-            text-shadow: 0 0 15px rgba(46, 213, 115, 0.5);
-        }
+    @keyframes successPop {
+      0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
 
-        p.sub {
-            color: #ccc;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            font-size: 0.95rem;
-        }
+    .success-icon i {
+      font-size: 2.5rem;
+      color: white;
+    }
 
-        .order-summary-wrapper {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.1);
-            overflow: hidden;
-        }
+    h1 {
+      font-family: 'Baloo 2', cursive;
+      font-size: 2rem;
+      color: var(--success);
+      margin-bottom: 30px;
+      font-weight: 800;
+    }
 
-        .order-summary {
-            padding: 15px;
-            text-align: left;
-            max-height: 250px;
-            overflow-y: auto;
-        }
-        
-        .order-summary::-webkit-scrollbar { width: 5px; }
-        .order-summary::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
-        .order-summary::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+    /* Order Summary */
+    .order-box {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border: 2px solid #e8f4fd;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 25px;
+      text-align: left;
+    }
 
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            color: #bbb;
-            padding: 5px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .summary-row:last-child { border-bottom: none; }
+    .order-title {
+      font-size: 0.85rem;
+      color: #636e72;
+      margin-bottom: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
 
-        .summary-row span:first-child {
-            font-weight: 600;
-        }
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
 
-        .summary-total {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            font-weight: 800;
-            font-size: 1.2rem;
-            color: white;
-            background: rgba(0, 0, 0, 0.3);
-        }
+    .order-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
 
-        .fast-track-box {
-            background: linear-gradient(145deg, rgba(0, 136, 204, 0.15), rgba(0, 136, 204, 0.05));
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid rgba(0, 136, 204, 0.3);
-            margin-bottom: 20px;
-        }
+    .order-total {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 15px;
+      margin-top: 15px;
+      border-top: 2px solid var(--primary-dark);
+      font-size: 1.2rem;
+      color: var(--primary-dark);
+      font-weight: 900;
+    }
 
-        .fast-track-box strong {
-            color: #4db8ff;
-            display: block;
-            margin-bottom: 8px;
-            font-size: 1rem;
-            font-family: 'Baloo 2', cursive;
-        }
+    /* Fast Track Box */
+    .fast-track-box {
+      background: linear-gradient(135deg, #e8f9f3 0%, #d4f4e8 100%);
+      border: 2px solid #00b894;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
 
-        .fast-track-box p {
-            font-size: 0.85rem;
-            margin: 0;
-            color: #ddd;
-            line-height: 1.5;
-        }
+    .fast-track-title {
+      font-size: 1.1rem;
+      color: #000000;
+      margin-bottom: 10px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
 
-        .telegram-btn {
-            background: linear-gradient(135deg, var(--telegram), #0099dd);
-            color: white;
-            text-decoration: none;
-            padding: 15px 30px;
-            border-radius: 50px;
-            display: inline-block;
-            font-weight: 800;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(0, 136, 204, 0.4);
-            margin-bottom: 15px;
-            font-family: 'Montserrat', sans-serif;
-        }
+    .fast-track-desc {
+      font-size: 0.85rem;
+      color: #2d3436;
+      margin-bottom: 18px;
+      line-height: 1.5;
+      font-weight: 500;
+    }
 
-        .telegram-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 136, 204, 0.6);
-        }
+    .btn-telegram {
+      width: 100%;
+      background: linear-gradient(135deg, #0088cc 0%, #229ED9 100%);
+      color: white;
+      border: none;
+      padding: 16px 20px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 5px 20px rgba(0, 136, 204, 0.3);
+    }
 
-        .telegram-btn:active {
-            transform: translateY(-1px);
-        }
+    .btn-telegram:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 136, 204, 0.5);
+    }
 
-        .note {
-            font-size: 0.85rem;
-            color: #888;
-            line-height: 1.6;
-        }
+    .btn-telegram i {
+      font-size: 1.2rem;
+    }
 
-        .contact-link {
-            color: var(--telegram);
-            text-decoration: none;
-            font-weight: 700;
-            transition: color 0.3s ease;
-        }
+    /* Manual Wait Box */
+    .manual-box {
+      background: linear-gradient(135deg, #fff9e6 0%, #fff4d6 100%);
+      border: 2px solid #ffd93d;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 25px;
+      text-align: center;
+    }
 
-        .contact-link:hover {
-            color: #4db8ff;
-        }
+    .manual-text {
+      font-size: 0.85rem;
+      color: #2d3436;
+      font-weight: 600;
+      line-height: 1.5;
+    }
 
-        .particle {
-            position: fixed;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 94, 87, 0.3);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: float 15s infinite;
-            z-index: 0;
-        }
+    /* Footer Links */
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding-top: 20px;
+      border-top: 1px solid #f1f2f6;
+    }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(100vh) translateX(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
-        }
+    .footer-link {
+      font-size: 0.85rem;
+      color: var(--primary-dark);
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.3s ease;
+    }
 
-        .particle:nth-child(2) { left: 20%; animation-delay: 2s; }
-        .particle:nth-child(3) { left: 40%; animation-delay: 4s; }
-        .particle:nth-child(4) { left: 60%; animation-delay: 6s; }
-        .particle:nth-child(5) { left: 80%; animation-delay: 8s; }
-    </style>
+    .footer-link:hover {
+      transform: scale(1.05);
+    }
+
+    .social-link-telegram {
+      background: linear-gradient(135deg, #0088cc 0%, #229ED9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .social-link-instagram {
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
 </head>
+
 <body>
+  <div class="frost-overlay"></div>
+  <div id="snow-container"></div>
 
-    <div id="bg-layer"></div>
-
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-
-    <div class="success-card">
-        <div class="logo"><span class="desi">Desi</span><span class="tease">Tease</span></div>
-        
-        <div class="icon-box">🎉</div>
-        <h1>Payment Received!</h1>
-        <p class="sub">Sit back and relax. We have your details safe and will verify your order shortly.</p>
-
-        <div class="order-summary-wrapper">
-            <div class="order-summary" id="items-list">
-                <!-- Order items will be injected here -->
-            </div>
-            <div class="summary-total">
-                <span>Total Paid:</span>
-                <span id="paid-amount">₹0</span>
-            </div>
-        </div>
-
-        <div class="fast-track-box">
-            <strong>⚡ Fast Track (Recommended)</strong>
-            <p>Click below to send your order details directly on Telegram. Helps us verify faster and get you access immediately!</p>
-        </div>
-
-        <a href="#" id="tg-link" class="telegram-btn">
-            📨 Send Order on Telegram
-        </a>
-
-        <p class="note">Or wait for us to come online and verify manually. Usually takes 5-30 minutes.<br>Questions? Contact <a href="https://t.me/DesiTease_2" class="contact-link">@DesiTease_2</a></p>
+  <div class="success-container">
+    <div class="success-icon">
+      <i class="fas fa-check"></i>
     </div>
 
-    <script>
-        const orderData = localStorage.getItem('desiOrder');
-        
-        if (orderData) {
-            const order = JSON.parse(orderData);
-            
-            // Update total amount
-            document.getElementById('paid-amount').textContent = "₹" + order.total;
-            
-            // Generate Item List for Telegram
-            let itemList = order.items.map(i => `• ${i.name} - ₹${i.price}`).join('%0A');
-            let msg = `Hi DesiTease! 👋%0A%0AI just paid: ₹${order.total}%0A%0A📦 My Order:%0A${itemList}%0A%0APlease verify my payment screenshot and send access! 🚀`;
-            
-            // Set Telegram button link
-            document.getElementById('tg-link').href = `https://t.me/DesiTease_2?text=${msg}`;
+    <h1>Order Received! 🎉</h1>
 
-            // Fill items list (separate from total)
-            const itemsList = document.getElementById('items-list');
-            let html = '';
-            order.items.forEach(item => {
-                html += `<div class="summary-row"><span>✓ ${item.name}</span><span>₹${item.price}</span></div>`;
-            });
-            itemsList.innerHTML = html;
+    <!-- ORDER SUMMARY -->
+    <div class="order-box">
+      <div class="order-title">📦 Your Order</div>
+      <div id="orderItems">
+        <!-- Dynamically filled -->
+      </div>
+    </div>
 
-        } else {
-            document.querySelector('.sub').textContent = "Order details not found. Please contact admin directly on Telegram.";
-            document.getElementById('tg-link').href = "https://t.me/DesiTease_2";
-        }
-    </script>
+    <!-- FAST TRACK TELEGRAM -->
+    <div class="fast-track-box">
+      <div class="fast-track-title">
+        <i class="fas fa-bolt"></i>
+        <span>Fast Track (Recommended)</span>
+      </div>
+      <p class="fast-track-desc">
+        Click below to send your order details directly on Telegram. Helps us verify faster and get you access immediately!
+      </p>
+      <a href="#" id="telegramBtn" class="btn-telegram">
+        <i class="fab fa-telegram-plane"></i>
+        <span>Send Order To Admin</span>
+      </a>
+    </div>
+
+    <!-- MANUAL WAIT -->
+    <div class="manual-box">
+      <p class="manual-text">
+        Or wait for us to come online and verify manually. Usually takes 5-30 minutes.
+      </p>
+    </div>
+
+    <!-- FOOTER LINKS -->
+    <div class="footer-links">
+      <a href="https://t.me/DesiTease_2" target="_blank" class="footer-link social-link-telegram">
+        <i class="fab fa-telegram-plane"></i> Telegram
+      </a>
+      <a href="https://instagram.com/desitease_" target="_blank" class="footer-link social-link-instagram">
+        <i class="fab fa-instagram"></i> Instagram
+      </a>
+      <a href="index.html" class="footer-link">
+        <i class="fas fa-home"></i> Home
+      </a>
+    </div>
+  </div>
+
+  <script>
+  // Item data for detailed bundle matching
+  const itemData = {
+    'pdf': { name: 'PDF Stories Pack', price: 103 },
+    'mms': { name: 'Viral MMS Pack', price: 149 },
+    'audio': { name: 'Audio Erotica', price: 139 },
+    'animated': { name: 'Animated 3D Pack', price: 169 },
+    'bbc': { name: 'BBC Pack', price: 189 },
+    'ai': { name: 'AI App Pack', price: 149 },
+    'spy': { name: 'Spy Cam Vault', price: 199 },
+    'incest': { name: 'Incest Pack', price: 219 },
+    'secret': { name: 'Secret Vault', price: 260 },
+    'actress': { name: 'Actress Pack', price: 349 }
+  };
+
+  function loadOrder() {
+    // Try to get data from localStorage first (most reliable)
+    const storedData = localStorage.getItem('desiOrder');
+    
+    if (storedData) {
+      const order = JSON.parse(storedData);
+      displayOrder(order.items, order.total);
+    } else {
+      // Fallback to URL params if localStorage fails
+      const urlParams = new URLSearchParams(window.location.search);
+      const itemsParam = urlParams.get('items');
+      const amountParam = urlParams.get('amount');
+      
+      if (itemsParam && amountParam) {
+        const items = itemsParam.split(',').map(id => {
+          const data = itemData[id.trim()];
+          return data ? { id: id.trim(), ...data } : null;
+        }).filter(Boolean);
+        displayOrder(items, '₹' + amountParam);
+      } else {
+        document.getElementById('orderItems').innerHTML = '<div class="order-item"><span>Order details not found.</span></div>';
+      }
+    }
+  }
+
+  function displayOrder(items, totalAmount) {
+    const container = document.getElementById('orderItems');
+    const itemIds = items.map(i => i.id);
+    const itemCount = itemIds.length;
+
+    // Detect bundles
+    let isMegaBundle = itemCount === 10;
+    let isTopPicksBundle = itemCount === 2 && itemIds.includes('pdf') && itemIds.includes('mms');
+    let isTrendingBundle = itemCount === 4 && itemIds.includes('audio') && itemIds.includes('animated') && itemIds.includes('bbc') && itemIds.includes('ai');
+    let isForbiddenBundle = itemCount === 4 && itemIds.includes('spy') && itemIds.includes('incest') && itemIds.includes('secret') && itemIds.includes('actress');
+
+    let html = '';
+
+    if (isMegaBundle) {
+      html += `
+        <div class="order-item">
+          <span><strong>🔥 ULTIMATE WINTER BUNDLE</strong><br><small style="font-size: 0.75rem; color: #636e72;">All 10 Premium Packs</small></span>
+          <span style="color: var(--gold); font-weight: 900;">₹1499</span>
+        </div>`;
+    } else if (isTopPicksBundle) {
+      html += `
+        <div class="order-item">
+          <span><strong>🔥 Top Picks Bundle</strong><br><small style="font-size: 0.75rem; color: #636e72;">PDF Stories + Viral MMS</small></span>
+          <span>₹202</span>
+        </div>`;
+    } else if (isTrendingBundle) {
+      html += `
+        <div class="order-item">
+          <span><strong>⚡ Trending Bundle</strong><br><small style="font-size: 0.75rem; color: #636e72;">Audio + 3D + BBC + AI App</small></span>
+          <span>₹517</span>
+        </div>`;
+    } else if (isForbiddenBundle) {
+      html += `
+        <div class="order-item">
+          <span><strong>💀 Forbidden Vault Bundle</strong><br><small style="font-size: 0.75rem; color: #636e72;">Spy + Incest + Secret + Actress</small></span>
+          <span>₹822</span>
+        </div>`;
+    } else {
+      items.forEach(item => {
+        html += `
+          <div class="order-item">
+            <span>${item.name}</span>
+            <span>₹${item.price}</span>
+          </div>`;
+      });
+    }
+
+    html += `
+      <div class="order-total">
+        <span>Total Paid</span>
+        <span>${totalAmount}</span>
+      </div>`;
+
+    container.innerHTML = html;
+    generateTelegramLink(items, totalAmount, isMegaBundle, isTopPicksBundle, isTrendingBundle, isForbiddenBundle);
+  }
+
+  function generateTelegramLink(items, amount, isMega, isTopPicks, isTrending, isForbidden) {
+    let itemsList = '';
+
+    if (isMega) itemsList = '• ULTIMATE WINTER BUNDLE - ₹1499 (All 10 Packs)';
+    else if (isTopPicks) itemsList = '• Top Picks Bundle - ₹202 (PDF + MMS)';
+    else if (isTrending) itemsList = '• Trending Bundle - ₹517 (Audio + 3D + BBC + AI)';
+    else if (isForbidden) itemsList = '• Forbidden Vault Bundle - ₹822 (Spy + Incest + Secret + Actress)';
+    else itemsList = items.map(i => `• ${i.name} - ₹${i.price}`).join('\n');
+
+    // Clean amount string (remove ₹ if present twice)
+    const cleanAmount = amount.replace('₹', '');
+
+    const message = `Hi DesiTease! 👋
+
+I just paid: ₹${cleanAmount}
+
+📦 My Order:
+${itemsList}
+
+Please verify my payment screenshot and send access! 🚀`;
+
+    const encodedMessage = encodeURIComponent(message);
+    document.getElementById('telegramBtn').href = `https://t.me/DesiTease_2?text=${encodedMessage}`;
+  }
+
+  // Create snow effect
+  function createSnow() {
+    const container = document.getElementById('snow-container');
+    const count = 30;
+    for(let i=0; i<count; i++) {
+      const snow = document.createElement('div');
+      snow.className = 'snowflake';
+      snow.style.left = Math.random() * 100 + 'vw';
+      snow.style.width = snow.style.height = (Math.random() * 5 + 4) + 'px';
+      snow.style.animationDuration = (Math.random() * 10 + 12) + 's';
+      snow.style.animationDelay = (Math.random() * 10) + 's';
+      container.appendChild(snow);
+    }
+  }
+
+  window.onload = function() {
+    loadOrder();
+    createSnow();
+  };
+</script>
+
 </body>
 </html>
