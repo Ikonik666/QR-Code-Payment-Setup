@@ -1,98 +1,297 @@
 // ========================================
-//   DESITEASE - FINAL VERSION V2
-//   Collapsible How It Works restored
+// DESITEASE - SMART PRICING SYSTEM
 // ========================================
 
 const allPacks = [
-    // TOP PICS (3 packs) - Total ₹391, Bundle ₹312 (20% OFF)
-    { id: 'mms', name: 'Viral MMS Pack', price: 149, oldPrice: 223, img: 'viral-mms.webp', type: '📱 VIDEO', cat: 'cat1', desc: 'The most explosive leaked content. Real clips of actresses, influencers, college girls, hotel scandals, and private moments.', size: '2,500+ Videos', quality: '4K HD', duration: 'Weekly Updates' },
-    { id: 'audio', name: 'Audio Erotica', price: 139, oldPrice: 208, img: 'audio-erotica.webp', type: '🎧 AUDIO', cat: 'cat1', desc: 'Seductive audio stories and ASMR that will ignite your senses. Perfect for late-night fantasies.', size: '1,200+ Audios', quality: 'HD Audio', duration: 'Monthly Updates' },
-    { id: 'pdf', name: 'PDF Stories Pack', price: 103, oldPrice: 154, img: 'pdf-stories.webp', type: '📖 TEXT', cat: 'cat1', desc: 'Massive collection of 15,000 explicit text stories across Hindi, English, Punjabi, and Urdu. Every fantasy you\'ve ever imagined.', size: '15,000+ Stories', quality: 'Multi-Language', duration: 'Lifetime Access' },
+    // TOP PICKS (3 packs) - ORANGE - Total: 391, Bundle: 313 (20% OFF)
+    {
+        id: 'pdf',
+        name: 'PDF Stories Pack',
+        price: 103,
+        oldPrice: 139,
+        img: 'pdf-stories.webp',
+        type: '📖 TEXT',
+        cat: 'cat1',
+        color: 'orange',
+        desc: 'Best seller. Read thousands of hot stories anywhere.',
+        fullDesc: 'Huge collection. 40,000+ text stories. Simple English, Hindi, Punjabi and Urdu. Read about Bhabhi, Neighbors and more.',
+        specs: [
+            { label: 'FILES', value: '40,000+' },
+            { label: 'FORMAT', value: 'PDF/Text' },
+            { label: 'LANGUAGE', value: 'Hindi/Eng' },
+            { label: 'ACCESS', value: 'Lifetime' }
+        ]
+    },
+    {
+        id: 'audio',
+        name: 'Audio Erotica',
+        price: 139,
+        oldPrice: 189,
+        img: 'audio-erotica.webp',
+        type: '🎧 AUDIO',
+        cat: 'cat1',
+        color: 'orange',
+        desc: 'Sex stories in Hindi, Punjabi, English. Put on headphones.',
+        fullDesc: 'Audio sex stories in Hindi, Punjabi, English, Urdu. Clear sound. Hear real Indian voices enjoying.',
+        specs: [
+            { label: 'HOURS', value: '3000+' },
+            { label: 'AUDIO', value: 'HQ Stereo' },
+            { label: 'LANGUAGE', value: 'Hindi/Puj' },
+            { label: 'UPDATES', value: 'Weekly' }
+        ]
+    },
+    {
+        id: 'mms',
+        name: 'Viral MMS Pack',
+        price: 149,
+        oldPrice: 199,
+        img: 'viral-mms.webp',
+        type: '📱 VIDEO',
+        cat: 'cat1',
+        color: 'orange',
+        desc: 'Real leaked videos from colleges and hotels. Unfiltered.',
+        fullDesc: 'Videos leaked from phones. Real Indian girls in hostels, hotels and colleges. Very raw.',
+        specs: [
+            { label: 'VIDEOS', value: '50,000+' },
+            { label: 'SOURCE', value: 'Leaked' },
+            { label: 'TYPE', value: 'Raw/Real' },
+            { label: 'REGION', value: 'Pan India' }
+        ]
+    },
 
-    // PREMIUM VAULT (4 packs) - Total ₹856, Bundle ₹684 (20% OFF)
-    { id: 'actress', name: 'Actress Exclusives', price: 349, oldPrice: 523, img: 'actress.webp', type: '🍿 PREMIUM', cat: 'cat2', electric: 'purple', desc: 'Ultimate celebrity fantasy pack. Deepfakes of top Bollywood actresses, leaked content, cum tributes in 4K HD.', size: '3,500+ Videos', quality: '4K Ultra HD', duration: 'Daily Updates' },
-    { id: 'bbc', name: 'BBC Collection', price: 189, oldPrice: 283, img: 'bbc-guy.webp', type: '🖤 NICHE', cat: 'cat2', desc: 'Exclusive interracial content featuring the most intense BBC action. Premium quality guaranteed.', size: '1,500+ Videos', quality: '4K UHD', duration: 'Weekly Updates' },
-    { id: 'animated', name: 'Animated Pack', price: 169, oldPrice: 253, img: 'animated-pack.webp', type: '🎨 3D', cat: 'cat2', desc: 'Premium animated adult content featuring top-tier 3D animations and exclusive artwork.', size: '800+ Videos', quality: '4K 60fps', duration: 'Bi-weekly Updates' },
-    { id: 'ai', name: 'SoulMate AI App', price: 149, oldPrice: 223, img: 'ai-app.webp', type: '🤖 APP', cat: 'cat2', desc: 'Your personal AI companion for intimate conversations, roleplay, and unlimited fantasy exploration.', size: 'Unlimited Chats', quality: 'AI Powered', duration: '1 Year Premium' },
+    // PREMIUM VAULT (4 packs) - PURPLE - Total: 856, Bundle: 685 (20% OFF)
+    {
+        id: 'ai',
+        name: 'SoulMate AI App',
+        price: 149,
+        oldPrice: 223,
+        img: 'ai-app.webp',
+        type: '🤖 APP',
+        cat: 'cat2',
+        color: 'purple',
+        desc: 'Unlimited roleplay characters. Create your fantasy, no filters.',
+        fullDesc: 'Unlimited roleplay characters. Create your fantasy, no filters. AI powered chatbot with no restrictions.',
+        specs: [
+            { label: 'PLATFORM', value: 'iOS/Android' },
+            { label: 'CHARS', value: 'Unlimited' },
+            { label: 'MODE', value: 'Uncensored' },
+            { label: 'ACCESS', value: 'Lifetime' }
+        ]
+    },
+    {
+        id: 'animated',
+        name: 'Animated Pack',
+        price: 169,
+        oldPrice: 229,
+        img: 'animated-pack.webp',
+        type: '🎨 3D',
+        cat: 'cat2',
+        color: 'purple',
+        desc: '3D Hentai and comics. Fantasy uncensored.',
+        fullDesc: 'Cartoons and 3D videos. Like Savita Bhabhi but video. Full color and HD quality.',
+        specs: [
+            { label: 'STYLE', value: '3D/2D' },
+            { label: 'QUALITY', value: '1080p HD' },
+            { label: 'CENSORED', value: 'No' },
+            { label: 'CONTENT', value: 'Fantasy' }
+        ]
+    },
+    {
+        id: 'bbc',
+        name: 'BBC Collection',
+        price: 189,
+        oldPrice: 249,
+        img: 'bbc-guy.webp',
+        type: '🖤 NICHE',
+        cat: 'cat2',
+        color: 'purple',
+        desc: 'Powerful dominance. Black men with Indian girls.',
+        fullDesc: '1000+ exclusive full-length scenes featuring powerful BBC dominance over innocent Indian girls.',
+        specs: [
+            { label: 'VIDEOS', value: '1000+' },
+            { label: 'THEME', value: 'Blacked' },
+            { label: 'FOCUS', value: 'Hardcore' },
+            { label: 'LENGTH', value: 'Full Scenes' }
+        ]
+    },
+    {
+        id: 'actress',
+        name: 'Actress Exclusives',
+        price: 349,
+        oldPrice: 523,
+        img: 'actress.webp',
+        type: '🍿 PREMIUM',
+        cat: 'cat2',
+        color: 'purple',
+        desc: 'Deepfakes, leaks & cum tributes of top Indian actresses - HD.',
+        fullDesc: 'Deepfakes, leaks & cum tributes of top Indian actresses. High quality HD content featuring Bollywood stars.',
+        specs: [
+            { label: 'QUALITY', value: '4K HD' },
+            { label: 'TYPE', value: 'Deepfake+Real' },
+            { label: 'STARS', value: 'Top 650+' },
+            { label: 'TRIBUTES', value: 'Included' }
+        ]
+    },
 
-    // DARK VAULT (3 packs) - Total ₹678, Bundle ₹542 (20% OFF)
-    { id: 'secret', name: 'Secret Vault', price: 260, oldPrice: 390, img: 'secret-vault.webp', type: '🔐 VIP', cat: 'cat3', electric: 'crimson', desc: 'Our most heavily guarded collection. Extreme scenes, banned content, darkest fantasies. VIP access required.', size: '5,000+ Videos', quality: '4K UHD', duration: 'Daily Updates' },
-    { id: 'incest', name: 'Incest Vault', price: 219, oldPrice: 328, img: 'incest-vault.webp', type: '⚡ TABOO', cat: 'cat3', desc: 'Taboo family fantasies brought to life. The forbidden content you\'ve been searching for.', size: '1,800+ Videos', quality: '4K HD', duration: 'Weekly Updates' },
-    { id: 'spy', name: 'Spy Cam Vault', price: 199, oldPrice: 298, img: 'spy-cam.webp', type: '📹 HIDDEN', cat: 'cat3', desc: 'Hidden camera footage from changing rooms, hotels, and private locations. Real authentic moments.', size: '2,000+ Videos', quality: 'HD Quality', duration: 'Daily Updates' }
+    // DARK VAULT (3 packs) - CRIMSON - Total: 678, Bundle: 542 (20% OFF)
+    {
+        id: 'spy',
+        name: 'Spy Cam Vault',
+        price: 199,
+        oldPrice: 269,
+        img: 'spy-cam.webp',
+        type: '📹 HIDDEN',
+        cat: 'cat3',
+        color: 'crimson',
+        desc: 'Hidden camera footage from changing rooms and hotels.',
+        fullDesc: 'Cameras hidden in rooms. Watch girls changing clothes without them knowing. Very secret.',
+        specs: [
+            { label: 'TYPE', value: 'Hidden Cam' },
+            { label: 'LOCATIONS', value: 'Hotels/Rooms' },
+            { label: 'VIBE', value: 'Voyeur' },
+            { label: 'RARITY', value: 'High' }
+        ]
+    },
+    {
+        id: 'incest',
+        name: 'Incest Vault',
+        price: 219,
+        oldPrice: 289,
+        img: 'incest-vault.webp',
+        type: '⚡ TABOO',
+        cat: 'cat3',
+        color: 'crimson',
+        desc: 'Forbidden family secrets. Taboo videos and stories.',
+        fullDesc: 'Family secret videos. Brothers, sisters, moms. The things you cannot tell anyone.',
+        specs: [
+            { label: 'THEME', value: 'Family' },
+            { label: 'TABOO', value: 'Extreme' },
+            { label: 'MEDIA', value: 'Video/Text' },
+            { label: 'DEMAND', value: 'High' }
+        ]
+    },
+    {
+        id: 'secret',
+        name: 'Secret Vault',
+        price: 260,
+        oldPrice: 349,
+        img: 'secret-vault.webp',
+        type: '🔐 VIP',
+        cat: 'cat3',
+        color: 'crimson',
+        desc: 'Extreme content. Not for everyone.',
+        fullDesc: 'The most dangerous collection. Content that is too hot. Only for people who want everything.',
+        specs: [
+            { label: 'STATUS', value: 'VIP' },
+            { label: 'CONTENT', value: 'Unlisted' },
+            { label: 'RISK', value: 'High' },
+            { label: 'ACCESS', value: 'Restricted' }
+        ]
+    }
 ];
 
-const categoryBundles = {
-    cat1: { name: 'Top Pics Bundle', price: 312, discount: 0.20 },
-    cat2: { name: 'Premium Vault Bundle', price: 684, discount: 0.20 },
-    cat3: { name: 'Dark Vault Bundle', price: 542, discount: 0.20 }
-};
+// Calculate bundle prices dynamically
+function calculateBundlePrices() {
+    const bundles = {};
+    ['cat1', 'cat2', 'cat3'].forEach(cat => {
+        const catPacks = allPacks.filter(p => p.cat === cat);
+        const totalPrice = catPacks.reduce((sum, p) => sum + p.price, 0);
+        const discountPercent = 0.20;
+        const discountedPrice = Math.round(totalPrice * (1 - discountPercent));
+        
+        bundles[cat] = {
+            price: discountedPrice,
+            originalPrice: totalPrice,
+            discount: discountPercent,
+            count: catPacks.length
+        };
+    });
+    return bundles;
+}
 
-const megaBundle = { price: 1499, discount: 0.22 };
+const categoryBundles = calculateBundlePrices();
+const megaBundle = {
+    price: 1348,
+    originalPrice: 1925,
+    discount: 0.30
+};
 
 let cart = [];
 
-// GSAP MARQUEE - OPTIMIZED
-function initMarquee() {
-    const track = document.getElementById('marqueeTrack');
-    const marqueeData = [...allPacks, ...allPacks, ...allPacks];
-
-    track.innerHTML = marqueeData.map(p => `
-        <div class="marquee-card" onclick="showDetail('${p.id}')">
-            <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/280x360/1a1a24/00d2ff?text=${p.name}'">
-            <div class="marquee-overlay">
-                <h3>${p.name}</h3>
-                <div class="price">₹${p.price}</div>
-            </div>
-        </div>
-    `).join('');
-
-    const cardWidth = window.innerWidth < 768 ? 195 : 300;
-    const totalWidth = cardWidth * allPacks.length;
-
-    const tl = gsap.timeline({ repeat: -1, defaults: { ease: 'none' } });
-    tl.to(track, { x: -totalWidth, duration: 40, ease: 'none' });
-
-    track.addEventListener('mouseenter', () => tl.pause());
-    track.addEventListener('mouseleave', () => tl.play());
-
-    let isDragging = false, startX = 0, scrollLeft = 0;
-
-    track.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.pageX - track.offsetLeft;
-        scrollLeft = gsap.getProperty(track, 'x');
-        tl.pause();
+// SMART PRICING CALCULATION
+function calculateSmartPrice() {
+    if (cart.length === 0) return 0;
+    
+    // Check if all 10 packs are in cart (AUTO MEGA BUNDLE)
+    if (cart.length === 10) {
+        const allPackIds = allPacks.map(p => p.id).sort();
+        const cartPackIds = cart.map(p => p.id).sort();
+        const hasAllPacks = JSON.stringify(allPackIds) === JSON.stringify(cartPackIds);
+        
+        if (hasAllPacks) {
+            return megaBundle.price;
+        }
+    }
+    
+    // Calculate price by category bundles and individual packs
+    let total = 0;
+    const processedPacks = new Set();
+    
+    // Check each category for bundle
+    ['cat1', 'cat2', 'cat3'].forEach(cat => {
+        const catPacks = allPacks.filter(p => p.cat === cat);
+        const catPacksInCart = cart.filter(p => p.cat === cat);
+        const catBundledPacks = catPacksInCart.filter(p => p.bundledIn === cat);
+        
+        // If all packs from this category are in cart AND marked as bundled
+        if (catBundledPacks.length === catPacks.length) {
+            total += categoryBundles[cat].price;
+            catPacksInCart.forEach(p => processedPacks.add(p.id));
+        } else {
+            catPacksInCart.forEach(p => {
+                if (!processedPacks.has(p.id)) {
+                    total += p.price;
+                    processedPacks.add(p.id);
+                }
+            });
+        }
     });
-
-    track.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        const x = e.pageX - track.offsetLeft;
-        const walk = (x - startX) * 1.5;
-        gsap.set(track, { x: scrollLeft + walk });
-    });
-
-    track.addEventListener('mouseup', () => { isDragging = false; tl.play(); });
-    track.addEventListener('mouseleave', () => { if (isDragging) { isDragging = false; tl.play(); } });
+    
+    return total;
 }
 
-function renderGrids() {
-    ['cat1', 'cat2', 'cat3'].forEach(cat => {
-        const packs = allPacks.filter(p => p.cat === cat);
-        const grid = document.getElementById(`grid${cat.charAt(0).toUpperCase() + cat.slice(1)}`);
+// Update bundle button text
+function updateBundleButtons() {
+    const cat1Discount = Math.round(categoryBundles.cat1.discount * 100);
+    const cat2Discount = Math.round(categoryBundles.cat2.discount * 100);
+    const cat3Discount = Math.round(categoryBundles.cat3.discount * 100);
 
-        grid.innerHTML = packs.map(p => {
-            const electricClass = p.electric ? `electric-${p.electric}` : '';
+    document.getElementById('cat1BundleText').textContent = 
+        `SAVE ${cat1Discount}% · Bundle: ₹${categoryBundles.cat1.price}`;
+    document.getElementById('cat2BundleText').textContent = 
+        `SAVE ${cat2Discount}% · Bundle: ₹${categoryBundles.cat2.price}`;
+    document.getElementById('cat3BundleText').textContent = 
+        `SAVE ${cat3Discount}% · Bundle: ₹${categoryBundles.cat3.price}`;
+}
+
+// RENDER PACKS
+function renderPacks() {
+    ['cat1', 'cat2', 'cat3'].forEach(cat => {
+        const container = document.getElementById(cat);
+        const packs = allPacks.filter(p => p.cat === cat);
+
+        container.innerHTML = packs.map(p => {
+            const inCart = cart.find(c => c.id === p.id);
+            const colorClass = `cat-${p.color}`;
+
             return `
-                <div class="card ${electricClass}">
-                    <div class="card-img-wrap" onclick="event.stopPropagation(); showDetail('${p.id}')">
-                        <img src="${p.img}" class="card-img" alt="${p.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x300/1a1a24/00d2ff?text=${p.name}'">
-                        <div class="type-badge">${p.type}</div>
-                        <div class="card-info-icon">
-                            <i class="fas fa-info"></i>
-                        </div>
+                <div class="card ${colorClass}" data-id="${p.id}">
+                    <div class="card-img-wrap" onclick="showDetail('${p.id}')">
+                        <img src="${p.img}" class="card-img" alt="${p.name}">
+                        <span class="type-badge">${p.type}</span>
+                        <span class="card-info-icon">INFO</span>
                     </div>
-                    <div class="card-body" onclick="toggleCart('${p.id}')">
+                    <div class="card-body" onclick="showDetail('${p.id}')">
                         <div class="card-name">${p.name}</div>
                         <div class="card-text">${p.desc}</div>
                         <div class="card-price-row">
@@ -100,8 +299,10 @@ function renderGrids() {
                                 <div class="old-price">₹${p.oldPrice}</div>
                                 <div class="price">₹${p.price}</div>
                             </div>
-                            <button class="btn-add" onclick="event.stopPropagation(); toggleCart('${p.id}')" id="btn-${p.id}">
-                                <i class="fas fa-shopping-cart"></i> <span>BUY</span>
+                            <button class="btn-add ${inCart ? 'active' : ''}" 
+                                    onclick="event.stopPropagation(); toggleCart('${p.id}')">
+                                <i class="fas ${inCart ? 'fa-check' : 'fa-shopping-cart'}"></i>
+                                <span>${inCart ? 'ADDED' : 'ADD'}</span>
                             </button>
                         </div>
                     </div>
@@ -111,194 +312,292 @@ function renderGrids() {
     });
 }
 
+// TOGGLE CART - Individual add (NO bundle)
 function toggleCart(id) {
     const pack = allPacks.find(p => p.id === id);
-    const idx = cart.findIndex(c => c.id === id);
-    idx > -1 ? cart.splice(idx, 1) : cart.push(pack);
-    updateUI();
-}
+    const inCart = cart.find(c => c.id === id);
 
-function addCategoryBundle(cat) {
-    const packs = allPacks.filter(p => p.cat === cat);
-    const allInCart = packs.every(p => cart.some(c => c.id === p.id));
-
-    if (allInCart) {
-        packs.forEach(p => {
-            const idx = cart.findIndex(c => c.id === p.id);
-            if (idx > -1) cart.splice(idx, 1);
-        });
+    if (inCart) {
+        cart = cart.filter(c => c.id !== id);
     } else {
-        packs.forEach(p => {
-            if (!cart.some(c => c.id === p.id)) {
-                cart.push(p);
-            }
-        });
-    }
-    updateUI();
-}
-
-function addMegaBundleAndCheckout() {
-    cart = [...allPacks];
-    updateUI();
-    openCheckout();
-}
-
-function calculateTotal() {
-    if (cart.length === 0) return 0;
-
-    if (cart.length === 10) {
-        return megaBundle.price;
+        cart.push({ ...pack, bundledIn: null });
     }
 
-    let total = 0;
-    let processedIds = [];
-
-    ['cat1', 'cat2', 'cat3'].forEach(cat => {
-        const catPacks = allPacks.filter(p => p.cat === cat);
-        const catPackIds = catPacks.map(p => p.id);
-        const allCatInCart = catPackIds.every(id => cart.some(c => c.id === id));
-
-        if (allCatInCart) {
-            total += categoryBundles[cat].price;
-            processedIds.push(...catPackIds);
-        }
-    });
-
-    cart.forEach(item => {
-        if (!processedIds.includes(item.id)) {
-            total += item.price;
-        }
-    });
-
-    return total;
+    updateCart();
+    renderPacks();
 }
 
-function updateUI() {
-    allPacks.forEach(p => {
-        const btn = document.getElementById(`btn-${p.id}`);
-        if (btn) {
-            if (cart.some(c => c.id === p.id)) {
-                btn.classList.add('active');
-                btn.innerHTML = '<i class="fas fa-check"></i> <span>ADDED</span>';
-            } else {
-                btn.classList.remove('active');
-                btn.innerHTML = '<i class="fas fa-shopping-cart"></i> <span>BUY</span>';
-            }
-        }
-    });
-
-    ['cat1', 'cat2', 'cat3'].forEach(cat => {
-        const btn = document.getElementById(`${cat}-btn`);
-        const packs = allPacks.filter(p => p.cat === cat);
-        const allInCart = packs.every(p => cart.some(c => c.id === p.id));
-
-        if (btn) {
-            if (allInCart) {
-                btn.classList.add('added');
-                btn.innerHTML = '<i class="fas fa-check"></i> <span>ADDED</span>';
-            } else {
-                btn.classList.remove('added');
-                const bundlePrice = categoryBundles[cat].price;
-                btn.innerHTML = `<span class="discount-badge">20% OFF</span> <span>Buy All ₹${bundlePrice}</span>`;
-            }
-        }
-    });
-
+// UPDATE CART
+function updateCart() {
     const stickyCart = document.getElementById('stickyCart');
-    const stickyTotal = document.getElementById('stickyTotal');
-    const headerCartCount = document.getElementById('headerCartCount');
+    const cartItemsText = document.getElementById('cartItemsText');
+    const cartTotalText = document.getElementById('cartTotalText');
 
-    if (cart.length > 0) {
-        const total = calculateTotal();
-        stickyCart.style.display = 'flex';
-        stickyTotal.textContent = `₹${total}`;
-        headerCartCount.textContent = cart.length;
-    } else {
+    if (cart.length === 0) {
         stickyCart.style.display = 'none';
-        headerCartCount.textContent = '0';
+        return;
     }
+
+    stickyCart.style.display = 'flex';
+    const total = calculateSmartPrice();
+    
+    cartItemsText.textContent = `${cart.length} item${cart.length > 1 ? 's' : ''}`;
+    cartTotalText.textContent = `Total: ₹${total}`;
 }
 
-function clearCart() {
-    cart = [];
-    updateUI();
-}
-
+// SHOW DETAIL MODAL
 function showDetail(id) {
     const pack = allPacks.find(p => p.id === id);
-    if (!pack) return;
+    const modal = document.getElementById('detailModal');
+    const detailBox = modal.querySelector('.detail-box');
+    
+    detailBox.setAttribute('data-pack-id', pack.id);
+    
+    document.getElementById('detailImg').src = pack.img;
+    document.getElementById('detailName').textContent = pack.name;
+    document.getElementById('detailDesc').textContent = pack.fullDesc;
 
-    document.getElementById('dImg').src = pack.img;
-    document.getElementById('dTitle').textContent = pack.name;
-    document.getElementById('dDesc').textContent = pack.desc;
-    document.getElementById('dSpecs').innerHTML = `
-        <div class="spec-item"><div class="spec-label">SIZE</div><div class="spec-val">${pack.size}</div></div>
-        <div class="spec-item"><div class="spec-label">QUALITY</div><div class="spec-val">${pack.quality}</div></div>
-        <div class="spec-item"><div class="spec-label">UPDATES</div><div class="spec-val">${pack.duration}</div></div>
-        <div class="spec-item"><div class="spec-label">PRICE</div><div class="spec-val">₹${pack.price}</div></div>
-    `;
-    document.getElementById('detailModal').style.display = 'flex';
-}
-
-function closeDetail() {
-    document.getElementById('detailModal').style.display = 'none';
-}
-
-function openCheckout() {
-    if (cart.length === 0) { alert('Your cart is empty! Add some packs first.'); return; }
-
-    const total = calculateTotal();
-    document.getElementById('checkoutTotal').textContent = total;
-    document.getElementById('orderList').innerHTML = cart.map(p => `
-        <div class="summary-item"><span>${p.name}</span><span>₹${p.price}</span></div>
+    const specsHTML = pack.specs.map(s => `
+        <div class="spec-item">
+            <div class="spec-label">${s.label}</div>
+            <div class="spec-val">${s.value}</div>
+        </div>
     `).join('');
+    document.getElementById('detailSpecs').innerHTML = specsHTML;
 
-    if (cart.length === 10) {
-        document.getElementById('orderList').innerHTML += `
-            <div class="summary-item" style="color: #00ff9d; font-weight: 900;">
-                <span>🔥 MEGA BUNDLE DISCOUNT</span><span>-₹426</span>
-            </div>
-        `;
+    modal.style.display = 'flex';
+}
+
+// ADD CATEGORY BUNDLE - Marks as bundled
+document.querySelectorAll('.cat-bundle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const cat = btn.getAttribute('data-cat');
+        const catPacks = allPacks.filter(p => p.cat === cat);
+
+        cart = cart.filter(p => p.cat !== cat);
+
+        catPacks.forEach(pack => {
+            cart.push({ ...pack, bundledIn: cat });
+        });
+
+        updateCart();
+        renderPacks();
+    });
+});
+
+// MEGA BUNDLE - Add all with mega flag
+// MEGA BUNDLE - Add all with mega flag AND open checkout
+document.getElementById('megaBundleCard').addEventListener('click', () => {
+    cart = allPacks.map(p => ({ ...p, bundledIn: 'mega' }));
+    updateCart();
+    renderPacks();
+    
+    // Open checkout modal automatically
+    setTimeout(() => {
+        document.getElementById('checkoutBtn').click();
+    }, 300);
+});
+
+document.getElementById('megaCTABtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    cart = allPacks.map(p => ({ ...p, bundledIn: 'mega' }));
+    updateCart();
+    renderPacks();
+    
+    // Open checkout modal automatically
+    setTimeout(() => {
+        document.getElementById('checkoutBtn').click();
+    }, 300);
+});
+
+
+// ✅ CHECKOUT MODAL (WITH LOCALSTORAGE SAVE)
+document.getElementById('checkoutBtn').addEventListener('click', () => {
+    const orderSummary = document.getElementById('orderSummary');
+    const coCartTotal = document.getElementById('coCartTotal');
+
+    if (cart.length === 0) {
+        orderSummary.innerHTML = '<p style="text-align: center; padding: 20px;">Your cart is empty</p>';
+        coCartTotal.textContent = 'Payable Amount: ₹0';
+        return;
     }
 
+    const total = calculateSmartPrice();
+    
+    // ✅ SAVE ORDER DATA TO LOCALSTORAGE (THIS IS THE KEY!)
+    const orderData = {
+        items: cart.map(item => ({ 
+            id: item.id, 
+            name: item.name, 
+            price: item.price 
+        })),
+        total: total,
+        timestamp: new Date().toISOString()
+    };
+    localStorage.setItem('orderData', JSON.stringify(orderData));
+    
+    // Check if it's a mega bundle (all 10 packs)
+    if (cart.length === 10) {
+        const allPackIds = allPacks.map(p => p.id).sort();
+        const cartPackIds = cart.map(p => p.id).sort();
+        const hasAllPacks = JSON.stringify(allPackIds) === JSON.stringify(cartPackIds);
+        
+        if (hasAllPacks) {
+            orderSummary.innerHTML = `
+                <div class="summary-item">
+                    <span>MEGA BUNDLE (All 10 Packs)</span>
+                    <span>₹${megaBundle.price}</span>
+                </div>
+                <div class="bundle-tag">🎉 You saved ₹${megaBundle.originalPrice - megaBundle.price}!</div>
+            `;
+            coCartTotal.textContent = `Payable Amount: ₹${megaBundle.price}`;
+            document.getElementById('checkoutModal').style.display = 'flex';
+            return;
+        }
+    }
+    
+    // Build detailed breakdown
+    let summaryHTML = '';
+    const processedPacks = new Set();
+    let totalSavings = 0;
+    
+    ['cat1', 'cat2', 'cat3'].forEach(cat => {
+        const catPacks = allPacks.filter(p => p.cat === cat);
+        const catPacksInCart = cart.filter(p => p.cat === cat);
+        const catBundledPacks = catPacksInCart.filter(p => p.bundledIn === cat);
+        
+        if (catBundledPacks.length === catPacks.length) {
+            const bundleData = categoryBundles[cat];
+            const catName = cat === 'cat1' ? 'Top Picks' : cat === 'cat2' ? 'Premium Vault' : 'Dark Vault';
+            summaryHTML += `
+                <div class="summary-item">
+                    <span>${catName} Bundle (${catPacks.length} packs)</span>
+                    <span>₹${bundleData.price}</span>
+                </div>
+            `;
+            totalSavings += bundleData.originalPrice - bundleData.price;
+            catPacksInCart.forEach(p => processedPacks.add(p.id));
+        } else {
+            catPacksInCart.forEach(p => {
+                if (!processedPacks.has(p.id)) {
+                    summaryHTML += `
+                        <div class="summary-item">
+                            <span>${p.name}</span>
+                            <span>₹${p.price}
+                                <span class="summary-remove" onclick="removeFromCheckout('${p.id}')">×</span>
+                            </span>
+                        </div>
+                    `;
+                    processedPacks.add(p.id);
+                }
+            });
+        }
+    });
+    
+    if (totalSavings > 0) {
+        summaryHTML += `<div class="bundle-tag">🎉 You saved ₹${totalSavings}!</div>`;
+    }
+    
+    orderSummary.innerHTML = summaryHTML;
+    coCartTotal.textContent = `Payable Amount: ₹${total}`;
     document.getElementById('checkoutModal').style.display = 'flex';
+});
+
+// REMOVE FROM CHECKOUT
+function removeFromCheckout(id) {
+    cart = cart.filter(c => c.id !== id);
+    updateCart();
+    renderPacks();
+    if (cart.length === 0) {
+        document.getElementById('checkoutModal').style.display = 'none';
+    } else {
+        document.getElementById('checkoutBtn').click();
+    }
 }
 
-function closeCheckout() {
+// CLEAR CART
+document.getElementById('cartClearBtnInside').addEventListener('click', (e) => {
+    e.stopPropagation();
+    cart = [];
+    updateCart();
+    renderPacks();
+});
+
+// CLOSE MODALS
+document.getElementById('detailCloseBtn').addEventListener('click', () => {
+    document.getElementById('detailModal').style.display = 'none';
+});
+
+document.getElementById('checkoutCloseX').addEventListener('click', () => {
     document.getElementById('checkoutModal').style.display = 'none';
-}
+});
 
-function setPay(method) {
-    document.querySelectorAll('.co-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.co-section').forEach(s => s.classList.remove('active'));
-    event.target.closest('.co-tab').classList.add('active');
-    document.getElementById(`pay-${method}`).classList.add('active');
-}
+// CHECKOUT TABS
+document.querySelectorAll('.co-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.co-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.co-section').forEach(s => s.classList.remove('active'));
+        
+        tab.classList.add('active');
+        const section = tab.getAttribute('data-tab') + 'Section';
+        document.getElementById(section).classList.add('active');
+    });
+});
 
+// COPY CRYPTO ADDRESS
 function copyAddress() {
-    navigator.clipboard.writeText('TLquccw7uU4A6fTJekDsrsQbJEvnFv1eTD').then(() => alert('USDT address copied!'));
+    const address = 'TLquccw7uU4A6fTJekDsrsQbJEvnFv1eTD';
+    navigator.clipboard.writeText(address);
+    alert('Address copied!');
 }
 
-function saveOrderData() {
-    document.getElementById('formItems').value = cart.map(p => p.name).join(', ');
-    document.getElementById('formAmount').value = calculateTotal();
+// ✅ REDIRECT TO SUCCESS PAGE (FOR TESTING OR AFTER PAYMENT)
+function redirectToSuccess() {
+    // Make sure order data is saved
+    if (cart.length > 0) {
+        const total = calculateSmartPrice();
+        const orderData = {
+            items: cart.map(item => ({ 
+                id: item.id, 
+                name: item.name, 
+                price: item.price 
+            })),
+            total: total,
+            timestamp: new Date().toISOString()
+        };
+        localStorage.setItem('orderData', JSON.stringify(orderData));
+    }
+    
+    // Redirect to success page
+    window.location.href = 'success.html';
 }
 
-// TOGGLE HOW IT WORKS COLLAPSIBLE
-function toggleHowItWorks() {
-    const content = document.getElementById('collapseContent');
-    const header = document.querySelector('.how-collapse-header');
-    content.classList.toggle('active');
-    header.classList.toggle('active');
-}
+// INIT
+updateBundleButtons();
+renderPacks();
 
-window.addEventListener('scroll', () => {
-    const header = document.getElementById('mainHeader');
-    header.classList.toggle('scrolled', window.scrollY > 100);
+// Crypto Accordion Toggle
+document.querySelectorAll('.crypto-main').forEach(crypto => {
+    crypto.addEventListener('click', function(e) {
+        // Don't toggle if clicking on a network button
+        if (e.target.closest('.network-btn')) return;
+        
+        this.classList.toggle('expanded');
+    });
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    initMarquee();
-    renderGrids();
-    updateUI();
-});
+// Copy Crypto Address Function
+function copyCrypto(cryptoName, address) {
+    navigator.clipboard.writeText(address).then(() => {
+        const notif = document.getElementById('copyNotif');
+        const text = document.getElementById('copyText');
+        text.innerText = cryptoName;
+        notif.classList.add('show');
+        
+        setTimeout(() => {
+            notif.classList.remove('show');
+        }, 2500);
+    }).catch(err => {
+        alert('Failed to copy. Address: ' + address);
+    });
+}
