@@ -5,304 +5,428 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DesiTease Premium Store</title>
 
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
+    <!-- Main CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header id="mainHeader">
-        <div class="header-wrapper">
-            <div class="header-left">
-                <div class="logo">
-                    <span class="desi">Desi</span><span class="tease">Tease</span>
-                </div>
-                <p class="tagline">Where Fantasy Meets Reality. India's most exclusive premium archive.</p>
-
-                <div class="trust-bar">
-                    <div class="trust-badge">
-                        <i class="fas fa-crown"></i>
-                        <span>Lifetime Access</span>
-                    </div>
-                    <div class="trust-badge">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>Regular Updates</span>
-                    </div>
-                    <div class="trust-badge">
-                        <i class="fas fa-headset"></i>
-                        <span>24/7 Support</span>
-                    </div>
-                </div>
+    <!-- DARK HEADER WITH RED SEPARATOR -->
+    <header>
+        <div class="logo">
+            <span class="desi">Desi</span><span class="tease">Tease</span>
+        </div>
+        <p class="tagline">Where Fantasy Meets Reality. India's most exclusive premium archive.</p>
+        <div class="trust-bar">
+            <div class="trust-badge">
+                <i class="fas fa-circle-check"></i>
+                <span>Lifetime Access</span>
             </div>
-
-            <button class="header-cart" onclick="openCheckout()">
-                <i class="fas fa-shopping-cart"></i>
-                <span>Cart</span>
-                <span class="cart-count" id="headerCartCount">0</span>
-            </button>
+            <div class="trust-badge">
+                <i class="fas fa-sync-alt"></i>
+                <span>Regular Updates</span>
+            </div>
+            <div class="trust-badge">
+                <i class="fas fa-headset"></i>
+                <span>24/7 Support</span>
+            </div>
         </div>
     </header>
 
     <div class="container">
 
-        <section class="hero-section">
-            <p class="premium-text">India's most exclusive premium content</p>
-            <div class="marquee-wrapper">
-                <div class="marquee-track" id="marqueeTrack"></div>
+        <!-- TOP PICKS (ORANGE) -->
+        <section class="category-section">
+            <div class="cat-header">
+                <div class="cat-title cat1-title">
+                    <span class="cat-icon cat1-icon">◆</span>
+                    <span>Top Picks</span>
+                </div>
+                <button class="cat-bundle-btn" data-cat="cat1">
+                    <i class="fas fa-layer-group"></i>
+                    <span id="cat1BundleText">SAVE 29% · Bundle: ₹313</span>
+                </button>
             </div>
+            <div class="grid" id="cat1"></div>
         </section>
 
-        <!-- TOP PICS -->
-        <div class="cat-header">
-            <div class="cat-title" style="color: #ff9500;">
-                <i class="fas fa-fire-alt"></i>
-                <span>Top Pics</span>
+        <!-- PREMIUM VAULT (PURPLE) -->
+        <section class="category-section">
+            <div class="cat-header">
+                <div class="cat-title cat2-title">
+                    <span class="cat-icon cat2-icon">◆</span>
+                    <span>Premium Vault</span>
+                </div>
+                <button class="cat-bundle-btn" data-cat="cat2">
+                    <i class="fas fa-layer-group"></i>
+                    <span id="cat2BundleText">SAVE 20% · Bundle: ₹685</span>
+                </button>
             </div>
-            <button class="cat-bundle-btn" id="cat1-btn" onclick="addCategoryBundle('cat1')">
-                <span class="discount-badge">20% OFF</span>
-                <span>Buy All ₹312</span>
-            </button>
-        </div>
-        <div class="grid" id="gridCat1"></div>
+            <div class="grid" id="cat2"></div>
+        </section>
 
-        <div class="category-separator"></div>
-
-        <!-- PREMIUM VAULT -->
-        <div class="cat-header">
-            <div class="cat-title" style="color: #a855f7;">
-                <i class="fas fa-crown"></i>
-                <span>Premium Vault</span>
+        <!-- DARK VAULT (CRIMSON) -->
+        <section class="category-section">
+            <div class="cat-header">
+                <div class="cat-title cat3-title">
+                    <span class="cat-icon cat3-icon">◆</span>
+                    <span>Dark Vault</span>
+                </div>
+                <button class="cat-bundle-btn" data-cat="cat3">
+                    <i class="fas fa-layer-group"></i>
+                    <span id="cat3BundleText">SAVE 20% · Bundle: ₹542</span>
+                </button>
             </div>
-            <button class="cat-bundle-btn" id="cat2-btn" onclick="addCategoryBundle('cat2')">
-                <span class="discount-badge">20% OFF</span>
-                <span>Buy All ₹684</span>
-            </button>
-        </div>
-        <div class="grid" id="gridCat2"></div>
+            <div class="grid" id="cat3"></div>
+        </section>
 
-        <div class="category-separator"></div>
-
-        <!-- DARK VAULT -->
-        <div class="cat-header">
-            <div class="cat-title" style="color: #dc143c;">
-                <i class="fas fa-skull-crossbones"></i>
-                <span>Dark Vault</span>
-            </div>
-            <button class="cat-bundle-btn" id="cat3-btn" onclick="addCategoryBundle('cat3')">
-                <span class="discount-badge">20% OFF</span>
-                <span>Buy All ₹542</span>
-            </button>
-        </div>
-        <div class="grid" id="gridCat3"></div>
-
-        <!-- GLOWING MEGA BUNDLE - FIXED SPACING -->
+        <!-- MEGA-GLOW-WRAPPER (ANIMATED ULTIMATE BUNDLE) -->
         <div class="mega-glow-wrapper">
-            <div class="mega-glow-card" onclick="addMegaBundleAndCheckout()">
+            <div class="mega-glow-card" id="megaBundleCard">
                 <span class="glow"></span>
                 <div class="mega-glow-content">
-                    <div class="mega-badge">ULTIMATE</div>
-                    <div class="mega-glow-title">All 10 Premium Packs</div>
-                    <div class="mega-glow-price">₹1499</div>
-                    <div class="mega-glow-save">Save ₹426 • 22% OFF</div>
-                    <div class="mega-glow-features">
-                        <span>🔥 Lifetime Access</span>
-                        <span>⚡ Daily Updates</span>
-                        <span>💎 VIP Support</span>
+                    <div class="mega-discount-badge">
+                        <i class="fas fa-fire"></i>
+                        <span>30% OFF BUNDLE</span>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- COLLAPSIBLE HOW IT WORKS -->
-        <div class="how-collapse-wrap">
-            <div class="how-collapse-header" onclick="toggleHowItWorks()">
-                <div class="how-collapse-title">
-                    <i class="fas fa-question-circle"></i>
-                    <span>How DesiTease Works</span>
-                </div>
-                <i class="fas fa-chevron-down how-collapse-icon" id="collapseIcon"></i>
-            </div>
-            <div class="how-collapse-content" id="collapseContent">
-                <div class="how-collapse-inner">
-                    <div class="how-steps">
-                        <div class="step">
-                            <div class="step-number">1</div>
-                            <h3>Choose Your Pack</h3>
-                            <p>Select individual packs or grab bundle deals for maximum savings. All content lifetime access guaranteed.</p>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">2</div>
-                            <h3>Complete Payment</h3>
-                            <p>Pay securely via UPI, PayPal, or Crypto. Upload screenshot and provide your Telegram username.</p>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">3</div>
-                            <h3>Instant Telegram Access</h3>
-                            <p>After payment verification, you'll be added to exclusive premium Telegram groups where ALL content is instantly available!</p>
-                        </div>
+                    <div class="mega-subtitle">Get ALL 10 Packs for one low price</div>
+                    <div class="mega-price-row">
+                        <div class="mega-price">₹1348</div>
+                        <div class="mega-old-price">₹1925</div>
                     </div>
-                    <div style="text-align: center;">
-                        <a href="https://t.me/Hk41QbvJlQ5Mzc1" target="_blank" class="proof-btn">
-                            <i class="fas fa-check-circle"></i>
-                            <span>View Payment Proofs</span>
-                        </a>
-                    </div>
+                    <button class="mega-cta-btn" id="megaCTABtn">
+                        <i class="fas fa-bolt"></i>
+                        Grab Deal Now
+                    </button>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <!-- STICKY CART WITH DELETE BUTTON INSIDE -->
+    <!-- STICKY CART -->
     <div class="sticky-cart" id="stickyCart">
         <div class="cart-info">
-            <div style="font-size: 0.75rem; color: #a0a0b0; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">TOTAL</div>
-            <div style="font-size: 1.8rem; font-weight: 900; color: #00d2ff;" id="stickyTotal">₹0</div>
+            <div id="cartItemsText" style="font-size: 0.75rem; color: #888; margin-bottom: 5px;">0 items</div>
+            <div id="cartTotalText" style="font-size: 1.4rem; font-weight: 900; color: #000;">Total: ₹0</div>
         </div>
-        <button class="cart-clear-btn-inside" onclick="clearCart()" title="Clear Cart">
+        <button class="cart-clear-btn-inside" id="cartClearBtnInside" title="Clear Cart">
             <i class="fas fa-trash-alt"></i>
         </button>
-        <button class="checkout-arrow" onclick="openCheckout()">
+        <button class="checkout-arrow" id="checkoutBtn">
             <span>CHECKOUT</span>
             <i class="fas fa-arrow-right"></i>
         </button>
     </div>
 
-    <div class="modal" id="detailModal" onclick="if(event.target===this) closeDetail()">
+    <!-- DETAIL MODAL -->
+    <div class="modal" id="detailModal">
         <div class="detail-box">
-            <img src="" id="dImg" class="detail-img" alt="Preview" loading="lazy">
+            <img src="" id="detailImg" class="detail-img" alt="Preview">
             <div class="detail-content">
-                <h2 id="dTitle"></h2>
-                <p id="dDesc"></p>
-                <div class="spec-grid" id="dSpecs"></div>
-                <button class="detail-close-btn" onclick="closeDetail()">Close</button>
+                <h2 id="detailName"></h2>
+                <p id="detailDesc"></p>
+                <div class="spec-grid" id="detailSpecs"></div>
+                <button class="detail-close-btn" id="detailCloseBtn">Close</button>
             </div>
         </div>
     </div>
 
-    <div class="modal" id="checkoutModal" onclick="if(event.target===this) closeCheckout()">
-        <div class="checkout-box-compact">
-            <button class="modal-close-x" onclick="closeCheckout()">
-                <i class="fas fa-times"></i>
-            </button>
-
+    <!-- CHECKOUT MODAL -->
+    <div class="modal" id="checkoutModal">
+        <div class="checkout-box">
+            <span class="modal-close-btn" id="checkoutCloseX">&times;</span>
             <h2 class="co-title">Complete Your Order</h2>
 
+            <!-- Payment Tabs -->
             <div class="co-tabs">
-                <div class="co-tab active" onclick="setPay('upi')">
+                <div class="co-tab active" data-tab="upi">
                     <i class="fas fa-qrcode"></i> UPI
                 </div>
-                <div class="co-tab" onclick="setPay('paypal')">
+                <div class="co-tab" data-tab="paypal">
                     <i class="fab fa-paypal"></i> PayPal
                 </div>
-                <div class="co-tab" onclick="setPay('crypto')">
+                <div class="co-tab" data-tab="crypto">
                     <i class="fab fa-bitcoin"></i> Crypto
                 </div>
             </div>
 
-            <div class="co-section active" id="pay-upi">
+            <!-- Payment Sections -->
+            <div class="co-section active" id="upiSection">
                 <p style="font-size: 0.85rem; margin-bottom: 12px;">Scan to pay with any UPI App</p>
-                <img src="upi-qr.jpg" style="width: 160px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.1); margin: 10px 0;" loading="lazy" onerror="this.style.opacity='0.3';" alt="QR">
-                <div><a href="upi-qr.jpg" download style="color: #00d2ff; text-decoration: underline; font-size: 0.8rem;">Download QR</a></div>
+                <img src="upi-qr.jpg" style="width: 160px; border-radius: 10px; border: 2px solid #e0e0e0; margin: 10px auto; display: block;" alt="QR">
+                <a href="upi-qr.jpg" download style="color: #e55039; text-decoration: underline; font-size: 0.8rem;">Download QR</a>
             </div>
 
-            <div class="co-section" id="pay-paypal">
-                <p style="font-size: 0.85rem; margin-bottom: 12px;">International Payment</p>
-                <a href="https://paypal.me/desitease" target="_blank" class="co-btn-inline">
-                    <i class="fab fa-paypal"></i> Pay with PayPal
-                </a>
-            </div>
-
-            <div class="co-section" id="pay-crypto">
-                <p style="font-size: 0.85rem; margin-bottom: 10px;">USDT (TRC20)</p>
-                <code class="crypto-code">TLquccw7uU4A6fTJekDsrsQbJEvnFv1eTD</code>
-                <button class="co-btn-inline" onclick="copyAddress()">
-                    <i class="fas fa-copy"></i> Copy Address
+            <div class="co-section" id="paypalSection">
+                <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; margin-bottom: 16px; color: #2d3436; text-align: center;">International Payment (PayPal)</h4>
+                <button class="paypal-btn" onclick="openPayPal()">
+                    <i class="fab fa-paypal"></i>
+                    <span>Pay with PayPal</span>
                 </button>
+                <p style="font-size: 0.8rem; color: #636e72; text-align: center; margin-top: 12px; line-height: 1.4;">Secure payment via PayPal. After payment, upload your screenshot below.</p>
             </div>
 
-            <div class="order-summary-compact" id="orderList"></div>
+            <div class="co-section" id="cryptoSection">
+    <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; margin-bottom: 16px; color: #2d3436; text-align: center;">🔐 Select Crypto - Click Network to Copy</h4>
+    
+    <div class="crypto-accordion">
+        
+        <!-- USDT (Tether) -->
+        <div class="crypto-main" id="cryptoUSDT">
+            <div class="crypto-header">
+                <div class="crypto-header-left">
+                    <div class="crypto-icon">₮</div>
+                    <div class="crypto-info">
+                        <h4>USDT (Tether)</h4>
+                        <span>4 Networks Available</span>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-down crypto-chevron"></i>
+            </div>
+            <div class="crypto-networks">
+                <div class="crypto-networks-inner">
+                    <div class="network-btn" onclick="copyCrypto('USDT TRC20', 'TLquccw7uU4A6fTJekDsrsQbJEvnFv1eTD')">
+                        <div class="network-left">
+                            <div class="network-name">TRC20 (Tron)</div>
+                            <div class="network-desc">Fastest & Cheapest</div>
+                        </div>
+                        <div class="network-badge best">✅ BEST</div>
+                    </div>
+                    <div class="network-btn" onclick="copyCrypto('USDT BEP20', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
+                        <div class="network-left">
+                            <div class="network-name">BEP20 (BSC)</div>
+                            <div class="network-desc">Binance Smart Chain</div>
+                        </div>
+                        <div class="network-badge cheap">⚡ Cheap</div>
+                    </div>
+                    <div class="network-btn" onclick="copyCrypto('USDT ERC20', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
+                        <div class="network-left">
+                            <div class="network-name">ERC20 (Ethereum)</div>
+                            <div class="network-desc">Ethereum Network</div>
+                        </div>
+                    </div>
+                    <div class="network-btn" onclick="copyCrypto('USDT Polygon', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
+                        <div class="network-left">
+                            <div class="network-name">Polygon</div>
+                            <div class="network-desc">MATIC Network</div>
+                        </div>
+                        <div class="network-badge cheap">⚡ Cheap</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <div class="co-total-compact">₹<span id="checkoutTotal">0</span></div>
+        <!-- Bitcoin -->
+        <div class="crypto-main" id="cryptoBTC">
+            <div class="crypto-header">
+                <div class="crypto-header-left">
+                    <div class="crypto-icon">₿</div>
+                    <div class="crypto-info">
+                        <h4>Bitcoin</h4>
+                        <span>2 Networks Available</span>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-down crypto-chevron"></i>
+            </div>
+            <div class="crypto-networks">
+                <div class="crypto-networks-inner">
+                    <div class="network-btn" onclick="copyCrypto('Bitcoin BTC', '114wbEsmXGo9tExmg2HKEZqPXYsAB9S4ei')">
+                        <div class="network-left">
+                            <div class="network-name">BTC Main Network</div>
+                            <div class="network-desc">Bitcoin Blockchain</div>
+                        </div>
+                        <div class="network-badge popular">🔥 Popular</div>
+                    </div>
+                    <div class="network-btn" onclick="copyCrypto('Bitcoin BSC', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
+                        <div class="network-left">
+                            <div class="network-name">BTC (BSC)</div>
+                            <div class="network-desc">Wrapped Bitcoin</div>
+                        </div>
+                        <div class="network-badge cheap">⚡ Cheap</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <form name="desi-orders" method="POST" data-netlify="true" enctype="multipart/form-data" action="success.html" onsubmit="saveOrderData()">
+        <!-- Ethereum -->
+        <div class="crypto-main" id="cryptoETH">
+            <div class="crypto-header">
+                <div class="crypto-header-left">
+                    <div class="crypto-icon">Ξ</div>
+                    <div class="crypto-info">
+                        <h4>Ethereum</h4>
+                        <span>3 Networks Available</span>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-down crypto-chevron"></i>
+            </div>
+            <div class="crypto-networks">
+                <div class="crypto-networks-inner">
+                    <div class="network-btn" onclick="copyCrypto('Ethereum ERC20', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
+                        <div class="network-left">
+                            <div class="network-name">ERC20 (Main Network)</div>
+                            <div class="network-desc">Ethereum Blockchain</div>
+                        </div>
+                        <div class="network-badge popular">🔥 Popular</div>
+                    </div>
+                    <div class="network-btn" onclick="copyCrypto('Ethereum Arbitrum', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
+                        <div class="network-left">
+                            <div class="network-name">Arbitrum (Layer 2)</div>
+                            <div class="network-desc">Lower Fees</div>
+                        </div>
+                        <div class="network-badge cheap">⚡ Cheap</div>
+                    </div>
+                    <div class="network-btn" onclick="copyCrypto('Ethereum BSC', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
+                        <div class="network-left">
+                            <div class="network-name">BSC (Wrapped)</div>
+                            <div class="network-desc">Binance Smart Chain</div>
+                        </div>
+                        <div class="network-badge cheap">⚡ Cheap</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BNB (Binance Coin) -->
+        <div class="crypto-main" id="cryptoBNB">
+            <div class="crypto-header">
+                <div class="crypto-header-left">
+                    <div class="crypto-icon">🟡</div>
+                    <div class="crypto-info">
+                        <h4>BNB (Binance Coin)</h4>
+                        <span>1 Network Available</span>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-down crypto-chevron"></i>
+            </div>
+            <div class="crypto-networks">
+                <div class="crypto-networks-inner">
+                    <div class="network-btn" onclick="copyCrypto('BNB BEP20', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
+                        <div class="network-left">
+                            <div class="network-name">BEP20 (BSC)</div>
+                            <div class="network-desc">Binance Smart Chain</div>
+                        </div>
+                        <div class="network-badge best">⚡ Fast</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <p style="font-size: 0.75rem; color: #636e72; margin-top: 15px; text-align: center; line-height: 1.4;">
+        ⚠️ Click network to copy address. Send exact amount to avoid delays.
+    </p>
+
+    <!-- Copy Notification -->
+    <div class="copy-notification" id="copyNotif">
+        <span id="copyText"></span> Address Copied! ✅
+    </div>
+</div>
+
+
+            <!-- Order Summary -->
+            <div class="order-summary" id="orderSummary"></div>
+
+            <!-- Total -->
+            <div class="co-total" id="coCartTotal">Payable Amount: ₹0</div>
+
+            <!-- Form -->
+            <form name="desi-orders" method="POST" data-netlify="true" enctype="multipart/form-data" action="success.html" onsubmit="return saveOrderData()">
                 <input type="hidden" name="form-name" value="desi-orders">
                 <input type="hidden" name="items" id="formItems">
                 <input type="hidden" name="amount" id="formAmount">
 
-                <input type="text" name="telegram" class="co-input-light" placeholder="Telegram Username (@YourName)" required>
+                <input type="text" name="telegram" class="co-input" placeholder="Telegram Username (@YourName)" required>
                 <div class="co-help">If no username, enter registered phone number</div>
 
                 <label class="co-label">Upload Payment Screenshot</label>
-                <input type="file" name="screenshot" class="co-input-light" accept="image/*" required>
+                <input type="file" name="screenshot" class="co-input" accept="image/*" required>
 
-                <button type="submit" class="co-btn-submit">
-                    <i class="fas fa-check-circle"></i> Submit & Get Access
+                <button type="submit" class="co-btn">
+                    <i class="fas fa-check-circle"></i>
+                    Submit & Get Access
                 </button>
             </form>
         </div>
     </div>
 
+    <!-- FOOTER WITH DARK THEME -->
     <footer>
         <div class="logo">
             <span class="desi">Desi</span><span class="tease">Tease</span>
         </div>
-        <p>Questions? DM us on Telegram or Instagram.</p>
-        <div style="display: flex; justify-content: center; gap: 15px; margin: 25px 0;">
-            <a href="https://t.me/DesiTease_2" class="social-link-telegram">
-                <i class="fab fa-telegram-plane"></i> Telegram
+        <p class="tagline">Have a question, custom request, or want international payment options? DM us directly.</p>
+        
+        <!-- SOCIAL BUTTONS -->
+        <div class="social-links">
+            <a href="https://t.me/DesiTease_2" class="social-btn" target="_blank">
+                <i class="fab fa-telegram-plane"></i>
+                <span>Telegram</span>
             </a>
-            <a href="https://instagram.com/desitease_" class="social-link-instagram">
-                <i class="fab fa-instagram"></i> Instagram
+            <a href="https://instagram.com/DesiTease_" class="social-btn" target="_blank">
+                <i class="fab fa-instagram"></i>
+                <span>Instagram</span>
             </a>
         </div>
-        <p style="font-size: 0.8rem; color: #636e72; margin-top: 30px;">© 2026 DesiTease. All Rights Reserved.</p>
+        
+        <p class="footer-copyright">© 2026 DesiTease Premium Store. All Rights Reserved.</p>
     </footer>
 
     <script src="script.js"></script>
 
+    <!-- Additional Functions -->
     <script>
-    // Save order data function - runs AFTER script.js loads so 'cart' variable exists
-    function saveOrderData() {
-        try {
-            const totalText = document.getElementById('checkoutTotal').innerText;
+        // PayPal redirect function
+        function openPayPal() {
+    const totalText = document.getElementById('coCartTotal').innerText.split('₹')[1];
+    // Convert INR to USD (approximate rate: 1 USD = 91.68 INR)
+    const amountInUSD = (parseFloat(totalText) / 91.68).toFixed(2);
+    const paypalURL = `https://paypal.me/desitease/${amountInUSD}USD`;
+    window.open(paypalURL, '_blank');
+}
 
-            // Check if cart exists (it should, from script.js)
-            if (typeof cart !== 'undefined' && cart.length > 0) {
-                // Create simple item list
-                const simpleItems = cart.map(i => ({
-                    id: i.id,
-                    name: i.name,
-                    price: i.price
-                }));
 
-                // Save to localStorage
-                const orderData = {
-                    total: totalText,
-                    items: simpleItems
-                };
-                localStorage.setItem('desiOrder', JSON.stringify(orderData));
-                console.log('✅ Order saved to localStorage:', orderData);
+        // Save order data function
+        function saveOrderData() {
+            try {
+                const totalText = document.getElementById('coCartTotal').innerText.split('₹')[1];
 
-                // Also populate hidden fields for Netlify
-                document.getElementById('formItems').value = cart.map(i => i.id).join(',');
-                document.getElementById('formAmount').value = totalText;
-            } else {
-                console.error('❌ Cart is empty or undefined!');
-                alert('Please add items to cart before submitting!');
-                return false;
+                // Check if cart exists
+                if (typeof cart !== 'undefined' && cart.length > 0) {
+                    // Create simple item list
+                    const simpleItems = cart.map(i => ({ id: i.id, name: i.name, price: i.price }));
+
+                    // Save to localStorage for success page
+                    const orderData = {
+                        total: totalText,
+                        items: simpleItems
+                    };
+                    localStorage.setItem('orderData', JSON.stringify(orderData));
+                    console.log('Order saved to localStorage:', orderData);
+
+                    // Also populate hidden fields for Netlify
+                    document.getElementById('formItems').value = cart.map(i => i.id).join(',');
+                    document.getElementById('formAmount').value = totalText;
+                } else {
+                    console.error('Cart is empty or undefined!');
+                    alert('Please add items to cart before submitting!');
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error saving order:', error);
             }
-        } catch (error) {
-            console.error('❌ Error saving order:', error);
+            return true;
         }
-        return true;
-    }
     </script>
-    
+
 </body>
 </html>
