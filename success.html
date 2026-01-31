@@ -2,39 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>Order Received - DesiTease</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Successful - DesiTease</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="success-style.css">
 </head>
 <body>
-
-    <div class="particles-container" id="particlesContainer"></div>
-
     <div class="success-wrapper">
         <div class="success-card">
-
-            <!-- Success Icon -->
             <div class="success-icon">
                 <div class="icon-circle">
                     <i class="fas fa-check"></i>
                 </div>
             </div>
 
-            <!-- Logo -->
             <div class="logo">
                 <span class="desi">Desi</span><span class="tease">Tease</span>
             </div>
 
-            <!-- Success Title -->
-            <h1 class="success-title">Order Received Successfully!</h1>
-            <p class="success-message">Thank you for your purchase! Your payment is being verified by our team.</p>
+            <h1 class="success-title">Payment Received! 🎉</h1>
+            <p class="success-message">
+                Thank you for your purchase! Your payment is being verified by our team.
+            </p>
 
-            <!-- Order Details Box -->
             <div class="order-details-box">
-                <h3>🛍️ Your Order</h3>
+                <h3><i class="fas fa-receipt"></i> Your Order</h3>
                 <div class="order-items" id="orderItems">
                     <div class="loading-spinner">
                         <i class="fas fa-spinner fa-spin"></i>
@@ -43,72 +39,50 @@
                 </div>
             </div>
 
-            <!-- What Happens Next - CLEAN VERSION -->
-            <div class="next-steps">
+            <div class="next-steps-box">
                 <h3>What Happens Next?</h3>
-                <div class="step-list">
-                    <div class="step-item">
-                        <span class="step-number">1</span>
-                        <span class="step-text">Click the button below to send your order details to our admin</span>
+                <div class="steps-list">
+                    <div class="step-row">
+                        <div class="step-num">1</div>
+                        <div class="step-text">Click the button below to send your order details to our admin</div>
                     </div>
-                    <div class="step-item">
-                        <span class="step-number">2</span>
-                        <span class="step-text">We verify your payment screenshot</span>
+                    <div class="step-row">
+                        <div class="step-num">2</div>
+                        <div class="step-text">We verify your payment screenshot</div>
                     </div>
-                    <div class="step-item">
-                        <span class="step-number">3</span>
-                        <span class="step-text">You get added to exclusive Telegram groups with instant access</span>
+                    <div class="step-row">
+                        <div class="step-num">3</div>
+                        <div class="step-text">You get added to exclusive Telegram groups with instant access</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Timeline Box -->
-            <div class="timeline-box">
+            <div class="processing-box">
                 <i class="fas fa-clock"></i>
                 <span>Processing Time: <strong>5-30 minutes</strong></span>
             </div>
 
-            <!-- Action Button -->
-            <div class="action-buttons">
-                <a href="#" id="telegramBtn" class="btn-primary">
-                    <i class="fab fa-telegram-plane"></i>
-                    <span>Send Order Details to Admin</span>
-                </a>
-            </div>
+            <a class="btn-send-order" id="sendOrderBtn" href="#" target="_blank">
+                <i class="fas fa-paper-plane"></i>
+                <span>Send Order Details to Admin</span>
+            </a>
 
-            <!-- Support Box -->
             <div class="support-box">
                 <p>Need help? Contact us directly:</p>
                 <div class="support-links">
-                    <a href="https://t.me/DesiTease_2" target="_blank">
-                        <i class="fab fa-telegram-plane"></i> Telegram
+                    <a href="https://t.me/desitease_2" target="_blank">
+                        <i class="fab fa-telegram"></i>
+                        <span>Telegram</span>
                     </a>
-                    <a href="https://instagram.com/DesiTease_" target="_blank">
-                        <i class="fab fa-instagram"></i> Instagram
+                    <a href="https://www.instagram.com/desitease_" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                        <span>Instagram</span>
                     </a>
                 </div>
             </div>
-
-            <!-- Trust Badges -->
-            <div class="trust-badges">
-                <div class="badge">
-                    <i class="fas fa-lock"></i>
-                    <span>Secure Payment</span>
-                </div>
-                <div class="badge">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Private & Safe</span>
-                </div>
-                <div class="badge">
-                    <i class="fas fa-headset"></i>
-                    <span>24/7 Support</span>
-                </div>
-            </div>
-
         </div>
     </div>
 
     <script src="success-script.js"></script>
-
 </body>
 </html>
