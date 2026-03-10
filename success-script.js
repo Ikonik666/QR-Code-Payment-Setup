@@ -4,7 +4,7 @@
 // ========================================
 
 // Your Telegram username (CHANGE THIS TO YOUR ACTUAL USERNAME)
-const TELEGRAM_USERNAME = 'DesiTease_2';
+const TELEGRAM_USERNAME = 'DesiTease_4';
 
 // Item data (must match your main index.html)
 const itemData = {
