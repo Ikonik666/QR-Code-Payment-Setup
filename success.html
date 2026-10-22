@@ -1,71 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Order received — DesiTease</title>
-<meta name="robots" content="noindex, follow">
-<meta name="theme-color" content="#0a0608">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="/success-style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Successful - DesiTease</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="success-style.css">
 </head>
 <body>
+    <div class="success-wrapper">
+        <div class="success-card">
+            <div class="success-icon">
+                <div class="icon-circle">
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
 
-<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
-  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
-  <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M5 3v18l2-1.4 2 1.4 2-1.4 2 1.4 2-1.4 2 1.4 2-1.4V3l-2 1.4L17 3l-2 1.4L13 3l-2 1.4L9 3 7 4.4 5 3Z"/><path d="M9 9h6M9 13h6"/></symbol>
-  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
-  <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10.5 13.5"/><path d="M21 3 14.5 21l-4-7.5L3 9.5 21 3Z"/></symbol>
-  <symbol id="i-telegram" viewBox="0 0 24 24"><path d="M21.9 4.3 2.9 11.4c-1 .4-1 1.1 0 1.4l4.7 1.5 1.8 5.6c.2.7.4.7 1 .4l2.6-2 4.8 3.5c.8.5 1.3.2 1.5-.8l2.7-12.7c.2-1.1-.4-1.6-1.1-1Z"/><path d="m7.6 14.3 11-8.4-8.6 9.6-.3 4.1-2.1-5.3Z"/></symbol>
-  <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></symbol>
-</svg>
+            <div class="logo">
+                <span class="desi">Desi</span><span class="tease">Tease</span>
+            </div>
 
-<main class="wrap">
-  <div class="card">
-    <div class="tick"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></div>
+            <h1 class="success-title">Payment Received! 🎉</h1>
+            <p class="success-message">
+                Thank you for your purchase! Your payment is being verified by our team.
+            </p>
 
-    <p class="brand"><span class="brand__mark">DT</span><span class="brand__word"><b>Desi</b><i>Tease</i></span></p>
+            <div class="order-details-box">
+                <h3><i class="fas fa-receipt"></i> Your Order</h3>
+                <div class="order-items" id="orderItems">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading order details...</p>
+                    </div>
+                </div>
+            </div>
 
-    <h1 class="title">Payment received</h1>
-    <p class="lede">Thanks for your order. We are verifying your screenshot now — access usually lands in your Telegram within 5–30 minutes.</p>
+            <div class="next-steps-box">
+                <h3>What Happens Next?</h3>
+                <div class="steps-list">
+                    <div class="step-row">
+                        <div class="step-num">1</div>
+                        <div class="step-text">Click the button below to send your order details to our admin</div>
+                    </div>
+                    <div class="step-row">
+                        <div class="step-num">2</div>
+                        <div class="step-text">We verify your payment screenshot</div>
+                    </div>
+                    <div class="step-row">
+                        <div class="step-num">3</div>
+                        <div class="step-text">You get added to exclusive Telegram groups with instant access</div>
+                    </div>
+                </div>
+            </div>
 
-    <section class="box" aria-labelledby="h-order">
-      <h2 class="box__h" id="h-order"><svg class="ico" aria-hidden="true"><use href="#i-receipt"/></svg> Your order</h2>
-      <div id="orderItems" class="rows">
-        <p class="muted">Loading your order…</p>
-      </div>
-    </section>
+            <div class="processing-box">
+                <i class="fas fa-clock"></i>
+                <span>Processing Time: <strong>5-30 minutes</strong></span>
+            </div>
 
-    <section class="box" aria-labelledby="h-next">
-      <h2 class="box__h" id="h-next">What happens next</h2>
-      <ol class="steps">
-        <li><span>1</span>Send your order details to our admin with the button below.</li>
-        <li><span>2</span>We match your payment screenshot to your order.</li>
-        <li><span>3</span>You get added to the private Telegram groups with access.</li>
-      </ol>
-    </section>
+            <a class="btn-send-order" id="sendOrderBtn" href="#" target="_blank">
+                <i class="fas fa-paper-plane"></i>
+                <span>Send Order Details to Admin</span>
+            </a>
 
-    <p class="eta"><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg> Typical processing time <b>5–30 minutes</b></p>
-
-    <a class="cta" id="sendOrder" href="#" target="_blank" rel="noopener noreferrer">
-      <svg class="ico" aria-hidden="true"><use href="#i-send"/></svg> Send order details to admin
-    </a>
-
-    <div class="help">
-      <p class="muted">Need help?</p>
-      <div class="links">
-        <a href="https://t.me/DesiTease_4" target="_blank" rel="noopener noreferrer"><svg class="ico" aria-hidden="true"><use href="#i-telegram"/></svg> Telegram</a>
-        <a href="https://instagram.com/DesiTease_" target="_blank" rel="noopener noreferrer"><svg class="ico" aria-hidden="true"><use href="#i-instagram"/></svg> Instagram</a>
-      </div>
+            <div class="support-box">
+                <p>Need help? Contact us directly:</p>
+                <div class="support-links">
+                    <a href="https://t.me/desitease_4" target="_blank">
+                        <i class="fab fa-telegram"></i>
+                        <span>Telegram</span>
+                    </a>
+                    <a href="https://www.instagram.com/desitease_" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                        <span>Instagram</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <p class="foot"><a href="/">← Back to the store</a></p>
-  </div>
-</main>
-
-<script src="/success-script.js" defer></script>
+    <script src="success-script.js"></script>
 </body>
 </html>

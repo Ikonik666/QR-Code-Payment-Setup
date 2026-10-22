@@ -1,71 +1,127 @@
-/* =========================================================
-   DesiTease — order confirmation script
-   Reads the order that script.js stored before the form POST
-   and turns it into a Telegram deep link for the customer.
-   ========================================================= */
-(() => {
-  'use strict';
+// ========================================
+// DESITEASE - SUCCESS PAGE SCRIPT
+// Telegram Deep Link Integration
+// ========================================
 
-  const TELEGRAM_USERNAME = 'DesiTease_4';
-  const ORDER_KEY = 'dt-order';
+// Your Telegram username (CHANGE THIS TO YOUR ACTUAL USERNAME)
+const TELEGRAM_USERNAME = 'DesiTease_4';
 
-  const $ = (sel, root = document) => root.querySelector(sel);
-  const inr = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 });
-  const money = n => '₹' + inr.format(Math.round(Number(n) || 0));
+// Item data (must match your main index.html)
+const itemData = {
+    'pdf': { name: 'PDF Stories Pack', price: 103 },
+    'mms': { name: 'Viral MMS Pack', price: 149 },
+    'audio': { name: 'Audio Erotica', price: 139 },
+    'animated': { name: 'Animated Pack', price: 169 },
+    'bbc': { name: 'BBC Collection', price: 189 },
+    'ai': { name: 'SoulMate AI App', price: 149 },
+    'spy': { name: 'Spy Cam Vault', price: 199 },
+    'incest': { name: 'Incest Vault', price: 219 },
+    'secret': { name: 'Secret Vault', price: 260 },
+    'actress': { name: 'Actress Exclusives', price: 349 }
+};
 
-  const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-  }[c]));
+let currentOrder = null;
 
-  function readOrder() {
-    try {
-      const raw = localStorage.getItem(ORDER_KEY);
-      return raw ? JSON.parse(raw) : null;
-    } catch {
-      return null;
+// Load order on page load
+window.addEventListener('DOMContentLoaded', function() {
+    loadOrder();
+});
+
+// Load order from localStorage
+function loadOrder() {
+    const storedData = localStorage.getItem('orderData');
+    
+    if (storedData) {
+        try {
+            currentOrder = JSON.parse(storedData);
+            displayOrder(currentOrder);
+            generateTelegramLink(currentOrder);
+        } catch (e) {
+            console.error('Error parsing order data:', e);
+            showError();
+        }
+    } else {
+        showError();
     }
-  }
+}
 
-  function render(order) {
-    const box = $('#orderItems');
-    const btn = $('#sendOrder');
-
-    if (!order || !Array.isArray(order.items) || !order.items.length) {
-      box.innerHTML = '<p class="muted">We could not find your order details. If you just paid, send us the screenshot on Telegram and we will sort it out.</p>';
-      btn.setAttribute('aria-disabled', 'true');
-      btn.removeAttribute('href');
-      return;
+// Display order items
+function displayOrder(orderData) {
+    const container = document.getElementById('orderItems');
+    
+    if (!orderData || !orderData.items || orderData.items.length === 0) {
+        showError();
+        return;
     }
 
-    const rows = order.items.map(it => `
-      <div class="row">
-        <span>${escapeHtml(it.name)}${it.type ? ` <span class="muted">${escapeHtml(it.type)}</span>` : ''}</span>
-        <b>${money(it.price)}</b>
-      </div>`).join('');
+    let html = '';
+    
+    // Loop through items
+    orderData.items.forEach(item => {
+        const data = itemData[item.id];
+        if (data) {
+            html += `
+                <div class="order-item">
+                    <span>${data.name}</span>
+                    <strong>₹${data.price}</strong>
+                </div>
+            `;
+        }
+    });
 
-    box.innerHTML = rows + `
-      <div class="row row--total"><span>Total paid</span><b>${money(order.total)}</b></div>` +
-      (order.saved > 0 ? `<div class="row row--save">You saved ${money(order.saved)} with your bundle</div>` : '');
+    // Add total
+    html += `
+        <div class="order-item order-total">
+            <span>Total Paid</span>
+            <span>₹${orderData.total}</span>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+}
 
-    const method = order.method ? `\nPayment method: ${order.method}` : '';
-    const handle = order.telegram ? `\nMy contact: ${order.telegram}` : '';
-    const message =
-      `Hi DesiTease! 👋\n\n` +
-      `I just paid ${money(order.total)}.` + method + handle + `\n\n` +
-      `📦 My order:\n` +
-      order.items.map(it => `• ${it.name} — ${money(it.price)}`).join('\n') +
-      `\n\nI have attached my payment screenshot. Please verify and send access. 🚀`;
+// Show error message
+function showError() {
+    const container = document.getElementById('orderItems');
+    container.innerHTML = `
+        <p style="text-align: center; color: #95a5a6; padding: 18px; font-size: 0.9rem;">
+            No order details found. Please go back and complete your purchase.
+        </p>
+    `;
+    
+    // Disable button
+    const btn = document.getElementById('sendOrderBtn');
+    btn.style.opacity = '0.5';
+    btn.style.pointerEvents = 'none';
+}
 
-    btn.href = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
-  }
+// Generate Telegram deep link with prefilled message
+function generateTelegramLink(orderData) {
+    if (!orderData || !orderData.items || orderData.items.length === 0) {
+        return;
+    }
 
-  function boot() {
-    render(readOrder());
-  }
+    // Build the message
+    let message = `Hi DesiTease! 👋\n\n`;
+    message += `I just paid: ₹${orderData.total}\n\n`;
+    message += `📦 My Order:\n`;
+    
+    orderData.items.forEach(item => {
+        const data = itemData[item.id];
+        if (data) {
+            message += `• ${data.name} - ₹${data.price}\n`;
+        }
+    });
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot);
-  } else {
-    boot();
-  }
-})();
+    message += `\nPlease verify my payment screenshot and send access! 🚀`;
+
+    // Encode for URL
+    const encodedMessage = encodeURIComponent(message);
+    
+    // Create Telegram deep link
+    const telegramLink = `https://t.me/${TELEGRAM_USERNAME}?text=${encodedMessage}`;
+    
+    // Set the button href
+    const btn = document.getElementById('sendOrderBtn');
+    btn.href = telegramLink;
+}
