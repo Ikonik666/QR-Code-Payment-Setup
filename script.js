@@ -683,9 +683,10 @@
     const gate = $('#ageGate');
     let ok = false;
     try { ok = localStorage.getItem(CONFIG.ageKey) === '1'; } catch { ok = false; }
-    if (ok) { gate.hidden = true; return; }
+    if (ok) { gate.hidden = true; document.body.classList.remove('is-gated'); return; }
 
     gate.hidden = false;
+    document.body.classList.add('is-gated');
     const enter = $('#gateEnter');
     const focus = enter || gate.querySelector('button');
     focus?.focus();
@@ -693,6 +694,7 @@
     enter.addEventListener('click', () => {
       try { localStorage.setItem(CONFIG.ageKey, '1'); } catch { /* ignore */ }
       gate.hidden = true;
+      document.body.classList.remove('is-gated');
     });
   }
 

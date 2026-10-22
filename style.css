@@ -615,6 +615,7 @@ a { color: inherit; }
   text-align: center;
 }
 .gate[hidden] { display: none; }
+body.is-gated { overflow: hidden; }
 .gate__card {
   width: min(100%, 440px); padding: 34px 30px;
   border-radius: var(--r-xl); border: 1px solid var(--line-strong);
