@@ -1,0 +1,7 @@
+# Keep the build tooling and the original source artwork out of the deploy.
+tools/
+README.md
+README-template.md
+style-guide.md
+.gitignore
+.netlifyignore

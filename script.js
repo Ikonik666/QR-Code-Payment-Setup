@@ -1,603 +1,717 @@
-// ========================================
-// DESITEASE - SMART PRICING SYSTEM
-// ========================================
+/* =========================================================
+   DesiTease — store front
+   Single source of truth = the catalogue markup in index.html.
+   The script reads prices/specs out of the DOM, so adding a pack
+   means editing one file and nothing else.
+   ========================================================= */
+(() => {
+  'use strict';
 
-const allPacks = [
-    // TOP PICKS (3 packs) - ORANGE - Total: 391, Bundle: 313 (20% OFF)
-    {
-        id: 'pdf',
-        name: 'PDF Stories Pack',
-        price: 103,
-        oldPrice: 139,
-        img: 'pdf-stories.webp',
-        type: '📖 TEXT',
-        cat: 'cat1',
-        color: 'orange',
-        desc: 'Best seller. Read thousands of hot stories anywhere.',
-        fullDesc: 'Huge collection. 40,000+ text stories. Simple English, Hindi, Punjabi and Urdu. Read about Bhabhi, Neighbors and more.',
-        specs: [
-            { label: 'FILES', value: '40,000+' },
-            { label: 'FORMAT', value: 'PDF/Text' },
-            { label: 'LANGUAGE', value: 'Hindi/Eng' },
-            { label: 'ACCESS', value: 'Lifetime' }
-        ]
-    },
-    {
-        id: 'audio',
-        name: 'Audio Erotica',
-        price: 139,
-        oldPrice: 189,
-        img: 'audio-erotica.webp',
-        type: '🎧 AUDIO',
-        cat: 'cat1',
-        color: 'orange',
-        desc: 'Sex stories in Hindi, Punjabi, English. Put on headphones.',
-        fullDesc: 'Audio sex stories in Hindi, Punjabi, English, Urdu. Clear sound. Hear real Indian voices enjoying.',
-        specs: [
-            { label: 'HOURS', value: '3000+' },
-            { label: 'AUDIO', value: 'HQ Stereo' },
-            { label: 'LANGUAGE', value: 'Hindi/Puj' },
-            { label: 'UPDATES', value: 'Weekly' }
-        ]
-    },
-    {
-        id: 'mms',
-        name: 'Viral MMS Pack',
-        price: 149,
-        oldPrice: 199,
-        img: 'viral-mms.webp',
-        type: '📱 VIDEO',
-        cat: 'cat1',
-        color: 'orange',
-        desc: 'Real leaked videos from colleges and hotels. Unfiltered.',
-        fullDesc: 'Videos leaked from phones. Real Indian girls in hostels, hotels and colleges. Very raw.',
-        specs: [
-            { label: 'VIDEOS', value: '50,000+' },
-            { label: 'SOURCE', value: 'Leaked' },
-            { label: 'TYPE', value: 'Raw/Real' },
-            { label: 'REGION', value: 'Pan India' }
-        ]
+  /* ---------------------------------------------------------
+     1. Configuration — tune the business numbers here
+     --------------------------------------------------------- */
+  const CONFIG = {
+    // rupees per 1 US dollar (used for the PayPal + crypto conversion)
+    fxInrPerUsd: 91.68,
+    // true  = follow the live USDT/INR rate (fairer, the amount moves hourly)
+    // false = pin every order to fxInrPerUsd above (predictable for support)
+    useLiveFx: true,
+
+    // international / on-chain processing margin applied to the INR total
+    paypalMarkup: 1.20,   // +20%
+    cryptoMarkup: 1.20,   // +20%
+
+    paypalHandle: 'desitease',
+
+    // wallets
+    addr: {
+      usdtTron: 'TLquccw7uU4A6fTJekDsrsQbJEvnFv1eTD',
+      bsc:      '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15',
+      btc:      '114wbEsmXGo9tExmg2HKEZqPXYsAB9S4ei'
     },
 
-    // PREMIUM VAULT (4 packs) - PURPLE - Total: 856, Bundle: 685 (20% OFF)
-    {
-        id: 'ai',
-        name: 'SoulMate AI App',
-        price: 149,
-        oldPrice: 223,
-        img: 'ai-app.webp',
-        type: '🤖 APP',
-        cat: 'cat2',
-        color: 'purple',
-        desc: 'Unlimited roleplay characters. Create your fantasy, no filters.',
-        fullDesc: 'Unlimited roleplay characters. Create your fantasy, no filters. AI powered chatbot with no restrictions.',
-        specs: [
-            { label: 'PLATFORM', value: 'iOS/Android' },
-            { label: 'CHARS', value: 'Unlimited' },
-            { label: 'MODE', value: 'Uncensored' },
-            { label: 'ACCESS', value: 'Lifetime' }
-        ]
-    },
-    {
-        id: 'animated',
-        name: 'Animated Pack',
-        price: 169,
-        oldPrice: 229,
-        img: 'animated-pack.webp',
-        type: '🎨 3D',
-        cat: 'cat2',
-        color: 'purple',
-        desc: '3D Hentai and comics. Fantasy uncensored.',
-        fullDesc: 'Cartoons and 3D videos. Like Savita Bhabhi but video. Full color and HD quality.',
-        specs: [
-            { label: 'STYLE', value: '3D/2D' },
-            { label: 'QUALITY', value: '1080p HD' },
-            { label: 'CENSORED', value: 'No' },
-            { label: 'CONTENT', value: 'Fantasy' }
-        ]
-    },
-    {
-        id: 'bbc',
-        name: 'BBC Collection',
-        price: 189,
-        oldPrice: 249,
-        img: 'bbc-guy.webp',
-        type: '🖤 NICHE',
-        cat: 'cat2',
-        color: 'purple',
-        desc: 'Powerful dominance. Black men with Indian girls.',
-        fullDesc: '1000+ exclusive full-length scenes featuring powerful BBC dominance over innocent Indian girls.',
-        specs: [
-            { label: 'VIDEOS', value: '1000+' },
-            { label: 'THEME', value: 'Blacked' },
-            { label: 'FOCUS', value: 'Hardcore' },
-            { label: 'LENGTH', value: 'Full Scenes' }
-        ]
-    },
-    {
-        id: 'actress',
-        name: 'Actress Exclusives',
-        price: 349,
-        oldPrice: 523,
-        img: 'actress.webp',
-        type: '🍿 PREMIUM',
-        cat: 'cat2',
-        color: 'purple',
-        desc: 'Deepfakes, leaks & cum tributes of top Indian actresses - HD.',
-        fullDesc: 'Deepfakes, leaks & cum tributes of top Indian actresses. High quality HD content featuring Bollywood stars.',
-        specs: [
-            { label: 'QUALITY', value: '4K HD' },
-            { label: 'TYPE', value: 'Deepfake+Real' },
-            { label: 'STARS', value: 'Top 650+' },
-            { label: 'TRIBUTES', value: 'Included' }
-        ]
-    },
+    // bundle discounts
+    vaultDiscount: 0.20,
+    megaDiscount:  0.30,
 
-    // DARK VAULT (3 packs) - CRIMSON - Total: 678, Bundle: 542 (20% OFF)
-    {
-        id: 'spy',
-        name: 'Spy Cam Vault',
-        price: 199,
-        oldPrice: 269,
-        img: 'spy-cam.webp',
-        type: '📹 HIDDEN',
-        cat: 'cat3',
-        color: 'crimson',
-        desc: 'Hidden camera footage from changing rooms and hotels.',
-        fullDesc: 'Cameras hidden in rooms. Watch girls changing clothes without them knowing. Very secret.',
-        specs: [
-            { label: 'TYPE', value: 'Hidden Cam' },
-            { label: 'LOCATIONS', value: 'Hotels/Rooms' },
-            { label: 'VIBE', value: 'Voyeur' },
-            { label: 'RARITY', value: 'High' }
-        ]
-    },
-    {
-        id: 'incest',
-        name: 'Incest Vault',
-        price: 219,
-        oldPrice: 289,
-        img: 'incest-vault.webp',
-        type: '⚡ TABOO',
-        cat: 'cat3',
-        color: 'crimson',
-        desc: 'Forbidden family secrets. Taboo videos and stories.',
-        fullDesc: 'Family secret videos. Brothers, sisters, moms. The things you cannot tell anyone.',
-        specs: [
-            { label: 'THEME', value: 'Family' },
-            { label: 'TABOO', value: 'Extreme' },
-            { label: 'MEDIA', value: 'Video/Text' },
-            { label: 'DEMAND', value: 'High' }
-        ]
-    },
-    {
-        id: 'secret',
-        name: 'Secret Vault',
-        price: 260,
-        oldPrice: 349,
-        img: 'secret-vault.webp',
-        type: '🔐 VIP',
-        cat: 'cat3',
-        color: 'crimson',
-        desc: 'Extreme content. Not for everyone.',
-        fullDesc: 'The most dangerous collection. Content that is too hot. Only for people who want everything.',
-        specs: [
-            { label: 'STATUS', value: 'VIP' },
-            { label: 'CONTENT', value: 'Unlisted' },
-            { label: 'RISK', value: 'High' },
-            { label: 'ACCESS', value: 'Restricted' }
-        ]
+    // live rates (INR per coin) — fallback only, the API below wins
+    fallbackRates: { tether: 91.7, bitcoin: 9200000, ethereum: 320000, binancecoin: 61000 },
+    rateEndpoint: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether,binancecoin&vs_currencies=inr',
+    rateFallbackEndpoint: 'https://api.coinbase.com/v2/exchange-rates?currency=INR',
+    rateTtlMs: 10 * 60 * 1000,
+
+    ageKey: 'dt-age-verified',
+    orderKey: 'dt-order'
+  };
+
+  const COINS = [
+    { key: 'usdt-trc20', mark: '₮', name: 'USDT (Tether)', net: 'TRC20 · Tron',      addr: CONFIG.addr.usdtTron, coin: 'tether',      tag: 'Best', tagClass: 'ok' },
+    { key: 'usdt-bep20', mark: '₮', name: 'USDT (Tether)', net: 'BEP20 · BSC',       addr: CONFIG.addr.bsc,      coin: 'tether',      tag: 'Cheap', tagClass: 'warn' },
+    { key: 'usdt-erc20', mark: '₮', name: 'USDT (Tether)', net: 'ERC20 · Ethereum',  addr: CONFIG.addr.bsc,      coin: 'tether' },
+    { key: 'usdt-matic', mark: '₮', name: 'USDT (Tether)', net: 'Polygon · MATIC',   addr: CONFIG.addr.bsc,      coin: 'tether',      tag: 'Cheap', tagClass: 'warn' },
+    { key: 'btc',        mark: '₿', name: 'Bitcoin',        net: 'Main network',      addr: CONFIG.addr.btc,      coin: 'bitcoin',     tag: 'Popular', tagClass: 'hot' },
+    { key: 'btc-bsc',    mark: '₿', name: 'Bitcoin',        net: 'Wrapped · BSC',     addr: CONFIG.addr.bsc,      coin: 'bitcoin',     tag: 'Cheap', tagClass: 'warn' },
+    { key: 'eth',        mark: 'Ξ', name: 'Ethereum',       net: 'ERC20 · Mainnet',   addr: CONFIG.addr.bsc,      coin: 'ethereum',    tag: 'Popular', tagClass: 'hot' },
+    { key: 'eth-arb',    mark: 'Ξ', name: 'Ethereum',       net: 'Arbitrum · L2',     addr: CONFIG.addr.bsc,      coin: 'ethereum',    tag: 'Cheap', tagClass: 'warn' },
+    { key: 'eth-bsc',    mark: 'Ξ', name: 'Ethereum',       net: 'Wrapped · BSC',     addr: CONFIG.addr.bsc,      coin: 'ethereum',    tag: 'Cheap', tagClass: 'warn' },
+    { key: 'bnb',        mark: 'B', name: 'BNB',            net: 'BEP20 · BSC',       addr: CONFIG.addr.bsc,      coin: 'binancecoin', tag: 'Fast', tagClass: 'ok' }
+  ];
+
+  const COIN_PRECISION = { bitcoin: 8, ethereum: 6, tether: 2, binancecoin: 4 };
+
+  /* ---------------------------------------------------------
+     2. Small helpers
+     --------------------------------------------------------- */
+  const $  = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+  const inr = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 });
+  const money = n => '₹' + inr.format(Math.round(n));
+  const usd = n => '$' + n.toFixed(2);
+
+  const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  function toast(msg) {
+    const el = $('#toast');
+    el.textContent = msg;
+    el.classList.add('is-on');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => el.classList.remove('is-on'), 2600);
+  }
+
+  async function copy(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      ta.remove();
+      return ok;
     }
-];
+  }
 
-// Calculate bundle prices dynamically
-function calculateBundlePrices() {
-    const bundles = {};
-    ['cat1', 'cat2', 'cat3'].forEach(cat => {
-        const catPacks = allPacks.filter(p => p.cat === cat);
-        const totalPrice = catPacks.reduce((sum, p) => sum + p.price, 0);
-        const discountPercent = 0.20;
-        const discountedPrice = Math.round(totalPrice * (1 - discountPercent));
-        
-        bundles[cat] = {
-            price: discountedPrice,
-            originalPrice: totalPrice,
-            discount: discountPercent,
-            count: catPacks.length
-        };
-    });
-    return bundles;
-}
+  /* ---------------------------------------------------------
+     3. Read the catalogue out of the DOM
+     --------------------------------------------------------- */
+  const VAULT_LABELS = {
+    top:     'Top Picks',
+    premium: 'Premium Vault',
+    series:  'Signature Series'
+  };
 
-const categoryBundles = calculateBundlePrices();
-const megaBundle = {
-    price: 1348,
-    originalPrice: 1925,
-    discount: 0.30
-};
+  function parseSpecs(raw) {
+    if (!raw) return [];
+    return raw.split(';')
+      .map(s => s.trim())
+      .filter(Boolean)
+      .map(pair => {
+        const i = pair.indexOf(':');
+        return i < 0 ? { label: pair, value: '' } : { label: pair.slice(0, i).trim(), value: pair.slice(i + 1).trim() };
+      });
+  }
 
-let cart = [];
+  const packs = $$('.pack').map(el => ({
+    id:    el.dataset.id,
+    price: Number(el.dataset.price),
+    old:   Number(el.dataset.old),
+    vault: el.closest('.vault').dataset.vault,
+    name:  $('.pack__name', el).textContent.trim(),
+    desc:  $('.pack__desc', el).textContent.trim(),
+    blurb: el.dataset.blurb || '',
+    specs: parseSpecs(el.dataset.specs),
+    type:  $('.pack__type', el).textContent.trim(),
+    el
+  }));
 
-// SMART PRICING CALCULATION
-function calculateSmartPrice() {
-    if (cart.length === 0) return 0;
-    
-    // Check if all 10 packs are in cart (AUTO MEGA BUNDLE)
-    if (cart.length === 10) {
-        const allPackIds = allPacks.map(p => p.id).sort();
-        const cartPackIds = cart.map(p => p.id).sort();
-        const hasAllPacks = JSON.stringify(allPackIds) === JSON.stringify(cartPackIds);
-        
-        if (hasAllPacks) {
-            return megaBundle.price;
-        }
-    }
-    
-    // Calculate price by category bundles and individual packs
-    let total = 0;
-    const processedPacks = new Set();
-    
-    // Check each category for bundle
-    ['cat1', 'cat2', 'cat3'].forEach(cat => {
-        const catPacks = allPacks.filter(p => p.cat === cat);
-        const catPacksInCart = cart.filter(p => p.cat === cat);
-        const catBundledPacks = catPacksInCart.filter(p => p.bundledIn === cat);
-        
-        // If all packs from this category are in cart AND marked as bundled
-        if (catBundledPacks.length === catPacks.length) {
-            total += categoryBundles[cat].price;
-            catPacksInCart.forEach(p => processedPacks.add(p.id));
-        } else {
-            catPacksInCart.forEach(p => {
-                if (!processedPacks.has(p.id)) {
-                    total += p.price;
-                    processedPacks.add(p.id);
-                }
-            });
-        }
-    });
-    
-    return total;
-}
+  const packById = new Map(packs.map(p => [p.id, p]));
 
-// Update bundle button text
-function updateBundleButtons() {
-    const cat1Discount = Math.round(categoryBundles.cat1.discount * 100);
-    const cat2Discount = Math.round(categoryBundles.cat2.discount * 100);
-    const cat3Discount = Math.round(categoryBundles.cat3.discount * 100);
-
-    document.getElementById('cat1BundleText').textContent = 
-        `SAVE ${cat1Discount}% · Bundle: ₹${categoryBundles.cat1.price}`;
-    document.getElementById('cat2BundleText').textContent = 
-        `SAVE ${cat2Discount}% · Bundle: ₹${categoryBundles.cat2.price}`;
-    document.getElementById('cat3BundleText').textContent = 
-        `SAVE ${cat3Discount}% · Bundle: ₹${categoryBundles.cat3.price}`;
-}
-
-// RENDER PACKS
-function renderPacks() {
-    ['cat1', 'cat2', 'cat3'].forEach(cat => {
-        const container = document.getElementById(cat);
-        const packs = allPacks.filter(p => p.cat === cat);
-
-        container.innerHTML = packs.map(p => {
-            const inCart = cart.find(c => c.id === p.id);
-            const colorClass = `cat-${p.color}`;
-
-            return `
-                <div class="card ${colorClass}" data-id="${p.id}">
-                    <div class="card-img-wrap" onclick="showDetail('${p.id}')">
-                        <img src="${p.img}" class="card-img" alt="${p.name}">
-                        <span class="type-badge">${p.type}</span>
-                        <span class="card-info-icon">INFO</span>
-                    </div>
-                    <div class="card-body" onclick="showDetail('${p.id}')">
-                        <div class="card-name">${p.name}</div>
-                        <div class="card-text">${p.desc}</div>
-                        <div class="card-price-row">
-                            <div class="price-block">
-                                <div class="old-price">₹${p.oldPrice}</div>
-                                <div class="price">₹${p.price}</div>
-                            </div>
-                            <button class="btn-add ${inCart ? 'active' : ''}" 
-                                    onclick="event.stopPropagation(); toggleCart('${p.id}')">
-                                <i class="fas ${inCart ? 'fa-check' : 'fa-shopping-cart'}"></i>
-                                <span>${inCart ? 'ADDED' : 'ADD'}</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    });
-}
-
-// TOGGLE CART - Individual add (NO bundle)
-function toggleCart(id) {
-    const pack = allPacks.find(p => p.id === id);
-    const inCart = cart.find(c => c.id === id);
-
-    if (inCart) {
-        cart = cart.filter(c => c.id !== id);
-    } else {
-        cart.push({ ...pack, bundledIn: null });
-    }
-
-    updateCart();
-    renderPacks();
-}
-
-// UPDATE CART
-function updateCart() {
-    const stickyCart = document.getElementById('stickyCart');
-    const cartItemsText = document.getElementById('cartItemsText');
-    const cartTotalText = document.getElementById('cartTotalText');
-
-    if (cart.length === 0) {
-        stickyCart.style.display = 'none';
-        return;
-    }
-
-    stickyCart.style.display = 'flex';
-    const total = calculateSmartPrice();
-    
-    cartItemsText.textContent = `${cart.length} item${cart.length > 1 ? 's' : ''}`;
-    cartTotalText.textContent = `Total: ₹${total}`;
-}
-
-// SHOW DETAIL MODAL
-function showDetail(id) {
-    const pack = allPacks.find(p => p.id === id);
-    const modal = document.getElementById('detailModal');
-    const detailBox = modal.querySelector('.detail-box');
-    
-    detailBox.setAttribute('data-pack-id', pack.id);
-    
-    document.getElementById('detailImg').src = pack.img;
-    document.getElementById('detailName').textContent = pack.name;
-    document.getElementById('detailDesc').textContent = pack.fullDesc;
-
-    const specsHTML = pack.specs.map(s => `
-        <div class="spec-item">
-            <div class="spec-label">${s.label}</div>
-            <div class="spec-val">${s.value}</div>
-        </div>
-    `).join('');
-    document.getElementById('detailSpecs').innerHTML = specsHTML;
-
-    modal.style.display = 'flex';
-}
-
-// ADD CATEGORY BUNDLE - Marks as bundled
-document.querySelectorAll('.cat-bundle-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const cat = btn.getAttribute('data-cat');
-        const catPacks = allPacks.filter(p => p.cat === cat);
-
-        cart = cart.filter(p => p.cat !== cat);
-
-        catPacks.forEach(pack => {
-            cart.push({ ...pack, bundledIn: cat });
-        });
-
-        updateCart();
-        renderPacks();
-    });
-});
-
-// MEGA BUNDLE - Add all with mega flag
-// MEGA BUNDLE - Add all with mega flag AND open checkout
-document.getElementById('megaBundleCard').addEventListener('click', () => {
-    cart = allPacks.map(p => ({ ...p, bundledIn: 'mega' }));
-    updateCart();
-    renderPacks();
-    
-    // Open checkout modal automatically
-    setTimeout(() => {
-        document.getElementById('checkoutBtn').click();
-    }, 300);
-});
-
-document.getElementById('megaCTABtn').addEventListener('click', (e) => {
-    e.stopPropagation();
-    cart = allPacks.map(p => ({ ...p, bundledIn: 'mega' }));
-    updateCart();
-    renderPacks();
-    
-    // Open checkout modal automatically
-    setTimeout(() => {
-        document.getElementById('checkoutBtn').click();
-    }, 300);
-});
-
-
-// ✅ CHECKOUT MODAL (WITH LOCALSTORAGE SAVE)
-document.getElementById('checkoutBtn').addEventListener('click', () => {
-    const orderSummary = document.getElementById('orderSummary');
-    const coCartTotal = document.getElementById('coCartTotal');
-
-    if (cart.length === 0) {
-        orderSummary.innerHTML = '<p style="text-align: center; padding: 20px;">Your cart is empty</p>';
-        coCartTotal.textContent = 'Payable Amount: ₹0';
-        return;
-    }
-
-    const total = calculateSmartPrice();
-    
-    // ✅ SAVE ORDER DATA TO LOCALSTORAGE (THIS IS THE KEY!)
-    const orderData = {
-        items: cart.map(item => ({ 
-            id: item.id, 
-            name: item.name, 
-            price: item.price 
-        })),
-        total: total,
-        timestamp: new Date().toISOString()
+  const vaults = $$('.vault').map(el => {
+    const key = el.dataset.vault;
+    const own = packs.filter(p => p.vault === key);
+    const subtotal = own.reduce((s, p) => s + p.price, 0);
+    return {
+      key,
+      label: VAULT_LABELS[key] || key,
+      packs: own,
+      subtotal,
+      price: Math.round(subtotal * (1 - CONFIG.vaultDiscount))
     };
-    localStorage.setItem('orderData', JSON.stringify(orderData));
-    
-    // Check if it's a mega bundle (all 10 packs)
-    if (cart.length === 10) {
-        const allPackIds = allPacks.map(p => p.id).sort();
-        const cartPackIds = cart.map(p => p.id).sort();
-        const hasAllPacks = JSON.stringify(allPackIds) === JSON.stringify(cartPackIds);
-        
-        if (hasAllPacks) {
-            orderSummary.innerHTML = `
-                <div class="summary-item">
-                    <span>MEGA BUNDLE (All 10 Packs)</span>
-                    <span>₹${megaBundle.price}</span>
-                </div>
-                <div class="bundle-tag">🎉 You saved ₹${megaBundle.originalPrice - megaBundle.price}!</div>
-            `;
-            coCartTotal.textContent = `Payable Amount: ₹${megaBundle.price}`;
-            document.getElementById('checkoutModal').style.display = 'flex';
-            return;
+  });
+
+  const allSubtotal = packs.reduce((s, p) => s + p.price, 0);
+  const mega = {
+    price: Math.round(allSubtotal * (1 - CONFIG.megaDiscount)),
+    was: allSubtotal,
+    count: packs.length
+  };
+
+  /* ---------------------------------------------------------
+     4. State
+     --------------------------------------------------------- */
+  const state = {
+    cart: new Set(),
+    rates: { ...CONFIG.fallbackRates },
+    ratesLive: false,
+    rateTime: null,
+    // rupees per 1 USD — tracks the live USDT rate when available so the
+    // PayPal amount and the crypto amounts always agree with each other
+    fx: CONFIG.fxInrPerUsd,
+    detailId: null
+  };
+
+  /* ---------------------------------------------------------
+     5. Pricing engine (pure)
+     --------------------------------------------------------- */
+  function vaultBundlePrice(vault) {
+    return vault.price;
+  }
+
+  /** Total INR for the current cart, applying vault + mega discounts. */
+  function cartTotal(ids = state.cart) {
+    if (ids.size === 0) return 0;
+    if (ids.size === packs.length) return mega.price;
+
+    let total = 0;
+    for (const v of vaults) {
+      const idsIn = v.packs.map(p => p.id);
+      const all = idsIn.every(id => ids.has(id));
+      if (all) {
+        total += vaultBundlePrice(v);
+      } else {
+        for (const id of idsIn) if (ids.has(id)) total += packById.get(id).price;
+      }
+    }
+    return total;
+  }
+
+  /** Break the cart down into display lines. */
+  function cartLines() {
+    const lines = [];
+    let saved = 0;
+
+    if (state.cart.size === packs.length) {
+      saved = mega.was - mega.price;
+      return { mega: true, lines: [{ name: `Full Vault — all ${mega.count} packs`, price: mega.price }], saved };
+    }
+
+    for (const v of vaults) {
+      const ids = v.packs.map(p => p.id);
+      const inVault = ids.filter(id => state.cart.has(id));
+      if (!inVault.length) continue;
+
+      if (inVault.length === ids.length) {
+        lines.push({ name: `${v.label} bundle (${ids.length} packs)`, price: v.price, vault: v.key });
+        saved += v.subtotal - v.price;
+      } else {
+        for (const id of inVault) {
+          const p = packById.get(id);
+          lines.push({ name: p.name, price: p.price, id });
         }
+      }
     }
-    
-    // Build detailed breakdown
-    let summaryHTML = '';
-    const processedPacks = new Set();
-    let totalSavings = 0;
-    
-    ['cat1', 'cat2', 'cat3'].forEach(cat => {
-        const catPacks = allPacks.filter(p => p.cat === cat);
-        const catPacksInCart = cart.filter(p => p.cat === cat);
-        const catBundledPacks = catPacksInCart.filter(p => p.bundledIn === cat);
-        
-        if (catBundledPacks.length === catPacks.length) {
-            const bundleData = categoryBundles[cat];
-            const catName = cat === 'cat1' ? 'Top Picks' : cat === 'cat2' ? 'Premium Vault' : 'Dark Vault';
-            summaryHTML += `
-                <div class="summary-item">
-                    <span>${catName} Bundle (${catPacks.length} packs)</span>
-                    <span>₹${bundleData.price}</span>
-                </div>
-            `;
-            totalSavings += bundleData.originalPrice - bundleData.price;
-            catPacksInCart.forEach(p => processedPacks.add(p.id));
-        } else {
-            catPacksInCart.forEach(p => {
-                if (!processedPacks.has(p.id)) {
-                    summaryHTML += `
-                        <div class="summary-item">
-                            <span>${p.name}</span>
-                            <span>₹${p.price}
-                                <span class="summary-remove" onclick="removeFromCheckout('${p.id}')">×</span>
-                            </span>
-                        </div>
-                    `;
-                    processedPacks.add(p.id);
-                }
-            });
+    return { mega: false, lines, saved };
+  }
+
+  /* ---------------------------------------------------------
+     6. Rendering
+     --------------------------------------------------------- */
+  function renderBundleLabels() {
+    for (const v of vaults) {
+      const label = $(`[data-bundle-label="${v.key}"]`);
+      if (!label) continue;
+      const pct = Math.round(CONFIG.vaultDiscount * 100);
+      const already = v.packs.every(p => state.cart.has(p.id));
+      label.textContent = already
+        ? `Remove ${v.label} · ₹${v.price}`
+        : `Save ${pct}% · Bundle ${money(v.price)}`;
+    }
+  }
+
+  function renderMega() {
+    const now = $('[data-mega-price]');
+    const was = $('[data-mega-was]');
+    const save = $('[data-mega-save]');
+    if (now) now.textContent = money(mega.price);
+    if (was) was.textContent = money(mega.was);
+    if (save) save.textContent = `You keep ${money(mega.was - mega.price)} in your pocket`;
+
+    const list = $('[data-mega-list]');
+    if (list) {
+      list.innerHTML = packs.map(p => `
+        <li>
+          <svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>
+          <span>${escapeHtml(p.name)}</span>
+          <b>${money(p.price)}</b>
+        </li>`).join('');
+    }
+  }
+
+  function renderStats() {
+    const el = $('[data-stat="packs"]');
+    if (el) el.textContent = String(packs.length);
+  }
+
+  /** data-badge="New" on a card adds the corner ribbon if it isn't there yet. */
+  function renderBadges() {
+    packs.forEach(p => {
+      const badge = p.el.dataset.badge;
+      if (!badge || p.el.querySelector('.pack__flag')) return;
+      const flag = document.createElement('span');
+      flag.className = 'pack__flag';
+      flag.setAttribute('aria-hidden', 'true');
+      flag.textContent = badge;
+      $('.pack__media', p.el).appendChild(flag);
+    });
+  }
+
+  function renderCart() {
+    const total = cartTotal();
+    const n = state.cart.size;
+
+    $$('.pack').forEach(card => {
+      const on = state.cart.has(card.dataset.id);
+      card.classList.toggle('is-added', on);
+      const btn = $('.add', card);
+      if (btn) {
+        btn.innerHTML = on
+          ? '<svg class="ico" aria-hidden="true"><use href="#i-check"/></svg><span>Added</span>'
+          : '<svg class="ico" aria-hidden="true"><use href="#i-cart"/></svg><span>Add</span>';
+        btn.setAttribute('aria-pressed', String(on));
+      }
+    });
+
+    const bar = $('#cartBar');
+    if (bar) bar.hidden = n === 0;
+    const c = $('#cartBarCount');
+    if (c) c.textContent = `${n} item${n === 1 ? '' : 's'}`;
+    const t = $('#cartBarTotal');
+    if (t) t.textContent = money(total);
+
+    const badge = $('#topCartCount');
+    if (badge) {
+      badge.hidden = n === 0;
+      badge.textContent = n ? String(n) : '';
+    }
+
+    const cartBtn = $('#topCartBtn');
+    if (cartBtn) {
+      cartBtn.setAttribute('aria-label',
+        n ? `Open cart, ${n} item${n === 1 ? '' : 's'}, ${money(total)}` : 'Open cart');
+    }
+
+    renderBundleLabels();
+    renderCheckout();
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  /* ---------------------------------------------------------
+     7. Pack detail dialog
+     --------------------------------------------------------- */
+  const detailDialog = $('#detailDialog');
+
+  function openDetail(id) {
+    const p = packById.get(id);
+    if (!p) return;
+    state.detailId = id;
+
+    $('#detailTitle').textContent = p.name;
+    const img = $('#detailImg');
+    img.src = $('img', p.el).getAttribute('src');
+    img.alt = `${p.name} cover`;
+    $('#detailDesc').textContent = p.blurb || p.desc;
+    $('#detailWas').textContent = money(p.old);
+    $('#detailNow').textContent = money(p.price);
+
+    $('#detailSpecs').innerHTML = p.specs.map(s => `
+      <div><dt>${escapeHtml(s.label)}</dt><dd>${escapeHtml(s.value)}</dd></div>`).join('');
+
+    const btn = $('#detailAdd');
+    const on = state.cart.has(id);
+    btn.textContent = on ? 'Remove from cart' : 'Add to cart';
+    btn.dataset.add = id;
+
+    if (!detailDialog.open) {
+      detailDialog._opener = document.activeElement;
+      detailDialog.showModal();
+    }
+  }
+
+  /* ---------------------------------------------------------
+     8. Checkout dialog
+     --------------------------------------------------------- */
+  const checkoutDialog = $('#checkoutDialog');
+  let activeCoin = COINS[0];
+
+  function openCheckout() {
+    if (state.cart.size === 0) { toast('Your cart is empty'); return; }
+    renderCheckout();
+    if (!checkoutDialog.open) {
+      checkoutDialog._opener = document.activeElement;
+      checkoutDialog.showModal();
+    }
+  }
+
+  function renderCheckout() {
+    const { mega: isMega, lines, saved } = cartLines();
+    const total = cartTotal();
+
+    $('#orderSummary').innerHTML =
+      lines.map(l => `
+        <div class="summary__row">
+          <span>${escapeHtml(l.name)}</span>
+          <span>${money(l.price)}${l.id ? `<button class="summary__rm" type="button" data-remove="${l.id}" aria-label="Remove ${escapeHtml(l.name)}">&times;</button>` : ''}</span>
+        </div>`).join('') +
+      (saved > 0 ? `<span class="summary__tag">You saved ${money(saved)}${isMega ? ' on the full vault' : ''}</span>` : '');
+
+    const totalEl = $('#coTotal');
+    if (totalEl) totalEl.textContent = money(total);
+
+    $('#upiAmount').textContent = money(total);
+    $('#paypalInr').textContent = money(total);
+    $('#paypalUsd').textContent = usd(paypalUsd(total));
+    const pn = $('#paypalNote');
+    if (pn) {
+      pn.textContent = state.ratesLive
+        ? `includes ${Math.round((CONFIG.paypalMarkup - 1) * 100)}% international processing · live rate`
+        : `includes ${Math.round((CONFIG.paypalMarkup - 1) * 100)}% international processing · rate is indicative`;
+    }
+
+    const items = $('#formItems');
+    const amount = $('#formAmount');
+    if (items) items.value = Array.from(state.cart).join(',');
+    if (amount) amount.value = String(total);
+
+    renderCrypto(total);
+  }
+
+  function paypalUsd(totalInr) {
+    return (totalInr * CONFIG.paypalMarkup) / state.fx;
+  }
+
+  function cryptoAmount(totalInr, coin) {
+    const rate = state.rates[coin.coin];
+    if (!rate) return null;
+    return (totalInr * CONFIG.cryptoMarkup) / rate;
+  }
+
+  function fmtCrypto(v, coin) {
+    if (v == null) return '—';
+    const p = COIN_PRECISION[coin.coin] ?? 6;
+    return v.toFixed(p);
+  }
+
+  function renderCrypto(total) {
+    const list = $('#cryptoList');
+    if (!list) return;
+    const usdEq = (total * CONFIG.cryptoMarkup) / state.fx;
+
+    const warn = state.ratesLive ? '' :
+      '<p class="crypto__warn">Live rate unavailable — the amounts below are indicative. Confirm with support before sending.</p>';
+
+    list.innerHTML = warn + COINS.map(c => {
+      const amt = cryptoAmount(total, c);
+      return `
+        <div class="coin" data-coin="${c.key}">
+          <button class="coin__head" type="button" aria-expanded="false">
+            <span class="coin__mark" aria-hidden="true">${c.mark}</span>
+            <span class="coin__id">
+              <span class="coin__name">${escapeHtml(c.name)}</span>
+              <span class="coin__net">${escapeHtml(c.net)}${c.tag ? ` · ${c.tag}` : ''}</span>
+            </span>
+            <span class="coin__amt">
+              <b>${fmtCrypto(amt, c)}</b>
+              <span>${escapeHtml(c.mark)} · ≈ ${usd(usdEq)}</span>
+            </span>
+            <svg class="ico coin__chev" aria-hidden="true"><use href="#i-chevron"/></svg>
+          </button>
+          <div class="coin__body">
+            <p class="coin__addr">${escapeHtml(c.addr)}</p>
+            <div class="coin__cta">
+              <button class="coin__btn" type="button" data-copy-addr="${c.key}"><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg> Copy address</button>
+              <button class="coin__btn coin__btn--pay" type="button" data-copy-all="${c.key}">Copy amount + address</button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    const note = $('.pane__foot', $('#pane-crypto'));
+    if (note) {
+      note.textContent = state.ratesLive
+        ? `Amounts include a ${Math.round((CONFIG.cryptoMarkup - 1) * 100)}% crypto-processing margin. Rate refreshed ${state.rateTime ? state.rateTime.toLocaleTimeString() : ''}.`
+        : `Amounts include a ${Math.round((CONFIG.cryptoMarkup - 1) * 100)}% crypto-processing margin.`;
+    }
+  }
+
+  /* ---------------------------------------------------------
+     9. Exchange rates
+     --------------------------------------------------------- */
+  async function refreshRates() {
+    const cached = sessionStorage.getItem('dt-rates');
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (Date.now() - parsed.at < CONFIG.rateTtlMs) {
+          state.rates = { ...parsed.rates };
+          state.ratesLive = true;
+          state.rateTime = new Date(parsed.at);
+          if (parsed.rates.tether > 0 && CONFIG.useLiveFx) state.fx = parsed.rates.tether;
+          return;
         }
-    });
-    
-    if (totalSavings > 0) {
-        summaryHTML += `<div class="bundle-tag">🎉 You saved ₹${totalSavings}!</div>`;
+      } catch { /* ignore */ }
     }
-    
-    orderSummary.innerHTML = summaryHTML;
-    coCartTotal.textContent = `Payable Amount: ₹${total}`;
-    document.getElementById('checkoutModal').style.display = 'flex';
-});
 
-// REMOVE FROM CHECKOUT
-function removeFromCheckout(id) {
-    cart = cart.filter(c => c.id !== id);
-    updateCart();
-    renderPacks();
-    if (cart.length === 0) {
-        document.getElementById('checkoutModal').style.display = 'none';
-    } else {
-        document.getElementById('checkoutBtn').click();
+    const rates = await fetchRates();
+    if (!rates) {
+      state.ratesLive = false;   // keep the static fallback, UI flags it as indicative
+      return;
     }
-}
 
-// CLEAR CART
-document.getElementById('cartClearBtnInside').addEventListener('click', (e) => {
-    e.stopPropagation();
-    cart = [];
-    updateCart();
-    renderPacks();
-});
+    state.rates = { ...state.rates, ...rates };
+    state.ratesLive = true;
+    state.rateTime = new Date();
+    // USDT is pegged to the dollar, so its INR price is a good live proxy
+    // for the INR/USD rate — keeps PayPal and crypto conversions in step
+    if (rates.tether > 0 && CONFIG.useLiveFx) state.fx = rates.tether;
+    sessionStorage.setItem('dt-rates', JSON.stringify({ at: Date.now(), rates }));
+  }
 
-// CLOSE MODALS
-document.getElementById('detailCloseBtn').addEventListener('click', () => {
-    document.getElementById('detailModal').style.display = 'none';
-});
-
-document.getElementById('checkoutCloseX').addEventListener('click', () => {
-    document.getElementById('checkoutModal').style.display = 'none';
-});
-
-// CHECKOUT TABS
-document.querySelectorAll('.co-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-        document.querySelectorAll('.co-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.co-section').forEach(s => s.classList.remove('active'));
-        
-        tab.classList.add('active');
-        const section = tab.getAttribute('data-tab') + 'Section';
-        document.getElementById(section).classList.add('active');
-    });
-});
-
-// COPY CRYPTO ADDRESS
-function copyAddress() {
-    const address = 'TLquccw7uU4A6fTJekDsrsQbJEvnFv1eTD';
-    navigator.clipboard.writeText(address);
-    alert('Address copied!');
-}
-
-// ✅ REDIRECT TO SUCCESS PAGE (FOR TESTING OR AFTER PAYMENT)
-function redirectToSuccess() {
-    // Make sure order data is saved
-    if (cart.length > 0) {
-        const total = calculateSmartPrice();
-        const orderData = {
-            items: cart.map(item => ({ 
-                id: item.id, 
-                name: item.name, 
-                price: item.price 
-            })),
-            total: total,
-            timestamp: new Date().toISOString()
-        };
-        localStorage.setItem('orderData', JSON.stringify(orderData));
+  /** INR price per coin, from CoinGecko with a Coinbase fallback. */
+  async function fetchRates() {
+    const gecko = await fetchJson(CONFIG.rateEndpoint);
+    if (gecko) {
+      const out = {};
+      for (const c of COINS) {
+        const v = gecko[c.coin]?.inr;
+        if (v && v > 0) out[c.coin] = v;
+      }
+      if (out.tether) return out;
     }
-    
-    // Redirect to success page
-    window.location.href = 'success.html';
-}
 
-// INIT
-updateBundleButtons();
-renderPacks();
+    // Coinbase returns "1 INR = X coin", so invert it
+    const cb = await fetchJson(CONFIG.rateFallbackEndpoint);
+    if (cb && cb.data && cb.data.rates) {
+      const out = {};
+      const map = { bitcoin: 'BTC', ethereum: 'ETH', tether: 'USDT', binancecoin: 'BNB' };
+      for (const c of COINS) {
+        const sym = map[c.coin];
+        const r = sym && Number(cb.data.rates[sym]);
+        if (r && r > 0) out[c.coin] = 1 / r;
+      }
+      if (out.tether) return out;
+    }
+    return null;
+  }
 
-// Crypto Accordion Toggle
-document.querySelectorAll('.crypto-main').forEach(crypto => {
-    crypto.addEventListener('click', function(e) {
-        // Don't toggle if clicking on a network button
-        if (e.target.closest('.network-btn')) return;
-        
-        this.classList.toggle('expanded');
+  async function fetchJson(url) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 6000);
+    try {
+      const res = await fetch(url, { signal: ctrl.signal, cache: 'no-store' });
+      if (!res.ok) throw new Error('bad status');
+      return await res.json();
+    } catch {
+      return null;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  /* ---------------------------------------------------------
+     10. Events
+     --------------------------------------------------------- */
+  function addToCart(id) {
+    if (!packById.has(id)) return;
+    state.cart.has(id) ? state.cart.delete(id) : state.cart.add(id);
+    renderCart();
+    if (state.cart.has(id)) toast(`${packById.get(id).name} added`);
+  }
+
+  function toggleVault(key) {
+    const v = vaults.find(x => x.key === key);
+    if (!v) return;
+    const allIn = v.packs.every(p => state.cart.has(p.id));
+    v.packs.forEach(p => allIn ? state.cart.delete(p.id) : state.cart.add(p.id));
+    renderCart();
+    toast(allIn ? `${v.label} removed` : `${v.label} bundle added`);
+  }
+
+  function bind() {
+    // add / remove
+    document.addEventListener('click', e => {
+      const add = e.target.closest('[data-add]');
+      if (add) { e.preventDefault(); addToCart(add.dataset.add); return; }
+
+      const detail = e.target.closest('[data-detail]');
+      if (detail) { e.preventDefault(); openDetail(detail.dataset.detail); return; }
+
+      const bundle = e.target.closest('[data-bundle]');
+      if (bundle) { e.preventDefault(); toggleVault(bundle.dataset.bundle); return; }
+
+      const rm = e.target.closest('[data-remove]');
+      if (rm) { e.preventDefault(); state.cart.delete(rm.dataset.remove); renderCart(); return; }
+
+      const xBtn = e.target.closest('[data-close]');
+      if (xBtn) { e.preventDefault(); xBtn.closest('dialog')?.close(); return; }
+
+      const copyAddr = e.target.closest('[data-copy-addr]');
+      if (copyAddr) {
+        const c = COINS.find(x => x.key === copyAddr.dataset.copyAddr);
+        if (c) { copy(c.addr).then(ok => toast(ok ? `${c.name} address copied` : 'Copy failed')); }
+        return;
+      }
+
+      const copyAll = e.target.closest('[data-copy-all]');
+      if (copyAll) {
+        const c = COINS.find(x => x.key === copyAll.dataset.copyAll);
+        if (c) {
+          const amt = fmtCrypto(cryptoAmount(cartTotal(), c), c);
+          copy(`${amt} ${c.mark}\n${c.addr}`).then(ok => toast(ok ? 'Amount and address copied' : 'Copy failed'));
+        }
+        return;
+      }
+
+      // coin accordion
+      const head = e.target.closest('.coin__head');
+      if (head) {
+        const coin = head.closest('.coin');
+        const open = coin.classList.toggle('is-open');
+        head.setAttribute('aria-expanded', String(open));
+      }
     });
-});
 
-// Copy Crypto Address Function
-function copyCrypto(cryptoName, address) {
-    navigator.clipboard.writeText(address).then(() => {
-        const notif = document.getElementById('copyNotif');
-        const text = document.getElementById('copyText');
-        text.innerText = cryptoName;
-        notif.classList.add('show');
-        
-        setTimeout(() => {
-            notif.classList.remove('show');
-        }, 2500);
-    }).catch(err => {
-        alert('Failed to copy. Address: ' + address);
+    // checkout + cart actions
+    $('#cartCheckout').addEventListener('click', openCheckout);
+    $('#topCartBtn').addEventListener('click', openCheckout);
+    $('#cartClear').addEventListener('click', () => { state.cart.clear(); renderCart(); toast('Cart cleared'); });
+
+    $('#megaBtn').addEventListener('click', () => {
+      packs.forEach(p => state.cart.add(p.id));
+      renderCart();
+      openCheckout();
     });
-}
+
+    $('#detailAdd').addEventListener('click', e => {
+      addToCart(e.currentTarget.dataset.add);
+      e.currentTarget.textContent = state.cart.has(e.currentTarget.dataset.add) ? 'Remove from cart' : 'Add to cart';
+    });
+
+    // payment tabs
+    $$('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        $$('.tab').forEach(t => {
+          const on = t === tab;
+          t.classList.toggle('is-active', on);
+          t.setAttribute('aria-selected', String(on));
+        });
+        $$('.pane').forEach(p => {
+          const on = p.id === tab.getAttribute('aria-controls');
+          p.classList.toggle('is-active', on);
+          p.hidden = !on;
+        });
+      });
+    });
+
+    // paypal
+    $('#paypalBtn').addEventListener('click', () => {
+      const total = cartTotal();
+      const amount = paypalUsd(total);
+      const label = `DesiTease order — ${money(total)} (INR)`;
+      const url = `https://paypal.me/${CONFIG.paypalHandle}/${amount.toFixed(2)}USD/${encodeURIComponent(label)}`;
+      window.open(url, '_blank', 'noopener');
+    });
+
+    // close dialogs on backdrop click
+    $$('dialog').forEach(dlg => {
+      dlg.addEventListener('click', e => {
+        if (e.target === dlg) dlg.close();
+      });
+    });
+
+    // Escape closes whatever is open (native dialog cancel is not universal
+    // in every embedded browser, so do it explicitly as well)
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Escape') return;
+      const open = $$('dialog').find(d => d.open);
+      if (open) {
+        e.preventDefault();
+        open.close();
+      }
+    });
+
+    // return focus to whatever opened the dialog
+    $$('dialog').forEach(dlg => {
+      dlg.addEventListener('close', () => {
+        const opener = dlg._opener;
+        dlg._opener = null;
+        if (opener && document.contains(opener)) opener.focus();
+      });
+    });
+
+    // order form
+    const form = $('.order');
+    form.addEventListener('submit', () => {
+      const { lines, saved } = cartLines();
+      const order = {
+        total: cartTotal(),
+        saved,
+        items: Array.from(state.cart).map(id => {
+          const p = packById.get(id);
+          return { id, name: p.name, price: p.price, type: p.type };
+        }),
+        method: $('.tab.is-active')?.textContent.trim().replace(/\s+/g, ' ') || 'UPI',
+        telegram: $('#telegramInput').value.trim(),
+        at: new Date().toISOString()
+      };
+      try { localStorage.setItem(CONFIG.orderKey, JSON.stringify(order)); } catch { /* ignore */ }
+    });
+  }
+
+  /* ---------------------------------------------------------
+     11. Age gate
+     --------------------------------------------------------- */
+  function initAgeGate() {
+    const gate = $('#ageGate');
+    let ok = false;
+    try { ok = localStorage.getItem(CONFIG.ageKey) === '1'; } catch { ok = false; }
+    if (ok) { gate.hidden = true; return; }
+
+    gate.hidden = false;
+    const enter = $('#gateEnter');
+    const focus = enter || gate.querySelector('button');
+    focus?.focus();
+
+    enter.addEventListener('click', () => {
+      try { localStorage.setItem(CONFIG.ageKey, '1'); } catch { /* ignore */ }
+      gate.hidden = true;
+    });
+  }
+
+  /* ---------------------------------------------------------
+     12. Boot
+     --------------------------------------------------------- */
+  function boot() {
+    renderStats();
+    renderBadges();
+    renderMega();
+    renderCart();
+    bind();
+    initAgeGate();
+    refreshRates().then(renderCart);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();

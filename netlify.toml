@@ -1,0 +1,21 @@
+# DesiTease — Netlify build configuration
+# The site is a static build: no build command, publish from the repo root.
+
+[build]
+  publish = "."
+  command = ""
+
+[build.processing]
+  skip_processing = false
+  html_minify = true
+  css_minify = true
+  js_minify = true
+  # images are pre-optimised by tools/make-assets.py — leave them alone so the
+  # UPI QR keeps full contrast for scanning
+  image_minify = false
+
+[context.deploy-preview]
+  publish = "."
+
+[context.branch-deploy]
+  publish = "."

@@ -1,87 +1,157 @@
-# Frontend Mentor - QR code component
+# DesiTease — Premium Store
 
-![Design preview for the QR code component coding challenge](./design/desktop-preview.jpg)
+Static storefront for **desitease.netlify.app**. No build step, no framework, no
+runtime dependencies: plain HTML, CSS and JavaScript, deployed straight from
+this repo to Netlify.
 
-## Welcome! 👋
+```
+index.html            catalogue + checkout markup
+style.css             design system
+script.js             pricing engine, cart, payments
+success.html          order confirmation
+success-style.css
+success-script.js
+netlify.toml          build + minification config
+_headers              cache + security headers
+robots.txt sitemap.xml site.webmanifest favicon.svg
+assets/packs/*.webp   generated pack cover art
+assets/bg/*.webp      hero / footer backdrops
+assets/brand/         UPI QR, OG card
+tools/                asset generators (python)
+```
 
-Thanks for checking out this front-end coding challenge.
+---
 
-[Frontend Mentor](https://www.frontendmentor.io) challenges help you improve your coding skills by building realistic projects.
+## 1. Editing the catalogue
 
-**To do this challenge, you need a basic understanding of HTML and CSS.**
+**The markup is the single source of truth.** `script.js` reads prices, names,
+vaults and specs straight out of the DOM, so a pack only ever needs to be
+added in one place.
 
-## The challenge
+To add a pack:
 
-Your challenge is to build out this QR code component and get it looking as close to the design as possible.
+1. Copy an existing `<article class="pack">` block in `index.html`.
+2. Update `data-id`, `data-price`, `data-old`, `data-blurb`, `data-specs`.
+3. Drop it in the right `<div class="grid">` (one per vault).
+4. Add a matching cover at `assets/packs/<data-id>.webp` (800×800 WebP).
 
-You can use any tools you like to help you complete the challenge. So if you've got something you'd like to practice, feel free to give it a go.
+Bundle prices, the mega-bundle price, the savings line and the PayPal/crypto
+amounts all recalculate automatically — there is nothing else to touch.
 
-Want some support on the challenge? [Join our Slack community](https://www.frontendmentor.io/slack) and ask questions in the **#help** channel.
+### Pack attributes
 
-## Where to find everything
+| Attribute | Meaning | Example |
+|---|---|---|
+| `data-id` | unique key, also the cover filename | `aivideo` |
+| `data-price` | INR price | `209` |
+| `data-old` | struck-through "was" price | `299` |
+| `data-blurb` | long description shown in the detail dialog | … |
+| `data-specs` | spec tiles, `LABEL:value;LABEL:value` | `RESOLUTION:1080p / 4K;ACCESS:Lifetime` |
+| `data-badge` | optional ribbon on the cover | `New` |
 
-Your task is to build out the project to the designs inside the `/design` folder. You will find both a mobile and a desktop version of the design. 
+### Vaults
 
-The designs are in JPG static format. Using JPGs will mean that you'll need to use your best judgment for styles such as `font-size`, `padding` and `margin`. 
+Vaults are `<section class="vault" data-vault="key">` blocks. Add a fourth by
+copying a section and giving it a new key, then adding the key to
+`VAULT_LABELS` in `script.js`.
 
-If you would like the design files (we provide Sketch & Figma versions) to inspect the design in more detail, you can [subscribe as a PRO member](https://www.frontendmentor.io/pro).
+Discounts live in `CONFIG` (`vaultDiscount`, `megaDiscount`).
 
-You will find all the required assets in the `/images` folder. The assets are already optimized.
+---
 
-There is also a `style-guide.md` file containing the information you'll need, such as color palette and fonts.
+## 2. Business configuration
 
-## Building your project
+All the money settings live in one block at the top of `script.js`:
 
-Feel free to use any workflow that you feel comfortable with. Below is a suggested process, but do not feel like you need to follow these steps:
+```js
+const CONFIG = {
+  fxInrPerUsd: 91.68,   // fallback rupees per US dollar
+  paypalMarkup: 1.20,   // +20% on the PayPal amount
+  cryptoMarkup: 1.20,   // +20% on the crypto amount
+  paypalHandle: 'desitease',
+  addr: { usdtTron: 'TLqu…', bsc: '0x68cb…', btc: '114wb…' },
+  vaultDiscount: 0.20,
+  megaDiscount:  0.30,
+  fallbackRates: { tether: 91.7, bitcoin: 9200000, ethereum: 320000, binancecoin: 61000 },
+  …
+};
+```
 
-1. Initialize your project as a public repository on [GitHub](https://github.com/). Creating a repo will make it easier to share your code with the community if you need help. If you're not sure how to do this, [have a read-through of this Try Git resource](https://try.github.io/).
-2. Configure your repository to publish your code to a web address. This will also be useful if you need some help during a challenge as you can share the URL for your project with your repo URL. There are a number of ways to do this, and we provide some recommendations below.
-3. Look through the designs to start planning out how you'll tackle the project. This step is crucial to help you think ahead for CSS classes to create reusable styles.
-4. Before adding any styles, structure your content with HTML. Writing your HTML first can help focus your attention on creating well-structured content.
-5. Write out the base styles for your project, including general content styles, such as `font-family` and `font-size`.
-6. Start adding styles to the top of the page and work down. Only move on to the next section once you're happy you've completed the area you're working on.
+### How the PayPal / crypto markup works
 
-## Deploying your project
+`₹ total → × markup → ÷ FX rate → USD` for PayPal, and
+`₹ total → × markup → ÷ coin price in INR → coin units` for crypto.
 
-As mentioned above, there are many ways to host your project for free. Our recommend hosts are:
+So a ₹1,082 mega vault bills as **$14.16** on PayPal, **14.16 USDT**,
+**0.00014113 BTC** and **0.004057 ETH**.
 
-- [GitHub Pages](https://pages.github.com/)
-- [Vercel](https://vercel.com/)
-- [Netlify](https://www.netlify.com/)
+### Exchange rates
 
-You can host your site using one of these solutions or any of our other trusted providers. [Read more about our recommended and trusted hosts](https://medium.com/frontend-mentor/frontend-mentor-trusted-hosting-providers-bf000dfebe).
+Rates come from **CoinGecko** (`/simple/price?ids=…&vs_currencies=inr`) with a
+**Coinbase** fallback (`/v2/exchange-rates?currency=INR`), cached in
+`sessionStorage` for 10 minutes. If both fail, `CONFIG.fallbackRates` is used
+and the crypto panel shows an amber "amounts are indicative" warning.
 
-## Create a custom `README.md`
+> The `fallbackRates` values are placeholders — refresh them if the shop is
+> likely to run with no network, otherwise the live feed always wins.
 
-We strongly recommend overwriting this `README.md` with a custom one. We've provided a template inside the [`README-template.md`](./README-template.md) file in this starter code.
+---
 
-The template provides a guide for what to add. A custom `README` will help you explain your project and reflect on your learnings. Please feel free to edit our template as much as you like.
+## 3. Payments
 
-Once you've added your information to the template, delete this file and rename the `README-template.md` file to `README.md`. That will make it show up as your repository's README file.
+| Method | How it works |
+|---|---|
+| **UPI** | Static merchant QR (`assets/brand/upi-qr.*`) with the exact INR amount shown next to it. |
+| **PayPal** | Opens `paypal.me/desitease/<amount>USD/<description>` in a new tab. |
+| **Crypto** | Ten networks; each shows the exact coin amount for the current order, plus copy-address and copy-amount+address buttons. |
 
-## Submitting your solution
+Orders are captured by a **Netlify form** (`desi-orders`) that asks for a
+Telegram username and a payment screenshot, then redirects to
+`success.html` — which builds a pre-filled Telegram deep link for the buyer.
 
-Submit your solution on the platform for the rest of the community to see. Follow our ["Complete guide to submitting solutions"](https://medium.com/frontend-mentor/a-complete-guide-to-submitting-solutions-on-frontend-mentor-ac6384162248) for tips on how to do this.
+---
 
-Remember, if you're looking for feedback on your solution, be sure to ask questions when submitting it. The more specific and detailed you are with your questions, the higher the chance you'll get valuable feedback from the community.
+## 4. Assets
 
-## Sharing your solution
+All artwork is generated, so it can be rebuilt at any time:
 
-There are multiple places you can share your solution:
+```bash
+python tools/make-assets.py   # pack covers + backdrops
+python tools/make-qr.py       # re-render the UPI QR with a quiet zone
+python tools/make-brand.py    # PWA icons + Open Graph card
+```
 
-1. Share your solution page in the **#finished-projects** channel of the [Slack community](https://www.frontendmentor.io/slack). 
-2. Tweet [@frontendmentor](https://twitter.com/frontendmentor) and mention **@frontendmentor**, including the repo and live URLs in the tweet. We'd love to take a look at what you've built and help share it around.
-3. Share your solution on other social channels like LinkedIn.
-4. Blog about your experience building your project. Writing about your workflow, technical choices, and talking through your code is a brilliant way to reinforce what you've learned. Great platforms to write on are [dev.to](https://dev.to/), [Hashnode](https://hashnode.com/), and [CodeNewbie](https://community.codenewbie.org/).
+`tools/source/` keeps the original backdrop art and the original QR payload so
+the generators are reproducible. It is excluded from the deploy.
 
-We provide templates to help you share your solution once you've submitted it on the platform. Please do edit them and include specific questions when you're looking for feedback. 
+---
 
-The more specific you are with your questions the more likely it is that another member of the community will give you feedback.
+## 5. Deploying
 
-## Got feedback for us?
+The repo is the site. Connect it to Netlify with:
 
-We love receiving feedback! We're always looking to improve our challenges and our platform. So if you have anything you'd like to mention, please email hi[at]frontendmentor[dot]io.
+| Setting | Value |
+|---|---|
+| Build command | *(empty)* |
+| Publish directory | `.` |
+| Branch | `main` |
 
-This challenge is completely free. Please share it with anyone who will find it useful for practice.
+`netlify.toml` enables Netlify's HTML/CSS/JS minification. `_headers` adds
+long-lived caching for `/assets` and images, `no-store`-style revalidation for
+the app shell, and a Content-Security-Policy.
 
-**Have fun building!** 🚀
+> **CSP note** — if you add a third-party script (analytics, a chat widget),
+> add its origin to `script-src` / `connect-src` in `_headers`, otherwise the
+> browser will block it.
+
+---
+
+## 6. House rules
+
+* 18+ only. The age gate is stored in `localStorage` under `dt-age-verified`.
+* The store lists original, licensed and AI-synthetic material featuring
+  consenting adults aged 18 and over. Do not add packs of leaked, covertly
+  recorded or non-consensual material, and do not add packs containing
+  anything that depicts a minor or a childlike character.
+* Every performer must be a consenting adult, and the licence for the
+  material must be written down somewhere you can produce it on request.
