@@ -1,433 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DesiTease Premium Store</title>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DesiTease — Premium Archive | Lifetime Access, Instant Delivery</title>
+<meta name="description" content="DesiTease is a premium digital archive of original stories, audio drama and AI-created content. Lifetime access, instant delivery, UPI / PayPal / crypto checkout.">
+<meta name="theme-color" content="#0a0608">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://desitease.netlify.app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DesiTease">
+<meta property="og:title" content="DesiTease — Premium Archive">
+<meta property="og:description" content="Original stories, audio drama and AI-created content. Lifetime access, instant delivery.">
+<meta property="og:url" content="https://desitease.netlify.app/">
+<meta property="og:image" content="https://desitease.netlify.app/assets/brand/og-card.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DesiTease — Premium Archive">
+<meta name="twitter:description" content="Original stories, audio drama and AI-created content. Lifetime access, instant delivery.">
+<meta name="twitter:image" content="https://desitease.netlify.app/assets/brand/og-card.jpg">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="/favicon-32x32.png" sizes="32x32">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="/style.css">
 </head>
+
 <body>
+<a class="skip-link" href="#main">Skip to catalogue</a>
 
-    <!-- DARK HEADER WITH RED SEPARATOR -->
-    <header>
-        <div class="logo">
-            <span class="desi">Desi</span><span class="tease">Tease</span>
-        </div>
-        <p class="tagline">Where Fantasy Meets Reality. India's most exclusive premium archive.</p>
-        <div class="trust-bar">
-            <div class="trust-badge">
-                <i class="fas fa-circle-check"></i>
-                <span>Lifetime Access</span>
-            </div>
-            <div class="trust-badge">
-                <i class="fas fa-sync-alt"></i>
-                <span>Regular Updates</span>
-            </div>
-            <div class="trust-badge">
-                <i class="fas fa-headset"></i>
-                <span>24/7 Support</span>
-            </div>
-        </div>
-    </header>
+<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></symbol>
+  <symbol id="i-support" viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><path d="M4 14a2 2 0 0 1 2-2h1v6H6a2 2 0 0 1-2-2z"/><path d="M20 14a2 2 0 0 0-2-2h-1v6h1a2 2 0 0 0 2-2z"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-qr" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14h1M14 20h3M20 17v4"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.4 3.2 8.3 8 9.5 4.8-1.2 8-5.1 8-9.5V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 21h16"/></symbol>
+  <symbol id="i-telegram" viewBox="0 0 24 24"><path d="M21.9 4.3 2.9 11.4c-1 .4-1 1.1 0 1.4l4.7 1.5 1.8 5.6c.2.7.4.7 1 .4l2.6-2 4.8 3.5c.8.5 1.3.2 1.5-.8l2.7-12.7c.2-1.1-.4-1.6-1.1-1Z"/><path d="m7.6 14.3 11-8.4-8.6 9.6-.3 4.1-2.1-5.3Z"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></symbol>
+</svg>
 
-    <div class="container">
+<header class="topbar">
+  <div class="topbar__inner">
+    <a class="brand" href="#main" title="DesiTease — home"><span class="brand__mark" aria-hidden="true">DT</span><span class="brand__word"><span class="brand__a">Desi</span><span class="brand__b">Tease</span></span></a>
+    <p class="topbar__tag">Premium archive · Lifetime access</p>
+    <button class="topbar__cart" id="topCartBtn" type="button" aria-label="Open cart"><svg class="ico" aria-hidden="true"><use href="#i-cart"/></svg><span class="topbar__count" id="topCartCount" hidden>0</span></button>
+  </div>
+</header>
 
-        <!-- TOP PICKS (ORANGE) -->
-        <section class="category-section">
-            <div class="cat-header">
-                <div class="cat-title cat1-title">
-                    <span class="cat-icon cat1-icon">◆</span>
-                    <span>Top Picks</span>
-                </div>
-                <button class="cat-bundle-btn" data-cat="cat1">
-                    <i class="fas fa-layer-group"></i>
-                    <span id="cat1BundleText">SAVE 29% · Bundle: ₹313</span>
-                </button>
-            </div>
-            <div class="grid" id="cat1"></div>
-        </section>
+<main id="main">
+<section class="hero">
+  <div class="hero__bg" aria-hidden="true"></div>
+  <div class="hero__inner">
+    <p class="hero__eyebrow"><span class="dot"></span> New drops every week</p>
+    <h1 class="hero__title">Your private<br><span class="grad">archive</span>, unlocked.</h1>
+    <p class="hero__sub">Original stories, audio drama and AI-created content — delivered to your Telegram in minutes. Pay once, keep it forever.</p>
+    <ul class="hero__stats" role="list"><li><b data-stat="packs">12</b><span>Packs</span></li><li><b data-stat="files">60K+</b><span>Files</span></li><li><b>4.9★</b><span>Buyer rating</span></li></ul>
+  </div>
+</section>
 
-        <!-- PREMIUM VAULT (PURPLE) -->
-        <section class="category-section">
-            <div class="cat-header">
-                <div class="cat-title cat2-title">
-                    <span class="cat-icon cat2-icon">◆</span>
-                    <span>Premium Vault</span>
-                </div>
-                <button class="cat-bundle-btn" data-cat="cat2">
-                    <i class="fas fa-layer-group"></i>
-                    <span id="cat2BundleText">SAVE 20% · Bundle: ₹685</span>
-                </button>
-            </div>
-            <div class="grid" id="cat2"></div>
-        </section>
+<div class="vaults">
+<!-- Vault 1 -->
+<section class="vault" id="vault-top" data-vault="top" aria-labelledby="h-top">
+  <div class="vault__head"><div><h2 class="vault__title vault__title--top" id="h-top"><span class="vault__gem" aria-hidden="true">◆</span> Top Picks</h2><p class="vault__desc">The fastest way in — start here.</p></div><button class="bundle" type="button" data-bundle="top"><svg class="ico" aria-hidden="true"><use href="#i-layers"/></svg><span data-bundle-label="top">Save 20% · Bundle ₹337</span></button></div>
+  <div class="grid">
+    <article class="pack" data-id="pdf" data-price="103" data-old="139" data-blurb="A huge library of original text stories in plain text and PDF - 40,000+ files covering bhabhi, neighbour, office and everyday desi-life scenarios." data-specs="FILES:40,000+;FORMAT:PDF / TXT;LANGUAGE:Hindi / English;ACCESS:Lifetime">
+      <button class="pack__media" type="button" data-detail="pdf"><span class="sr-only">PDF Stories Pack</span><img src="/assets/packs/pdf.webp" loading="lazy" alt=""><span class="pack__type" aria-hidden="true">📖 TEXT</span></button>
+      <div class="pack__body"><h3 class="pack__name">PDF Stories Pack</h3><p class="pack__desc">40,000+ story files. Read anywhere.</p><div class="pack__buy"><p class="price"><s>₹139 </s><span>₹103</span></p><button class="add" data-add="pdf">Add</button></div></div>
+    </article>
+    <article class="pack" data-id="audio" data-price="139" data-old="189" data-blurb="Narration you can listen to on the move - 3,000+ hours in Hindi, Punjabi, English and Urdu." data-specs="HOURS:3,000+;QUALITY:HQ Stereo;LANGUAGE:Hindi / Punjabi / Urdu;UPDATES:Weekly">
+      <button class="pack__media" type="button" data-detail="audio"><span class="sr-only">Audio Erotica</span><img src="/assets/packs/audio.webp" loading="lazy" alt=""><span class="pack__type" aria-hidden="true">🎧 AUDIO</span></button>
+      <div class="pack__body"><h3 class="pack__name">Audio Erotica</h3><p class="pack__desc">3,000+ hours of narration in Hindi, Punjabi, English and Urdu.</p><div class="pack__buy"><p class="price"><s>₹189 </s><span>₹139</span></p><button class="add" data-add="audio">Add</button></div></div>
+    </article>
+    <article class="pack" data-id="mms" data-price="149" data-old="199" data-blurb="Videos leaked from phones. Real Indian girls in hostels, hotels and colleges." data-specs="VIDEOS:50,000+;SOURCE:Leaked;TYPE:Raw/Real;REGION:Pan India">
+      <button class="pack__media" type="button" data-detail="mms"><span class="sr-only">Viral MMS Pack</span><img src="/assets/packs/mms.webp" loading="lazy" alt=""><span class="pack__type" aria-hidden="true">📱 VIDEO</span></button>
+      <div class="pack__body"><h3 class="pack__name">Viral MMS Pack</h3><p class="pack__desc">Real leaked videos. Unfiltered.</p><div class="pack__buy"><p class="price"><s>₹199 </s><span>₹149</span></p><button class="add" data-add="mms">Add</button></div></div>
+    </article>
+  </div>
+</section>
 
-        <!-- DARK VAULT (CRIMSON) -->
-        <section class="category-section">
-            <div class="cat-header">
-                <div class="cat-title cat3-title">
-                    <span class="cat-icon cat3-icon">◆</span>
-                    <span>Dark Vault</span>
-                </div>
-                <button class="cat-bundle-btn" data-cat="cat3">
-                    <i class="fas fa-layer-group"></i>
-                    <span id="cat3BundleText">SAVE 20% · Bundle: ₹542</span>
-                </button>
-            </div>
-            <div class="grid" id="cat3"></div>
-        </section>
+<!-- Vault 2: Premium (all 6 packs) -->
+<section class="vault" id="vault-premium" data-vault="premium" aria-labelledby="h-premium">
+  <div class="vault__head"><div><h2 class="vault__title vault__title--premium" id="h-premium"><span class="vault__gem" aria-hidden="true">◆</span> Premium Vault</h2><p class="vault__desc">Interactive and AI-generated. You drive the story.</p></div><button class="bundle" type="button" data-bundle="premium"><svg class="ico" aria-hidden="true"><use href="#i-layers"/></svg><span data-bundle-label="premium">Save 20% · Bundle ₹1,051</span></button></div>
+  <div class="grid">
+    <article class="pack" data-id="ai" data-price="149" data-old="223" data-blurb="An uncensored AI companion app for iOS and Android. Unlimited characters, your own prompts, image generation and voice." data-specs="PLATFORM:iOS / Android;CHARACTERS:Unlimited;MODE:Uncensored;ACCESS:Lifetime">
+      <button class="pack__media" type="button" data-detail="ai"><span class="sr-only">SoulMate AI App</span><img src="/assets/packs/ai.webp" loading="lazy" alt=""><span class="pack__type" aria-hidden="true">🤖 APP</span></button>
+      <div class="pack__body"><h3 class="pack__name">SoulMate AI App</h3><p class="pack__desc">Unlimited AI characters. No filters.</p><div class="pack__buy"><p class="price"><s>₹223 </s><span>₹149</span></p><button class="add" data-add="ai">Add</button></div></div>
+    </article>
+    <article class="pack" data-id="animated" data-price="169" data-old="229" data-blurb="Cartoons and 3D videos. Full color and HD quality." data-specs="STYLE:3D/2D;QUALITY:1080p HD;CENSORED:No;CONTENT:Fantasy">
+      <button class="pack__media" type="button" data-detail="animated"><span class="sr-only">Animated Pack</span><img src="/assets/packs/animated.webp" loading="lazy" alt=""><span class="pack__type" aria-hidden="true">🎨 3D</span></button>
+      <div class="pack__body"><h3 class="pack__name">Animated Pack</h3><p class="pack__desc">3D Hentai and comics. Fantasy uncensored.</p><div class="pack__buy"><p class="price"><s>₹229 </s><span>₹169</span></p><button class="add" data-add="animated">Add</button></div></div>
+    </article>
+    <article class="pack" data-id="bbc" data-price="189" data-old="249" data-blurb="1000+ exclusive full-length scenes featuring powerful dominance over innocent Indian girls." data-specs="VIDEOS:1000+;THEME:Blacked;FOCUS:Hardcore;LENGTH:Full Scenes">
+      <button class="pack__media" type="button" data-detail="bbc"><span class="sr-only">BBC Collection</span><img src="/assets/packs/bbc.webp" loading="lazy" alt=""><span class="pack__type" aria-hidden="true">🖤 NICHE</span></button>
+      <div class="pack__body"><h3 class="pack__name">BBC Collection</h3><p class="pack__desc">Powerful dominance. Black men with Indian girls.</p><div class="pack__buy"><p class="price"><s>₹249 </s><span>₹189</span></p><button class="add" data-add="bbc">Add</button></div></div>
+    </article>
+    <article class="pack" data-id="actress" data-price="349" data-old="523" data-blurb="Deepfakes, leaks and cum tributes of top Indian actresses. High quality HD." data-specs="QUALITY:4K HD;TYPE:Deepfake+Real;STARS:Top 650+;TRIBUTES:Included">
+      <button class="pack__media" type="button" data-detail="actress"><span class="sr-only">Actress Exclusives</span><img src="/assets/packs/actress.webp" loading="lazy" alt=""><span class="pack__type" aria-hidden="true">🍿 PREMIUM</span></button>
+      <div class="pack__body"><h3 class="pack__name">Actress Exclusives</h3><p class="pack__desc">Deepfakes, leaks and tributes. HD.</p><div class="pack__buy"><p class="price"><s>₹523 </s><span>₹349</span></p><button class="add" data-add="actress">Add</button></div></div>
+    </article>
+    <article class="pack" data-id="aivideos" data-price="209" data-old="299" data-blurb="Photorealistic AI-generated video 1080p/4K released weekly. Every clip synthetic - original performers, original scenes." data-specs="RESOLUTION:1080p / 4K;TYPE:Photoreal AI;UPDATES:Weekly;ACCESS:Lifetime" data-badge="New">
+      <button class="pack__media" type="button" data-detail="aivideos"><span class="sr-only">AI Videos Pack</span><img src="/assets/packs/aivideos.webp" loading="lazy" alt=""><span class="pack__type" aria-hidden="true">🤖 AI DESI VAULT</span><span class="pack__flag" aria-hidden="true">New</span></button>
+      <div class="pack__body"><h3 class="pack__name">AI Videos Pack</h3><p class="pack__desc">Photoreal synthetic video, 1080p &amp; 4K. New scenes weekly.</p><div class="pack__buy"><p class="price"><s>₹299 </s><span>₹209</span></p><button class="add" data-add="aivideos">Add</button></div></div>
+    </article>
+    <article class="pack" data-id="webseries" data-price="249" data-old="349" data-blurb="Full seasons of Indian OTT erotic series with all explicit cuts intact in full HD." data-specs="QUALITY:Full HD;EPISODES:Full Seasons;CENSORED:100% Uncut;ACCESS:Lifetime" data-badge="New">
+      <button class="pack__media" type="button" data-detail="webseries"><span class="sr-only">Desi Webseries Vault</span><img src="/assets/packs/webseries.webp" loading="lazy" alt=""><span class="pack__type" aria-hidden="true">🎬 OTT UNCUT</span><span class="pack__flag" aria-hidden="true">New</span></button>
+      <div class="pack__body"><h3 class="pack__name">Desi Webseries Vault</h3><p class="pack__desc">Uncut Indian OTT webseries, complete seasons.</p><div class="pack__buy"><p class="price"><s>₹349 </s><span>₹249</span></p><button class="add" data-add="webseries">Add</button></div></div>
+    </article>
+  </div>
+</section>
 
-        <!-- MEGA-GLOW-WRAPPER (ANIMATED ULTIMATE BUNDLE) -->
-        <div class="mega-glow-wrapper">
-            <div class="mega-glow-card" id="megaBundleCard">
-                <span class="glow"></span>
-                <div class="mega-glow-content">
-                    <div class="mega-discount-badge">
-                        <i class="fas fa-fire"></i>
-                        <span>30% OFF BUNDLE</span>
-                    </div>
-                    <div class="mega-subtitle">Get ALL 10 Packs for one low price</div>
-                    <div class="mega-price-row">
-                        <div class="mega-price">₹1348</div>
-                        <div class="mega-old-price">₹1925</div>
-                    </div>
-                    <button class="mega-cta-btn" id="megaCTABtn">
-                        <i class="fas fa-bolt"></i>
-                        Grab Deal Now
-                    </button>
-                </div>
-            </div>
-        </div>
+<!-- Vault 3 -->
+<section class="vault" id="vault-series" data-vault="series" aria-labelledby="h-series">
+  <div class="vault__head"><div><h2 class="vault__title vault__title--series" id="h-series"><span class="vault__gem" aria-hidden="true">◆</span> Dark Vault</h2><p class="vault__desc">Hidden, forbidden, extreme.</p></div><button class="bundle" type="button" data-bundle="series"><svg class="ico" aria-hidden="true"><use href="#i-layers"/></svg><span data-bundle-label="series">Save 20% · Bundle ₹542</span></button></div>
+  <div class="grid">
+    <article class="pack" data-id="spy" data-price="199" data-old="269" data-blurb="Cameras hidden in rooms. Watch girls changing clothes without them knowing." data-specs="TYPE:Hidden Cam;LOCATIONS:Hotels/Rooms;VIBE:Voyeur;RARITY:High">
+      <button class="pack__media" type="button" data-detail="spy"><span class="sr-only">Spy Cam Vault</span><img src="/assets/packs/spy.webp" loading="lazy" alt=""><span class="pack__type" aria-hidden="true">📹 HIDDEN</span></button>
+      <div class="pack__body"><h3 class="pack__name">Spy Cam Vault</h3><p class="pack__desc">Hidden camera footage from rooms and hotels.</p><div class="pack__buy"><p class="price"><s>₹269 </s><span>₹199</span></p><button class="add" data-add="spy">Add</button></div></div>
+    </article>
+    <article class="pack" data-id="incest" data-price="219" data-old="289" data-blurb="Family secret videos. Brothers, sisters, moms. The things you cannot tell anyone." data-specs="THEME:Family;TABOO:Extreme;MEDIA:Video/Text;DEMAND:High">
+      <button class="pack__media" type="button" data-detail="incest"><span class="sr-only">Incest Vault</span><img src="/assets/packs/incest.webp" loading="lazy" alt=""><span class="pack__type" aria-hidden="true">⚡ TABOO</span></button>
+      <div class="pack__body"><h3 class="pack__name">Incest Vault</h3><p class="pack__desc">Forbidden family secrets.</p><div class="pack__buy"><p class="price"><s>₹289 </s><span>₹219</span></p><button class="add" data-add="incest">Add</button></div></div>
+    </article>
+    <article class="pack" data-id="secret" data-price="260" data-old="349" data-blurb="The most dangerous collection. Content that is too hot. Only for people who want everything." data-specs="STATUS:VIP;CONTENT:Unlisted;RISK:High;ACCESS:Restricted">
+      <button class="pack__media" type="button" data-detail="secret"><span class="sr-only">Secret Vault</span><img src="/assets/packs/secret.webp" loading="lazy" alt=""><span class="pack__type" aria-hidden="true">🔐 VIP</span></button>
+      <div class="pack__body"><h3 class="pack__name">Secret Vault</h3><p class="pack__desc">Extreme content. Not for everyone.</p><div class="pack__buy"><p class="price"><s>₹349 </s><span>₹260</span></p><button class="add" data-add="secret">Add</button></div></div>
+    </article>
+  </div>
+</section>
 
-    </div>
-
-    <!-- STICKY CART -->
-    <div class="sticky-cart" id="stickyCart">
-        <div class="cart-info">
-            <div id="cartItemsText" style="font-size: 0.75rem; color: #888; margin-bottom: 5px;">0 items</div>
-            <div id="cartTotalText" style="font-size: 1.4rem; font-weight: 900; color: #000;">Total: ₹0</div>
-        </div>
-        <button class="cart-clear-btn-inside" id="cartClearBtnInside" title="Clear Cart">
-            <i class="fas fa-trash-alt"></i>
-        </button>
-        <button class="checkout-arrow" id="checkoutBtn">
-            <span>CHECKOUT</span>
-            <i class="fas fa-arrow-right"></i>
-        </button>
-    </div>
-
-    <!-- DETAIL MODAL -->
-    <div class="modal" id="detailModal">
-        <div class="detail-box">
-            <img src="" id="detailImg" class="detail-img" alt="Preview">
-            <div class="detail-content">
-                <h2 id="detailName"></h2>
-                <p id="detailDesc"></p>
-                <div class="spec-grid" id="detailSpecs"></div>
-                <button class="detail-close-btn" id="detailCloseBtn">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- CHECKOUT MODAL -->
-    <div class="modal" id="checkoutModal">
-        <div class="checkout-box">
-            <span class="modal-close-btn" id="checkoutCloseX">&times;</span>
-            <h2 class="co-title">Complete Your Order</h2>
-
-            <!-- Payment Tabs -->
-            <div class="co-tabs">
-                <div class="co-tab active" data-tab="upi">
-                    <i class="fas fa-qrcode"></i> UPI
-                </div>
-                <div class="co-tab" data-tab="paypal">
-                    <i class="fab fa-paypal"></i> PayPal
-                </div>
-                <div class="co-tab" data-tab="crypto">
-                    <i class="fab fa-bitcoin"></i> Crypto
-                </div>
-            </div>
-
-            <!-- Payment Sections -->
-            <div class="co-section active" id="upiSection">
-                <p style="font-size: 0.85rem; margin-bottom: 12px;">Scan to pay with any UPI App</p>
-                <img src="upi-qr.jpg" style="width: 160px; border-radius: 10px; border: 2px solid #e0e0e0; margin: 10px auto; display: block;" alt="QR">
-                <a href="upi-qr.jpg" download style="color: #e55039; text-decoration: underline; font-size: 0.8rem;">Download QR</a>
-            </div>
-
-            <div class="co-section" id="paypalSection">
-                <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; margin-bottom: 16px; color: #2d3436; text-align: center;">International Payment (PayPal)</h4>
-                <button class="paypal-btn" onclick="openPayPal()">
-                    <i class="fab fa-paypal"></i>
-                    <span>Pay with PayPal</span>
-                </button>
-                <p style="font-size: 0.8rem; color: #636e72; text-align: center; margin-top: 12px; line-height: 1.4;">Secure payment via PayPal. After payment, upload your screenshot below.</p>
-            </div>
-
-            <div class="co-section" id="cryptoSection">
-    <h4 style="font-family: 'Montserrat', sans-serif; font-size: 1rem; margin-bottom: 16px; color: #2d3436; text-align: center;">🔐 Select Crypto - Click Network to Copy</h4>
-    <p style="font-size: 0.85rem; color: #e55039; text-align: center; margin-bottom: 12px;">Crypto Total: ₹<span id="cryptoTotal">0</span> <small>(+20% markup)</small></p>
-    
-    <div class="crypto-accordion">
-        
-        <!-- USDT (Tether) -->
-        <div class="crypto-main" id="cryptoUSDT">
-            <div class="crypto-header">
-                <div class="crypto-header-left">
-                    <div class="crypto-icon">₮</div>
-                    <div class="crypto-info">
-                        <h4>USDT (Tether)</h4>
-                        <span>4 Networks Available</span>
-                    </div>
-                </div>
-                <i class="fas fa-chevron-down crypto-chevron"></i>
-            </div>
-            <div class="crypto-networks">
-                <div class="crypto-networks-inner">
-                    <div class="network-btn" onclick="copyCrypto('USDT TRC20', 'TLquccw7uU4A6fTJekDsrsQbJEvnFv1eTD')">
-                        <div class="network-left">
-                            <div class="network-name">TRC20 (Tron)</div>
-                            <div class="network-desc">Fastest & Cheapest</div>
-                        </div>
-                        <div class="network-badge best">✅ BEST</div>
-                    </div>
-                    <div class="network-btn" onclick="copyCrypto('USDT BEP20', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
-                        <div class="network-left">
-                            <div class="network-name">BEP20 (BSC)</div>
-                            <div class="network-desc">Binance Smart Chain</div>
-                        </div>
-                        <div class="network-badge cheap">⚡ Cheap</div>
-                    </div>
-                    <div class="network-btn" onclick="copyCrypto('USDT ERC20', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
-                        <div class="network-left">
-                            <div class="network-name">ERC20 (Ethereum)</div>
-                            <div class="network-desc">Ethereum Network</div>
-                        </div>
-                    </div>
-                    <div class="network-btn" onclick="copyCrypto('USDT Polygon', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
-                        <div class="network-left">
-                            <div class="network-name">Polygon</div>
-                            <div class="network-desc">MATIC Network</div>
-                        </div>
-                        <div class="network-badge cheap">⚡ Cheap</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bitcoin -->
-        <div class="crypto-main" id="cryptoBTC">
-            <div class="crypto-header">
-                <div class="crypto-header-left">
-                    <div class="crypto-icon">₿</div>
-                    <div class="crypto-info">
-                        <h4>Bitcoin</h4>
-                        <span>2 Networks Available</span>
-                    </div>
-                </div>
-                <i class="fas fa-chevron-down crypto-chevron"></i>
-            </div>
-            <div class="crypto-networks">
-                <div class="crypto-networks-inner">
-                    <div class="network-btn" onclick="copyCrypto('Bitcoin BTC', '114wbEsmXGo9tExmg2HKEZqPXYsAB9S4ei')">
-                        <div class="network-left">
-                            <div class="network-name">BTC Main Network</div>
-                            <div class="network-desc">Bitcoin Blockchain</div>
-                        </div>
-                        <div class="network-badge popular">🔥 Popular</div>
-                    </div>
-                    <div class="network-btn" onclick="copyCrypto('Bitcoin BSC', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
-                        <div class="network-left">
-                            <div class="network-name">BTC (BSC)</div>
-                            <div class="network-desc">Wrapped Bitcoin</div>
-                        </div>
-                        <div class="network-badge cheap">⚡ Cheap</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Ethereum -->
-        <div class="crypto-main" id="cryptoETH">
-            <div class="crypto-header">
-                <div class="crypto-header-left">
-                    <div class="crypto-icon">Ξ</div>
-                    <div class="crypto-info">
-                        <h4>Ethereum</h4>
-                        <span>3 Networks Available</span>
-                    </div>
-                </div>
-                <i class="fas fa-chevron-down crypto-chevron"></i>
-            </div>
-            <div class="crypto-networks">
-                <div class="crypto-networks-inner">
-                    <div class="network-btn" onclick="copyCrypto('Ethereum ERC20', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
-                        <div class="network-left">
-                            <div class="network-name">ERC20 (Main Network)</div>
-                            <div class="network-desc">Ethereum Blockchain</div>
-                        </div>
-                        <div class="network-badge popular">🔥 Popular</div>
-                    </div>
-                    <div class="network-btn" onclick="copyCrypto('Ethereum Arbitrum', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
-                        <div class="network-left">
-                            <div class="network-name">Arbitrum (Layer 2)</div>
-                            <div class="network-desc">Lower Fees</div>
-                        </div>
-                        <div class="network-badge cheap">⚡ Cheap</div>
-                    </div>
-                    <div class="network-btn" onclick="copyCrypto('Ethereum BSC', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
-                        <div class="network-left">
-                            <div class="network-name">BSC (Wrapped)</div>
-                            <div class="network-desc">Binance Smart Chain</div>
-                        </div>
-                        <div class="network-badge cheap">⚡ Cheap</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- BNB (Binance Coin) -->
-        <div class="crypto-main" id="cryptoBNB">
-            <div class="crypto-header">
-                <div class="crypto-header-left">
-                    <div class="crypto-icon">🟡</div>
-                    <div class="crypto-info">
-                        <h4>BNB (Binance Coin)</h4>
-                        <span>1 Network Available</span>
-                    </div>
-                </div>
-                <i class="fas fa-chevron-down crypto-chevron"></i>
-            </div>
-            <div class="crypto-networks">
-                <div class="crypto-networks-inner">
-                    <div class="network-btn" onclick="copyCrypto('BNB BEP20', '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15')">
-                        <div class="network-left">
-                            <div class="network-name">BEP20 (BSC)</div>
-                            <div class="network-desc">Binance Smart Chain</div>
-                        </div>
-                        <div class="network-badge best">⚡ Fast</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <p style="font-size: 0.75rem; color: #636e72; margin-top: 15px; text-align: center; line-height: 1.4;">
-        ⚠️ Click network to copy address. Send exact amount to avoid delays.
-    </p>
-
-    <!-- Copy Notification -->
-    <div class="copy-notification" id="copyNotif">
-        <span id="copyText"></span> Address Copied! ✅
-    </div>
 </div>
 
-
-            <!-- Order Summary -->
-            <div class="order-summary" id="orderSummary"></div>
-
-            <!-- Total -->
-            <div class="co-total" id="coCartTotal">Payable Amount: ₹0</div>
-
-            <!-- Form -->
-            <form name="desi-orders" method="POST" data-netlify="true" enctype="multipart/form-data" action="success.html" onsubmit="return saveOrderData()">
-                <input type="hidden" name="form-name" value="desi-orders">
-                <input type="hidden" name="items" id="formItems">
-                <input type="hidden" name="amount" id="formAmount">
-
-                <input type="text" name="telegram" class="co-input" placeholder="Telegram Username (@YourName)" required>
-                <div class="co-help">If no username, enter registered phone number</div>
-
-                <label class="co-label">Upload Payment Screenshot</label>
-                <input type="file" name="screenshot" class="co-input" accept="image/*" required>
-
-                <button type="submit" class="co-btn">
-                    <i class="fas fa-check-circle"></i>
-                    Submit & Get Access
-                </button>
-            </form>
-        </div>
+<section class="mega" aria-labelledby="h-mega">
+  <div class="mega__inner">
+    <div class="mega__copy">
+      <p class="mega__badge">30% off everything</p>
+      <h2 class="mega__title" id="h-mega">The Full Vault</h2>
+      <p class="mega__sub">Every pack on the site, one payment, permanent access.</p>
+      <p class="mega__price"><span class="mega__now" data-mega-price>₹1,668</span><s class="mega__was" data-mega-was>₹2,383</s></p>
+      <p class="mega__save" data-mega-save>You keep ₹715 in your pocket</p>
+      <button class="cta" type="button" id="megaBtn">Grab the bundle</button>
     </div>
+    <ul class="mega__list" data-mega-list role="list"></ul>
+  </div>
+</section>
 
-    <!-- FOOTER WITH DARK THEME -->
-    <footer>
-        <div class="logo">
-            <span class="desi">Desi</span><span class="tease">Tease</span>
-        </div>
-        <p class="tagline">Have a question, custom request, or want international payment options? DM us directly.</p>
-        
-        <!-- SOCIAL BUTTONS -->
-        <div class="social-links">
-            <a href="https://t.me/DesiTease_4" class="social-btn" target="_blank">
-                <i class="fab fa-telegram-plane"></i>
-                <span>Telegram</span>
-            </a>
-            <a href="https://instagram.com/DesiTease_" class="social-btn" target="_blank">
-                <i class="fab fa-instagram"></i>
-                <span>Instagram</span>
-            </a>
-        </div>
-        
-        <p class="footer-copyright">© 2026 DesiTease Premium Store. All Rights Reserved.</p>
-    </footer>
+</main>
 
-    <script src="script.js"></script>
+<footer class="foot">
+  <div class="foot__inner">
+    <a class="brand brand--foot" href="#main"><span class="brand__mark" aria-hidden="true">DT</span><span class="brand__word"><span class="brand__a">Desi</span><span class="brand__b">Tease</span></span></a>
+    <p class="foot__tag">Questions? DM us — we reply in minutes.</p>
+    <div class="foot__social"><a href="https://t.me/DesiTease_4">Telegram</a><a href="https://instagram.com/DesiTease_">Instagram</a></div>
+  </div>
+</footer>
 
-    <!-- Additional Functions -->
-    <script>
-        // PayPal redirect function (+20% markup)
-        function openPayPal() {
-    const totalText = document.getElementById('coCartTotal').innerText.split('₹')[1];
-    // Convert INR to USD (approximate rate: 1 USD = 91.68 INR) + 20% markup
-    const amountInUSD = (parseFloat(totalText) / 91.68 * 1.20).toFixed(2);
-    const paypalURL = `https://paypal.me/desitease/${amountInUSD}USD`;
-    window.open(paypalURL, '_blank');
-}
+<div class="cartbar" id="cartBar" hidden>
+  <div class="cartbar__info"><span id="cartBarCount">0</span><span id="cartBarTotal">₹0</span></div>
+  <button class="cartbar__cta" type="button" id="cartCheckout">Checkout</button>
+</div>
 
+<dialog class="dlg" id="detailDialog" aria-modal="true" aria-labelledby="detailTitle">
+  <div class="dlg__head"><h2 id="detailTitle">Pack</h2><button data-close aria-label="Close">X</button></div>
+  <div class="dlg__body"><img id="detailImg" alt=""><p id="detailDesc"></p><dl id="detailSpecs"></dl><div><s id="detailWas">₹0</s><b id="detailNow">₹0</b><button id="detailAdd">Add</button></div></div>
+</dialog>
 
-        // Save order data function
-        function saveOrderData() {
-            try {
-                const totalText = document.getElementById('coCartTotal').innerText.split('₹')[1];
+<dialog class="dlg" id="checkoutDialog" aria-modal="true" aria-labelledby="checkoutTitle">
+  <div class="dlg__head"><h2 id="checkoutTitle">Checkout</h2><button data-close aria-label="Close">X</button></div>
+  <div class="dlg__body"><div id="orderSummary"></div><div class="tabs"><button type="button" id="tab-upi">UPI</button><button type="button" id="tab-paypal">PayPal +20%</button><button type="button" id="tab-crypto">Crypto +20%</button></div><section id="pane-upi"><img src="/assets/brand/upi-qr.webp" alt="QR"><b id="upiAmount">₹0</b></section><section id="pane-paypal" hidden><b id="paypalInr">₹0</b><b id="paypalUsd">$0.00</b><em>+20% international processing</em><button>Pay with PayPal</button></section><section id="pane-crypto" hidden><div id="cryptoList"></div><em>+20% crypto margin</em></section><form name="desi-orders" method="POST" data-netlify="true" action="/success.html"><input type="hidden" name="form-name" value="desi-orders"><input type="hidden" name="items" id="formItems"><input type="hidden" name="amount" id="formAmount"><label>Telegram <input name="telegram" required></label><label>Screenshot <input type="file" name="screenshot" accept="image/*" required></label><button type="submit">Submit &amp; get access</button></form><p class="total">Payable <b id="coTotal">₹0</b></p></div>
+</dialog>
 
-                // Check if cart exists
-                if (typeof cart !== 'undefined' && cart.length > 0) {
-                    // Create simple item list
-                    const simpleItems = cart.map(i => ({ id: i.id, name: i.name, price: i.price }));
+<div class="gate" id="ageGate" role="dialog" aria-modal="true"><div class="gate__card"><p>18+</p><h1>Adults only</h1><p>This site contains explicit adult material for 18+ only.</p><button id="gateEnter">I am 18+ — enter</button><a href="https://www.google.com">Exit</a></div></div>
 
-                    // Save to localStorage for success page
-                    const orderData = {
-                        total: totalText,
-                        items: simpleItems
-                    };
-                    localStorage.setItem('orderData', JSON.stringify(orderData));
-                    console.log('Order saved to localStorage:', orderData);
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-                    // Also populate hidden fields for Netlify
-                    document.getElementById('formItems').value = cart.map(i => i.id).join(',');
-                    document.getElementById('formAmount').value = totalText;
-                } else {
-                    console.error('Cart is empty or undefined!');
-                    alert('Please add items to cart before submitting!');
-                    return false;
-                }
-            } catch (error) {
-                console.error('Error saving order:', error);
-            }
-            return true;
-        }
-    </script>
-
+<script src="/script.js" defer></script>
 </body>
 </html>
