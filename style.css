@@ -81,9 +81,7 @@ body.modal-open {
   overflow: hidden;
 }
 
-html[data-gate="pending"] body {
-  overflow: hidden;
-}
+/* html[data-gate="pending"] body { overflow: hidden; } */
 
 ::selection {
   background: rgba(216, 179, 132, 0.28);

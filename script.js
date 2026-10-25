@@ -546,52 +546,7 @@
      7. Age gate
      --------------------------------------------------------- */
   function initAgeGate() {
-    const gate = $('#ageGate');
-    const enter = $('#gateEnter');
-    if (!gate) return;
-
-    if (document.documentElement.dataset.gate === 'accepted') {
-      gate.setAttribute('aria-hidden', 'true');
-      return;
-    }
-
-    // Keep the page behind the gate out of the tab order and screen readers.
-    const behind = $$('body > *').filter(el => el !== gate && el.tagName !== 'SCRIPT');
-    const setBehindInert = state => {
-      behind.forEach(el => {
-        try { el.inert = state; } catch (e) { /* older browsers rely on the focus trap */ }
-      });
-    };
-    setBehindInert(true);
-
-    setTimeout(() => enter?.focus({ preventScroll: true }), 60);
-
-    gate.addEventListener('keydown', event => {
-      if (event.key !== 'Tab') return;
-      const items = focusableIn(gate);
-      if (!items.length) return;
-      const first = items[0];
-      const last = items[items.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    });
-
-    enter?.addEventListener('click', () => {
-      try {
-        localStorage.setItem(CONFIG.ageKey, '1');
-      } catch (e) {
-        /* still allow this session */
-      }
-      document.documentElement.dataset.gate = 'accepted';
-      gate.setAttribute('aria-hidden', 'true');
-      setBehindInert(false);
-      toast('Welcome to the archive');
-    });
+    document.documentElement.dataset.gate = 'accepted';
   }
 
   /* ---------------------------------------------------------
