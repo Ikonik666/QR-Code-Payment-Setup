@@ -1,18 +1,20 @@
 {
-  "name": "DesiTease Premium Store",
+  "name": "DesiTease — Private Archive",
   "short_name": "DesiTease",
-  "description": "Premium digital archive of original stories, audio drama and AI-created content.",
+  "description": "Original adult fiction, narrated audio drama and synthetic film. A private archive for adults, delivered on Telegram.",
+  "id": "/",
   "start_url": "/",
   "scope": "/",
+  "lang": "en",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0a0608",
-  "theme_color": "#0a0608",
-  "categories": ["entertainment", "shopping"],
+  "background_color": "#0a0708",
+  "theme_color": "#0a0708",
+  "categories": ["entertainment"],
   "icons": [
-    { "src": "/favicon-32x32.png", "sizes": "32x32", "type": "image/png" },
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    { "src": "/assets/brand/icons/favicon-32x32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/assets/brand/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/brand/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/assets/brand/icons/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
   ]
 }

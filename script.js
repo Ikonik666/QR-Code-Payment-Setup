@@ -1,8 +1,7 @@
 /* =========================================================
    DesiTease — store front
-   Single source of truth = the catalogue markup in index.html.
-   The script reads prices/specs out of the DOM, so adding a pack
-   means editing one file and nothing else.
+   The catalogue markup in index.html is the single source of
+   truth. Prices, specs and bundles are read from the DOM.
    ========================================================= */
 (() => {
   'use strict';
@@ -11,50 +10,50 @@
      1. Configuration — tune the business numbers here
      --------------------------------------------------------- */
   const CONFIG = {
-    // rupees per 1 US dollar (used for the PayPal + crypto conversion)
+    // rupees per 1 US dollar (used until the live USDT rate arrives)
     fxInrPerUsd: 91.68,
-    // true  = follow the live USDT/INR rate (fairer, the amount moves hourly)
-    // false = pin every order to fxInrPerUsd above (predictable for support)
     useLiveFx: true,
 
     // international / on-chain processing margin applied to the INR total
-    paypalMarkup: 1.20,   // +20%
-    cryptoMarkup: 1.20,   // +20%
+    paypalMarkup: 1.20,
+    cryptoMarkup: 1.20,
 
     paypalHandle: 'desitease',
+    upiId: 'desitease@fam',
 
     // wallets
     addr: {
       usdtTron: 'TLquccw7uU4A6fTJekDsrsQbJEvnFv1eTD',
-      bsc:      '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15',
-      btc:      '114wbEsmXGo9tExmg2HKEZqPXYsAB9S4ei'
+      bsc: '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15',
+      btc: '114wbEsmXGo9tExmg2HKEZqPXYsAB9S4ei'
     },
 
     // bundle discounts
     vaultDiscount: 0.20,
-    megaDiscount:  0.30,
+    megaDiscount: 0.30,
 
-    // live rates (INR per coin) — fallback only, the API below wins
+    // live INR rates — fallback values are only used if the API fails
     fallbackRates: { tether: 91.7, bitcoin: 9200000, ethereum: 320000, binancecoin: 61000 },
-    rateEndpoint: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether,binancecoin&vs_currencies=inr',
-    rateFallbackEndpoint: 'https://api.coinbase.com/v2/exchange-rates?currency=INR',
+    rateEndpoint: 'https://api.coinbase.com/v2/exchange-rates?currency=INR',
     rateTtlMs: 10 * 60 * 1000,
 
-    ageKey: 'dt-age-verified',
-    orderKey: 'dt-order'
+    ageKey: 'desitease.age.v1',
+    ageLegacyKey: 'dt-age-verified',
+    cartKey: 'desitease.cart.v1',
+    orderKey: 'orderData'
   };
 
   const COINS = [
-    { key: 'usdt-trc20', mark: '₮', name: 'USDT (Tether)', net: 'TRC20 · Tron',      addr: CONFIG.addr.usdtTron, coin: 'tether',      tag: 'Best', tagClass: 'ok' },
-    { key: 'usdt-bep20', mark: '₮', name: 'USDT (Tether)', net: 'BEP20 · BSC',       addr: CONFIG.addr.bsc,      coin: 'tether',      tag: 'Cheap', tagClass: 'warn' },
-    { key: 'usdt-erc20', mark: '₮', name: 'USDT (Tether)', net: 'ERC20 · Ethereum',  addr: CONFIG.addr.bsc,      coin: 'tether' },
-    { key: 'usdt-matic', mark: '₮', name: 'USDT (Tether)', net: 'Polygon · MATIC',   addr: CONFIG.addr.bsc,      coin: 'tether',      tag: 'Cheap', tagClass: 'warn' },
-    { key: 'btc',        mark: '₿', name: 'Bitcoin',        net: 'Main network',      addr: CONFIG.addr.btc,      coin: 'bitcoin',     tag: 'Popular', tagClass: 'hot' },
-    { key: 'btc-bsc',    mark: '₿', name: 'Bitcoin',        net: 'Wrapped · BSC',     addr: CONFIG.addr.bsc,      coin: 'bitcoin',     tag: 'Cheap', tagClass: 'warn' },
-    { key: 'eth',        mark: 'Ξ', name: 'Ethereum',       net: 'ERC20 · Mainnet',   addr: CONFIG.addr.bsc,      coin: 'ethereum',    tag: 'Popular', tagClass: 'hot' },
-    { key: 'eth-arb',    mark: 'Ξ', name: 'Ethereum',       net: 'Arbitrum · L2',     addr: CONFIG.addr.bsc,      coin: 'ethereum',    tag: 'Cheap', tagClass: 'warn' },
-    { key: 'eth-bsc',    mark: 'Ξ', name: 'Ethereum',       net: 'Wrapped · BSC',     addr: CONFIG.addr.bsc,      coin: 'ethereum',    tag: 'Cheap', tagClass: 'warn' },
-    { key: 'bnb',        mark: 'B', name: 'BNB',            net: 'BEP20 · BSC',       addr: CONFIG.addr.bsc,      coin: 'binancecoin', tag: 'Fast', tagClass: 'ok' }
+    { key: 'usdt-trc20', mark: '₮', name: 'USDT (Tether)', net: 'TRC20 · Tron', addr: CONFIG.addr.usdtTron, coin: 'tether', tag: 'Best' },
+    { key: 'usdt-bep20', mark: '₮', name: 'USDT (Tether)', net: 'BEP20 · BSC', addr: CONFIG.addr.bsc, coin: 'tether', tag: 'Cheap' },
+    { key: 'usdt-erc20', mark: '₮', name: 'USDT (Tether)', net: 'ERC20 · Ethereum', addr: CONFIG.addr.bsc, coin: 'tether' },
+    { key: 'usdt-matic', mark: '₮', name: 'USDT (Tether)', net: 'Polygon · MATIC', addr: CONFIG.addr.bsc, coin: 'tether', tag: 'Cheap' },
+    { key: 'btc', mark: '₿', name: 'Bitcoin', net: 'Main network', addr: CONFIG.addr.btc, coin: 'bitcoin', tag: 'Popular' },
+    { key: 'btc-bsc', mark: '₿', name: 'Bitcoin', net: 'Wrapped · BSC', addr: CONFIG.addr.bsc, coin: 'bitcoin', tag: 'Cheap' },
+    { key: 'eth', mark: 'Ξ', name: 'Ethereum', net: 'ERC20 · Mainnet', addr: CONFIG.addr.bsc, coin: 'ethereum', tag: 'Popular' },
+    { key: 'eth-arb', mark: 'Ξ', name: 'Ethereum', net: 'Arbitrum · L2', addr: CONFIG.addr.bsc, coin: 'ethereum', tag: 'Cheap' },
+    { key: 'eth-bsc', mark: 'Ξ', name: 'Ethereum', net: 'Wrapped · BSC', addr: CONFIG.addr.bsc, coin: 'ethereum', tag: 'Cheap' },
+    { key: 'bnb', mark: 'B', name: 'BNB', net: 'BEP20 · BSC', addr: CONFIG.addr.bsc, coin: 'binancecoin', tag: 'Fast' }
   ];
 
   const COIN_PRECISION = { bitcoin: 8, ethereum: 6, tether: 2, binancecoin: 4 };
@@ -62,18 +61,21 @@
   /* ---------------------------------------------------------
      2. Small helpers
      --------------------------------------------------------- */
-  const $  = (sel, root = document) => root.querySelector(sel);
+  const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
   const inr = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 });
-  const money = n => '₹' + inr.format(Math.round(n));
-  const usd = n => '$' + n.toFixed(2);
-
-  const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
-  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const money = n => '₹' + inr.format(Math.round(Number(n) || 0));
+  const usd = n => '$' + Number(n || 0).toFixed(2);
 
   function toast(msg) {
     const el = $('#toast');
+    if (!el) return;
+    // A native modal dialog lives in the top layer, above ordinary page
+    // content. Move the toast inside it so feedback stays visible there.
+    const openDialog = $$('dialog').find(dialog => dialog.open);
+    const host = openDialog || document.body;
+    if (el.parentElement !== host) host.appendChild(el);
     el.textContent = msg;
     el.classList.add('is-on');
     clearTimeout(toast._t);
@@ -84,58 +86,74 @@
     try {
       await navigator.clipboard.writeText(text);
       return true;
-    } catch {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.setAttribute('readonly', '');
-      ta.style.cssText = 'position:fixed;opacity:0';
-      document.body.appendChild(ta);
-      ta.select();
-      const ok = document.execCommand('copy');
-      ta.remove();
+    } catch (e) {
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(area);
+      area.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+      area.remove();
       return ok;
     }
+  }
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char]));
+  }
+
+  function parseSpecs(raw) {
+    if (!raw) return [];
+    return raw.split(';')
+      .map(part => {
+        const i = part.indexOf(':');
+        return i < 0
+          ? { label: part.trim(), value: '' }
+          : { label: part.slice(0, i).trim(), value: part.slice(i + 1).trim() };
+      })
+      .filter(spec => spec.label);
   }
 
   /* ---------------------------------------------------------
      3. Read the catalogue out of the DOM
      --------------------------------------------------------- */
   const VAULT_LABELS = {
-    top:     'Top Picks',
+    top: 'Top Picks',
     premium: 'Premium Vault',
-    series:  'Signature Series'
+    series: 'Dark Vault',
+    library: 'Top Picks',
+    studio: 'Premium Vault',
+    atelier: 'Dark Vault'
   };
 
-  function parseSpecs(raw) {
-    if (!raw) return [];
-    return raw.split(';')
-      .map(s => s.trim())
-      .filter(Boolean)
-      .map(pair => {
-        const i = pair.indexOf(':');
-        return i < 0 ? { label: pair, value: '' } : { label: pair.slice(0, i).trim(), value: pair.slice(i + 1).trim() };
-      });
-  }
-
   const packs = $$('.pack').map(el => ({
-    id:    el.dataset.id,
+    id: el.dataset.id,
     price: Number(el.dataset.price),
-    old:   Number(el.dataset.old),
-    vault: el.closest('.vault').dataset.vault,
-    name:  $('.pack__name', el).textContent.trim(),
-    desc:  $('.pack__desc', el).textContent.trim(),
+    old: Number(el.dataset.old),
+    vault: el.closest('[data-vault]')?.dataset.vault || 'other',
+    name: $('.pack__name', el).textContent.trim(),
+    desc: $('.pack__desc', el).textContent.trim(),
     blurb: el.dataset.blurb || '',
     specs: parseSpecs(el.dataset.specs),
-    type:  $('.pack__type', el).textContent.trim(),
+    type: $('.pack__type', el)?.textContent.trim() || 'Collection',
+    img: $('img', el)?.getAttribute('src') || '',
     el
   }));
 
-  const packById = new Map(packs.map(p => [p.id, p]));
+  const packById = new Map(packs.map(pack => [pack.id, pack]));
 
-  const vaults = $$('.vault').map(el => {
+  const vaults = $$('.vault[data-vault]').map(el => {
     const key = el.dataset.vault;
-    const own = packs.filter(p => p.vault === key);
-    const subtotal = own.reduce((s, p) => s + p.price, 0);
+    const own = packs.filter(pack => pack.vault === key);
+    const subtotal = own.reduce((sum, pack) => sum + pack.price, 0);
     return {
       key,
       label: VAULT_LABELS[key] || key,
@@ -145,7 +163,7 @@
     };
   });
 
-  const allSubtotal = packs.reduce((s, p) => s + p.price, 0);
+  const allSubtotal = packs.reduce((sum, pack) => sum + pack.price, 0);
   const mega = {
     price: Math.round(allSubtotal * (1 - CONFIG.megaDiscount)),
     was: allSubtotal,
@@ -155,13 +173,21 @@
   /* ---------------------------------------------------------
      4. State
      --------------------------------------------------------- */
+  function readStoredCart() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(CONFIG.cartKey) || '[]');
+      if (!Array.isArray(raw)) return [];
+      return raw.filter(id => packById.has(id));
+    } catch (e) {
+      return [];
+    }
+  }
+
   const state = {
-    cart: new Set(),
+    cart: new Set(readStoredCart()),
     rates: { ...CONFIG.fallbackRates },
     ratesLive: false,
     rateTime: null,
-    // rupees per 1 USD — tracks the live USDT rate when available so the
-    // PayPal amount and the crypto amounts always agree with each other
     fx: CONFIG.fxInrPerUsd,
     detailId: null
   };
@@ -169,68 +195,79 @@
   /* ---------------------------------------------------------
      5. Pricing engine (pure)
      --------------------------------------------------------- */
-  function vaultBundlePrice(vault) {
-    return vault.price;
-  }
-
-  /** Total INR for the current cart, applying vault + mega discounts. */
   function cartTotal(ids = state.cart) {
     if (ids.size === 0) return 0;
-    if (ids.size === packs.length) return mega.price;
+    if (packs.length > 0 && packs.every(pack => ids.has(pack.id))) return mega.price;
 
     let total = 0;
-    for (const v of vaults) {
-      const idsIn = v.packs.map(p => p.id);
-      const all = idsIn.every(id => ids.has(id));
-      if (all) {
-        total += vaultBundlePrice(v);
+    for (const vault of vaults) {
+      const idsInVault = vault.packs.map(pack => pack.id);
+      const complete = idsInVault.every(id => ids.has(id));
+      if (complete) {
+        total += vault.price;
       } else {
-        for (const id of idsIn) if (ids.has(id)) total += packById.get(id).price;
+        for (const id of idsInVault) {
+          if (ids.has(id)) total += packById.get(id).price;
+        }
       }
     }
     return total;
   }
 
-  /** Break the cart down into display lines. */
   function cartLines() {
     const lines = [];
     let saved = 0;
 
-    if (state.cart.size === packs.length) {
+    if (packs.length > 0 && packs.every(pack => state.cart.has(pack.id))) {
       saved = mega.was - mega.price;
-      return { mega: true, lines: [{ name: `Full Vault — all ${mega.count} packs`, price: mega.price }], saved };
+      return {
+        mega: true,
+        lines: [{ name: `Full Vault — all ${mega.count} packs`, price: mega.price, isMega: true, vault: 'mega' }],
+        saved
+      };
     }
 
-    for (const v of vaults) {
-      const ids = v.packs.map(p => p.id);
+    for (const vault of vaults) {
+      const ids = vault.packs.map(pack => pack.id);
       const inVault = ids.filter(id => state.cart.has(id));
       if (!inVault.length) continue;
 
       if (inVault.length === ids.length) {
-        lines.push({ name: `${v.label} bundle (${ids.length} packs)`, price: v.price, vault: v.key });
-        saved += v.subtotal - v.price;
+        lines.push({ name: `${vault.label} bundle (${ids.length} packs)`, price: vault.price, vault: vault.key });
+        saved += vault.subtotal - vault.price;
       } else {
         for (const id of inVault) {
-          const p = packById.get(id);
-          lines.push({ name: p.name, price: p.price, id });
+          const pack = packById.get(id);
+          lines.push({ name: pack.name, price: pack.price, id });
         }
       }
     }
+
     return { mega: false, lines, saved };
+  }
+
+  function persistCart() {
+    try {
+      localStorage.setItem(CONFIG.cartKey, JSON.stringify([...state.cart]));
+    } catch (e) {
+      /* private browsing can refuse storage */
+    }
   }
 
   /* ---------------------------------------------------------
      6. Rendering
      --------------------------------------------------------- */
   function renderBundleLabels() {
-    for (const v of vaults) {
-      const label = $(`[data-bundle-label="${v.key}"]`);
-      if (!label) continue;
-      const pct = Math.round(CONFIG.vaultDiscount * 100);
-      const already = v.packs.every(p => state.cart.has(p.id));
-      label.textContent = already
-        ? `Remove ${v.label} · ₹${v.price}`
-        : `Save ${pct}% · Bundle ${money(v.price)}`;
+    for (const vault of vaults) {
+      const label = $(`[data-bundle-label="${vault.key}"]`);
+      const button = $(`.bundle[data-bundle="${vault.key}"]`);
+      const complete = vault.packs.length > 0 && vault.packs.every(pack => state.cart.has(pack.id));
+      if (label) {
+        label.textContent = complete
+          ? `${vault.label} bundle added ✓`
+          : `Save ${Math.round(CONFIG.vaultDiscount * 100)}% · Bundle ${money(vault.price)}`;
+      }
+      if (button) button.setAttribute('aria-pressed', String(complete));
     }
   }
 
@@ -244,11 +281,11 @@
 
     const list = $('[data-mega-list]');
     if (list) {
-      list.innerHTML = packs.map(p => `
+      list.innerHTML = packs.map(pack => `
         <li>
           <svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>
-          <span>${escapeHtml(p.name)}</span>
-          <b>${money(p.price)}</b>
+          <span>${escapeHtml(pack.name)}</span>
+          <b>${money(pack.price)}</b>
         </li>`).join('');
     }
   }
@@ -258,87 +295,93 @@
     if (el) el.textContent = String(packs.length);
   }
 
-  /** data-badge="New" on a card adds the corner ribbon if it isn't there yet. */
   function renderBadges() {
-    packs.forEach(p => {
-      const badge = p.el.dataset.badge;
-      if (!badge || p.el.querySelector('.pack__flag')) return;
+    packs.forEach(pack => {
+      const badge = pack.el.dataset.badge;
+      if (!badge || pack.el.querySelector('.pack__flag')) return;
       const flag = document.createElement('span');
       flag.className = 'pack__flag';
       flag.setAttribute('aria-hidden', 'true');
       flag.textContent = badge;
-      $('.pack__media', p.el).appendChild(flag);
+      $('.pack__media', pack.el)?.appendChild(flag);
     });
+  }
+
+  function updateDetailButton() {
+    if (!state.detailId) return;
+    const button = $('#detailAdd');
+    if (!button) return;
+    const inCart = state.cart.has(state.detailId);
+    button.textContent = inCart ? 'Remove from cart' : 'Add to cart';
+    button.dataset.add = state.detailId;
   }
 
   function renderCart() {
     const total = cartTotal();
-    const n = state.cart.size;
+    const count = state.cart.size;
 
     $$('.pack').forEach(card => {
       const on = state.cart.has(card.dataset.id);
       card.classList.toggle('is-added', on);
-      const btn = $('.add', card);
-      if (btn) {
-        btn.innerHTML = on
+      const button = $('.add', card);
+      if (button) {
+        button.innerHTML = on
           ? '<svg class="ico" aria-hidden="true"><use href="#i-check"/></svg><span>Added</span>'
           : '<svg class="ico" aria-hidden="true"><use href="#i-cart"/></svg><span>Add</span>';
-        btn.setAttribute('aria-pressed', String(on));
+        button.setAttribute('aria-pressed', String(on));
       }
     });
 
     const bar = $('#cartBar');
-    if (bar) bar.hidden = n === 0;
-    const c = $('#cartBarCount');
-    if (c) c.textContent = `${n} item${n === 1 ? '' : 's'}`;
-    const t = $('#cartBarTotal');
-    if (t) t.textContent = money(total);
+    if (bar) bar.hidden = count === 0;
+    const countEl = $('#cartBarCount');
+    if (countEl) countEl.textContent = `${count} item${count === 1 ? '' : 's'}`;
+    const totalEl = $('#cartBarTotal');
+    if (totalEl) totalEl.textContent = money(total);
 
     const badge = $('#topCartCount');
     if (badge) {
-      badge.hidden = n === 0;
-      badge.textContent = n ? String(n) : '';
+      badge.hidden = count === 0;
+      badge.textContent = count ? String(count) : '';
     }
 
-    const cartBtn = $('#topCartBtn');
-    if (cartBtn) {
-      cartBtn.setAttribute('aria-label',
-        n ? `Open cart, ${n} item${n === 1 ? '' : 's'}, ${money(total)}` : 'Open cart');
+    const topCart = $('#topCartBtn');
+    if (topCart) {
+      topCart.setAttribute('aria-label',
+        count ? `Open cart, ${count} item${count === 1 ? '' : 's'}, ${money(total)}` : 'Open cart');
     }
 
     renderBundleLabels();
-    renderCheckout();
-  }
-
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    updateDetailButton();
+    persistCart();
+    if (checkoutDialog?.open) renderCheckout();
   }
 
   /* ---------------------------------------------------------
      7. Pack detail dialog
      --------------------------------------------------------- */
   const detailDialog = $('#detailDialog');
+  const checkoutDialog = $('#checkoutDialog');
 
   function openDetail(id) {
-    const p = packById.get(id);
-    if (!p) return;
+    const pack = packById.get(id);
+    if (!pack || !detailDialog) return;
     state.detailId = id;
 
-    $('#detailTitle').textContent = p.name;
-    const img = $('#detailImg');
-    img.src = $('img', p.el).getAttribute('src');
-    img.alt = `${p.name} cover`;
-    $('#detailDesc').textContent = p.blurb || p.desc;
-    $('#detailWas').textContent = money(p.old);
-    $('#detailNow').textContent = money(p.price);
+    $('#detailTitle').textContent = pack.name;
+    const image = $('#detailImg');
+    if (image) {
+      image.src = pack.img;
+      image.alt = `${pack.name} cover`;
+    }
+    $('#detailDesc').textContent = pack.blurb || pack.desc;
+    $('#detailWas').textContent = money(pack.old);
+    $('#detailNow').textContent = money(pack.price);
 
-    $('#detailSpecs').innerHTML = p.specs.map(s => `
-      <div><dt>${escapeHtml(s.label)}</dt><dd>${escapeHtml(s.value)}</dd></div>`).join('');
+    $('#detailSpecs').innerHTML = pack.specs.map(spec => `
+      <div><dt>${escapeHtml(spec.label)}</dt><dd>${escapeHtml(spec.value)}</dd></div>`).join('');
 
-    const btn = $('#detailAdd');
-    const on = state.cart.has(id);
-    btn.textContent = on ? 'Remove from cart' : 'Add to cart';
-    btn.dataset.add = id;
+    updateDetailButton();
 
     if (!detailDialog.open) {
       detailDialog._opener = document.activeElement;
@@ -347,13 +390,17 @@
   }
 
   /* ---------------------------------------------------------
-     8. Checkout dialog
+     8. Checkout
      --------------------------------------------------------- */
-  const checkoutDialog = $('#checkoutDialog');
   let activeCoin = COINS[0];
 
   function openCheckout() {
-    if (state.cart.size === 0) { toast('Your cart is empty'); return; }
+    if (state.cart.size === 0) {
+      toast('Your cart is empty');
+      return;
+    }
+    if (!checkoutDialog) return;
+    $('#toast')?.classList.remove('is-on');
     renderCheckout();
     if (!checkoutDialog.open) {
       checkoutDialog._opener = document.activeElement;
@@ -361,41 +408,87 @@
     }
   }
 
+  function upiLink(total) {
+    const params = new URLSearchParams({
+      pa: CONFIG.upiId,
+      pn: 'DesiTease',
+      am: String(Math.round(total)),
+      cu: 'INR',
+      tn: 'DesiTease order'
+    });
+    return `upi://pay?${params.toString()}`;
+  }
+
   function renderCheckout() {
     const { mega: isMega, lines, saved } = cartLines();
     const total = cartTotal();
+    const summary = getCartSummary();
 
-    $('#orderSummary').innerHTML =
-      lines.map(l => `
-        <div class="summary__row">
-          <span>${escapeHtml(l.name)}</span>
-          <span>${money(l.price)}${l.id ? `<button class="summary__rm" type="button" data-remove="${l.id}" aria-label="Remove ${escapeHtml(l.name)}">&times;</button>` : ''}</span>
-        </div>`).join('') +
-      (saved > 0 ? `<span class="summary__tag">You saved ${money(saved)}${isMega ? ' on the full vault' : ''}</span>` : '');
+    const summaryBox = $('#orderSummary');
+    if (summaryBox) {
+      summaryBox.innerHTML =
+        lines.map(line => `
+          <div class="summary__row">
+            <span>${escapeHtml(line.name)}</span>
+            <span>${money(line.price)}<button class="summary__rm" type="button" ${line.id ? `data-remove="${line.id}"` : `data-remove-vault="${line.vault}"`} aria-label="Remove ${escapeHtml(line.name)}">&times;</button></span>
+          </div>`).join('');
 
-    const totalEl = $('#coTotal');
-    if (totalEl) totalEl.textContent = money(total);
-
-    $('#upiAmount').textContent = money(total);
-    const intentBtn = $('#upiIntentBtn');
-    if (intentBtn) {
-      intentBtn.href = `upi://pay?pa=desitease@fam&pn=DesiTease&am=${total}&cu=INR&tn=Order%20${encodeURIComponent(Array.from(state.cart).join('+'))}`;
+      if (isMega) {
+        summaryBox.innerHTML += `
+          <div class="bundle-tag summary__tag">
+            🔥 30% FULL VAULT DISCOUNT APPLIED (-${money(saved)})
+          </div>
+        `;
+      } else if (saved > 0) {
+        summaryBox.innerHTML += `
+          <div class="bundle-tag summary__tag">
+            🎉 20% VAULT BUNDLE DISCOUNT APPLIED (-${money(saved)})
+          </div>
+        `;
+      }
     }
-    $('#paypalInr').textContent = money(total);
-    $('#paypalUsd').textContent = usd(paypalUsd(total));
-    const pn = $('#paypalNote');
-    if (pn) {
-      pn.textContent = state.ratesLive
+
+    // Update Total
+    const payableStr = money(total);
+    if ($('#coTotal')) $('#coTotal').textContent = payableStr;
+    if ($('#coCartTotal')) $('#coCartTotal').textContent = `Payable Amount: ${payableStr}`;
+    const upiAmount = $('#upiAmount');
+    if (upiAmount) upiAmount.textContent = payableStr;
+
+    // Update 1-Tap Mobile UPI Intent Link with exact total
+    const intent = $('#upiIntentBtn');
+    if (intent) intent.href = upiLink(total);
+
+    // Update PayPal values
+    const usdAmount = paypalUsd(total);
+    if ($('#paypalInr')) $('#paypalInr').textContent = payableStr;
+    if ($('#paypalUsd')) $('#paypalUsd').textContent = usd(usdAmount);
+    const paypalBtnText = $('#paypalBtnText');
+    if (paypalBtnText) {
+      paypalBtnText.textContent = `Pay with PayPal (${usd(usdAmount)} USD)`;
+    }
+    const note = $('#paypalNote');
+    if (note) {
+      note.textContent = state.ratesLive
         ? `includes ${Math.round((CONFIG.paypalMarkup - 1) * 100)}% international processing · live rate`
         : `includes ${Math.round((CONFIG.paypalMarkup - 1) * 100)}% international processing · rate is indicative`;
     }
 
+    // Fill Netlify hidden inputs
     const items = $('#formItems');
     const amount = $('#formAmount');
-    if (items) items.value = Array.from(state.cart).join(',');
-    if (amount) amount.value = String(total);
+    if (items) items.value = summary.items.map(item => item.name).join(', ');
+    if (amount) amount.value = payableStr;
 
     renderCrypto(total);
+  }
+
+  function getCartSummary() {
+    return {
+      items: packs.filter(pack => state.cart.has(pack.id)),
+      total: cartTotal(),
+      discount: cartLines().saved
+    };
   }
 
   function paypalUsd(totalInr) {
@@ -408,10 +501,10 @@
     return (totalInr * CONFIG.cryptoMarkup) / rate;
   }
 
-  function fmtCrypto(v, coin) {
-    if (v == null) return '—';
-    const p = COIN_PRECISION[coin.coin] ?? 6;
-    return v.toFixed(p);
+  function fmtCrypto(value, coin) {
+    if (value == null) return '—';
+    const precision = COIN_PRECISION[coin.coin] ?? 6;
+    return value.toFixed(precision);
   }
 
   function renderCrypto(total) {
@@ -419,30 +512,31 @@
     if (!list) return;
     const usdEq = (total * CONFIG.cryptoMarkup) / state.fx;
 
-    const warn = state.ratesLive ? '' :
+    const warning = state.ratesLive ? '' :
       '<p class="crypto__warn">Live rate unavailable — the amounts below are indicative. Confirm with support before sending.</p>';
 
-    list.innerHTML = warn + COINS.map(c => {
-      const amt = cryptoAmount(total, c);
+    list.innerHTML = warning + COINS.map(coin => {
+      const amount = cryptoAmount(total, coin);
+      const open = activeCoin.key === coin.key ? ' is-open' : '';
       return `
-        <div class="coin" data-coin="${c.key}">
-          <button class="coin__head" type="button" aria-expanded="false">
-            <span class="coin__mark" aria-hidden="true">${c.mark}</span>
+        <div class="coin${open}" data-coin="${coin.key}">
+          <button class="coin__head" type="button" aria-expanded="${activeCoin.key === coin.key}">
+            <span class="coin__mark" aria-hidden="true">${coin.mark}</span>
             <span class="coin__id">
-              <span class="coin__name">${escapeHtml(c.name)}</span>
-              <span class="coin__net">${escapeHtml(c.net)}${c.tag ? ` · ${c.tag}` : ''}</span>
+              <span class="coin__name">${escapeHtml(coin.name)}</span>
+              <span class="coin__net">${escapeHtml(coin.net)}${coin.tag ? ` · ${escapeHtml(coin.tag)}` : ''}</span>
             </span>
             <span class="coin__amt">
-              <b>${fmtCrypto(amt, c)}</b>
-              <span>${escapeHtml(c.mark)} · ≈ ${usd(usdEq)}</span>
+              <b>${fmtCrypto(amount, coin)}</b>
+              <span>${escapeHtml(coin.mark)} · ≈ ${usd(usdEq)}</span>
             </span>
             <svg class="ico coin__chev" aria-hidden="true"><use href="#i-chevron"/></svg>
           </button>
           <div class="coin__body">
-            <p class="coin__addr">${escapeHtml(c.addr)}</p>
+            <p class="coin__addr">${escapeHtml(coin.addr)}</p>
             <div class="coin__cta">
-              <button class="coin__btn" type="button" data-copy-addr="${c.key}"><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg> Copy address</button>
-              <button class="coin__btn coin__btn--pay" type="button" data-copy-all="${c.key}">Copy amount + address</button>
+              <button class="coin__btn" type="button" data-copy-addr="${coin.key}"><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg> Copy address</button>
+              <button class="coin__btn coin__btn--pay" type="button" data-copy-all="${coin.key}">Copy amount + address</button>
             </div>
           </div>
         </div>`;
@@ -460,70 +554,60 @@
      9. Exchange rates
      --------------------------------------------------------- */
   async function refreshRates() {
-    const cached = sessionStorage.getItem('dt-rates');
-    if (cached) {
-      try {
-        const parsed = JSON.parse(cached);
-        if (Date.now() - parsed.at < CONFIG.rateTtlMs) {
-          state.rates = { ...parsed.rates };
-          state.ratesLive = true;
-          state.rateTime = new Date(parsed.at);
-          if (parsed.rates.tether > 0 && CONFIG.useLiveFx) state.fx = parsed.rates.tether;
-          return;
-        }
-      } catch { /* ignore */ }
+    try {
+      const cached = JSON.parse(sessionStorage.getItem('dt-rates-v2') || 'null');
+      if (cached && Date.now() - cached.at < CONFIG.rateTtlMs) {
+        applyRates(cached.rates, new Date(cached.at));
+        return;
+      }
+    } catch (e) {
+      /* ignore malformed cache */
     }
 
     const rates = await fetchRates();
     if (!rates) {
-      state.ratesLive = false;   // keep the static fallback, UI flags it as indicative
+      state.ratesLive = false; // keep the static fallback; UI flags it as indicative
       return;
     }
 
+    applyRates(rates, new Date());
+    try {
+      sessionStorage.setItem('dt-rates-v2', JSON.stringify({ at: Date.now(), rates }));
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  function applyRates(rates, date) {
     state.rates = { ...state.rates, ...rates };
     state.ratesLive = true;
-    state.rateTime = new Date();
-    // USDT is pegged to the dollar, so its INR price is a good live proxy
-    // for the INR/USD rate — keeps PayPal and crypto conversions in step
+    state.rateTime = date;
     if (rates.tether > 0 && CONFIG.useLiveFx) state.fx = rates.tether;
-    sessionStorage.setItem('dt-rates', JSON.stringify({ at: Date.now(), rates }));
   }
 
-  /** INR price per coin, from CoinGecko with a Coinbase fallback. */
+  /** INR price per coin, from Coinbase (1 INR = X coin, so invert). */
   async function fetchRates() {
-    const gecko = await fetchJson(CONFIG.rateEndpoint);
-    if (gecko) {
-      const out = {};
-      for (const c of COINS) {
-        const v = gecko[c.coin]?.inr;
-        if (v && v > 0) out[c.coin] = v;
-      }
-      if (out.tether) return out;
-    }
-
-    // Coinbase returns "1 INR = X coin", so invert it
-    const cb = await fetchJson(CONFIG.rateFallbackEndpoint);
-    if (cb && cb.data && cb.data.rates) {
-      const out = {};
-      const map = { bitcoin: 'BTC', ethereum: 'ETH', tether: 'USDT', binancecoin: 'BNB' };
-      for (const c of COINS) {
-        const sym = map[c.coin];
-        const r = sym && Number(cb.data.rates[sym]);
-        if (r && r > 0) out[c.coin] = 1 / r;
-      }
-      if (out.tether) return out;
-    }
-    return null;
-  }
-
-  async function fetchJson(url) {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 6000);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 6000);
     try {
-      const res = await fetch(url, { signal: ctrl.signal, cache: 'no-store' });
-      if (!res.ok) throw new Error('bad status');
-      return await res.json();
-    } catch {
+      const response = await fetch(CONFIG.rateEndpoint, {
+        signal: controller.signal,
+        headers: { Accept: 'application/json' },
+        cache: 'no-store'
+      });
+      if (!response.ok) return null;
+      const data = await response.json();
+      const table = data?.data?.rates;
+      if (!table) return null;
+
+      const symbols = { bitcoin: 'BTC', ethereum: 'ETH', tether: 'USDT', binancecoin: 'BNB' };
+      const out = {};
+      for (const coin of COINS) {
+        const value = Number(table[symbols[coin.coin]]);
+        if (value > 0) out[coin.coin] = 1 / value;
+      }
+      return out.tether ? out : null;
+    } catch (e) {
       return null;
     } finally {
       clearTimeout(timer);
@@ -531,111 +615,167 @@
   }
 
   /* ---------------------------------------------------------
-     10. Events
+     10. Cart actions
      --------------------------------------------------------- */
   function addToCart(id) {
     if (!packById.has(id)) return;
-    state.cart.has(id) ? state.cart.delete(id) : state.cart.add(id);
+    if (state.cart.has(id)) {
+      state.cart.delete(id);
+      toast('Removed from cart');
+    } else {
+      state.cart.add(id);
+      toast(`${packById.get(id).name} added`);
+    }
     renderCart();
-    if (state.cart.has(id)) toast(`${packById.get(id).name} added`);
   }
 
   function toggleVault(key) {
-    const v = vaults.find(x => x.key === key);
-    if (!v) return;
-    const allIn = v.packs.every(p => state.cart.has(p.id));
-    v.packs.forEach(p => allIn ? state.cart.delete(p.id) : state.cart.add(p.id));
+    const vault = vaults.find(entry => entry.key === key);
+    if (!vault) return;
+    const complete = vault.packs.every(pack => state.cart.has(pack.id));
+    vault.packs.forEach(pack => complete ? state.cart.delete(pack.id) : state.cart.add(pack.id));
     renderCart();
-    toast(allIn ? `${v.label} removed` : `${v.label} bundle added`);
+    toast(complete ? `${vault.label} removed` : `${vault.label} bundle added`);
   }
 
+  function selectTab(tab) {
+    if (!tab) return;
+    $$('.tab').forEach(button => {
+      const active = button === tab;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-selected', String(active));
+      button.tabIndex = active ? 0 : -1;
+    });
+    $$('.pane').forEach(pane => {
+      const active = pane.id === tab.getAttribute('aria-controls');
+      pane.classList.toggle('is-active', active);
+      pane.hidden = !active;
+    });
+  }
+
+  /* ---------------------------------------------------------
+     11. Events
+     --------------------------------------------------------- */
   function bind() {
-    // add / remove
-    document.addEventListener('click', e => {
-      const add = e.target.closest('[data-add]');
-      if (add) { e.preventDefault(); addToCart(add.dataset.add); return; }
-
-      const detail = e.target.closest('[data-detail]');
-      if (detail) { e.preventDefault(); openDetail(detail.dataset.detail); return; }
-
-      const bundle = e.target.closest('[data-bundle]');
-      if (bundle) { e.preventDefault(); toggleVault(bundle.dataset.bundle); return; }
-
-      const rm = e.target.closest('[data-remove]');
-      if (rm) { e.preventDefault(); state.cart.delete(rm.dataset.remove); renderCart(); return; }
-
-      const xBtn = e.target.closest('[data-close]');
-      if (xBtn) { e.preventDefault(); xBtn.closest('dialog')?.close(); return; }
-
-      const copyAddr = e.target.closest('[data-copy-addr]');
-      if (copyAddr) {
-        const c = COINS.find(x => x.key === copyAddr.dataset.copyAddr);
-        if (c) { copy(c.addr).then(ok => toast(ok ? `${c.name} address copied` : 'Copy failed')); }
+    document.addEventListener('click', event => {
+      const add = event.target.closest('[data-add]');
+      if (add) {
+        event.preventDefault();
+        addToCart(add.dataset.add);
         return;
       }
 
-      const copyAll = e.target.closest('[data-copy-all]');
-      if (copyAll) {
-        const c = COINS.find(x => x.key === copyAll.dataset.copyAll);
-        if (c) {
-          const amt = fmtCrypto(cryptoAmount(cartTotal(), c), c);
-          copy(`${amt} ${c.mark}\n${c.addr}`).then(ok => toast(ok ? 'Amount and address copied' : 'Copy failed'));
+      const detail = event.target.closest('[data-detail]');
+      if (detail) {
+        event.preventDefault();
+        openDetail(detail.dataset.detail);
+        return;
+      }
+
+      const bundle = event.target.closest('[data-bundle]');
+      if (bundle) {
+        event.preventDefault();
+        toggleVault(bundle.dataset.bundle);
+        return;
+      }
+
+      const remove = event.target.closest('[data-remove]');
+      if (remove) {
+        event.preventDefault();
+        state.cart.delete(remove.dataset.remove);
+        renderCart();
+        if (state.cart.size === 0 && checkoutDialog?.open) {
+          checkoutDialog.close();
+          toast('Your cart is empty');
         }
         return;
       }
 
-      // coin accordion
-      const head = e.target.closest('.coin__head');
-      if (head) {
-        const coin = head.closest('.coin');
-        const open = coin.classList.toggle('is-open');
-        head.setAttribute('aria-expanded', String(open));
+      const removeVault = event.target.closest('[data-remove-vault]');
+      if (removeVault) {
+        event.preventDefault();
+        const vKey = removeVault.dataset.removeVault;
+        if (vKey === 'mega') {
+          state.cart.clear();
+        } else {
+          const v = vaultByKey.get(vKey);
+          if (v) v.packs.forEach(p => state.cart.delete(p.id));
+        }
+        renderCart();
+        if (state.cart.size === 0 && checkoutDialog?.open) {
+          checkoutDialog.close();
+          toast('Your cart is empty');
+        }
+        return;
+      }
+
+      const close = event.target.closest('[data-close]');
+      if (close) {
+        event.preventDefault();
+        close.closest('dialog')?.close();
+        return;
+      }
+
+      const copyAddr = event.target.closest('[data-copy-addr]');
+      if (copyAddr) {
+        const coin = COINS.find(entry => entry.key === copyAddr.dataset.copyAddr);
+        if (coin) copy(coin.addr).then(ok => toast(ok ? `${coin.name} address copied` : 'Copy failed'));
+        return;
+      }
+
+      const copyAll = event.target.closest('[data-copy-all]');
+      if (copyAll) {
+        const coin = COINS.find(entry => entry.key === copyAll.dataset.copyAll);
+        if (coin) {
+          const amount = fmtCrypto(cryptoAmount(cartTotal(), coin), coin);
+          copy(`${amount} ${coin.mark}\n${coin.addr}`)
+            .then(ok => toast(ok ? 'Amount and address copied' : 'Copy failed'));
+        }
+        return;
+      }
+
+      const coinHead = event.target.closest('.coin__head');
+      if (coinHead) {
+        const coinEl = coinHead.closest('.coin');
+        const coin = COINS.find(entry => entry.key === coinEl?.dataset.coin);
+        if (coin) activeCoin = coin;
+        const open = coinEl.classList.toggle('is-open');
+        coinHead.setAttribute('aria-expanded', String(open));
       }
     });
 
-    // checkout + cart actions
     $('#cartCheckout')?.addEventListener('click', openCheckout);
     $('#topCartBtn')?.addEventListener('click', openCheckout);
-    $('#cartClear')?.addEventListener('click', () => { state.cart.clear(); renderCart(); toast('Cart cleared'); });
+    $('#cartClear')?.addEventListener('click', () => {
+      state.cart.clear();
+      renderCart();
+      toast('Cart cleared');
+    });
 
     $('#megaBtn')?.addEventListener('click', () => {
-      packs.forEach(p => state.cart.add(p.id));
+      packs.forEach(pack => state.cart.add(pack.id));
       renderCart();
       openCheckout();
     });
 
-    $('#detailAdd')?.addEventListener('click', e => {
-      addToCart(e.currentTarget.dataset.add);
-      e.currentTarget.textContent = state.cart.has(e.currentTarget.dataset.add) ? 'Remove from cart' : 'Add to cart';
-    });
+    /* #detailAdd is handled by the delegated [data-add] listener above;
+       giving it its own listener would toggle the item twice. */
 
-    // payment tabs
-    $$('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        $$('.tab').forEach(t => {
-          const on = t === tab;
-          t.classList.toggle('is-active', on);
-          t.setAttribute('aria-selected', String(on));
-        });
-        $$('.pane').forEach(p => {
-          const on = p.id === tab.getAttribute('aria-controls');
-          p.classList.toggle('is-active', on);
-          p.hidden = !on;
-        });
+    $$('.tab').forEach((tab, index) => {
+      tab.addEventListener('click', () => selectTab(tab));
+      tab.addEventListener('keydown', event => {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+        event.preventDefault();
+        const direction = event.key === 'ArrowRight' ? 1 : -1;
+        const next = $$('.tab')[(index + direction + $$('.tab').length) % $$('.tab').length];
+        selectTab(next);
+        next.focus();
       });
     });
+    selectTab($('#tab-upi'));
 
-    // paypal
-    document.addEventListener('click', e => {
-      const copyBtn = e.target.closest('[data-copy]');
-      if (copyBtn) {
-        const val = copyBtn.dataset.copy;
-        navigator.clipboard.writeText(val).then(() => {
-          toast(`Copied: ${val}`);
-        }).catch(() => {
-          toast('Copied to clipboard');
-        });
-      }
+    $('#copyUpiBtn')?.addEventListener('click', () => {
+      copy(CONFIG.upiId).then(ok => toast(ok ? 'UPI ID copied' : 'Copy failed'));
     });
 
     $('#paypalBtn')?.addEventListener('click', () => {
@@ -646,62 +786,123 @@
       window.open(url, '_blank', 'noopener');
     });
 
-    // close dialogs on backdrop click
-    $$('dialog').forEach(dlg => {
-      dlg.addEventListener('click', e => {
-        if (e.target === dlg) dlg.close();
+    $$('dialog').forEach(dialog => {
+      dialog.addEventListener('click', event => {
+        if (event.target === dialog) dialog.close();
       });
-    });
-
-    // Escape closes whatever is open (native dialog cancel is not universal
-    // in every embedded browser, so do it explicitly as well)
-    document.addEventListener('keydown', e => {
-      if (e.key !== 'Escape') return;
-      const open = $$('dialog').find(d => d.open);
-      if (open) {
-        e.preventDefault();
-        open.close();
-      }
-    });
-
-    // return focus to whatever opened the dialog
-    $$('dialog').forEach(dlg => {
-      dlg.addEventListener('close', () => {
-        const opener = dlg._opener;
-        dlg._opener = null;
+      dialog.addEventListener('close', () => {
+        const opener = dialog._opener;
+        dialog._opener = null;
         if (opener && document.contains(opener)) opener.focus();
       });
     });
 
-    // order form
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape') return;
+      const open = $$('dialog').find(dialog => dialog.open);
+      if (open) {
+        event.preventDefault();
+        open.close();
+      }
+    });
+
     const form = $('.order');
-    form?.addEventListener('submit', () => {
-      const { lines, saved } = cartLines();
+    form?.addEventListener('submit', event => {
+      if (state.cart.size === 0) {
+        event.preventDefault();
+        toast('Your cart is empty');
+        return;
+      }
+      const { items, total, discount } = getCartSummary();
+      const activeTab = $('.tab.is-active');
+      const methods = { 'tab-upi': 'UPI', 'tab-paypal': 'PayPal', 'tab-crypto': 'Crypto' };
+      const method = methods[activeTab?.id] || 'UPI';
+      const methodField = $('#formMethod');
+      if (methodField) methodField.value = method;
       const order = {
-        total: cartTotal(),
-        saved,
-        items: Array.from(state.cart).map(id => {
-          const p = packById.get(id);
-          return { id, name: p.name, price: p.price, type: p.type };
-        }),
-        method: $('.tab.is-active')?.textContent.trim().replace(/\s+/g, ' ') || 'UPI',
-        telegram: $('#telegramInput').value.trim(),
-        at: new Date().toISOString()
+        items: items.map(item => ({
+          id: item.id,
+          name: item.name,
+          type: item.type,
+          price: item.price
+        })),
+        total,
+        saved: discount,
+        method,
+        telegram: $('#telegramInput')?.value.trim() || '',
+        date: new Date().toISOString()
       };
-      try { localStorage.setItem(CONFIG.orderKey, JSON.stringify(order)); } catch { /* ignore */ }
+      try {
+        localStorage.setItem(CONFIG.orderKey, JSON.stringify(order));
+      } catch (e) {
+        /* the confirmation page has an empty state */
+      }
     });
   }
 
   /* ---------------------------------------------------------
-     11. Age gate
+     12. Age gate
      --------------------------------------------------------- */
+  function focusableIn(root) {
+    return $$('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])', root)
+      .filter(el => !el.disabled && el.offsetParent !== null);
+  }
+
   function initAgeGate() {
     const gate = $('#ageGate');
-    if (gate) gate.hidden = true;
+    if (!gate) return;
+
+    let accepted = true;
+    document.documentElement.dataset.gate = 'accepted';
+    gate.hidden = true;
+    gate.setAttribute('aria-hidden', 'true');
+    return;
+
+    gate.hidden = false;
+    document.body.classList.add('is-gated');
+    const enter = $('#gateEnter');
+    const behind = $$('body > *').filter(el => el !== gate && el.tagName !== 'SCRIPT');
+    behind.forEach(el => {
+      try { el.inert = true; } catch (e) { /* focus trap is the fallback */ }
+    });
+
+    setTimeout(() => enter?.focus({ preventScroll: true }), 60);
+
+    gate.addEventListener('keydown', event => {
+      if (event.key !== 'Tab') return;
+      const items = focusableIn(gate);
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    enter?.addEventListener('click', () => {
+      try {
+        localStorage.setItem(CONFIG.ageKey, '1');
+        localStorage.removeItem(CONFIG.ageLegacyKey);
+      } catch (e) {
+        /* entry is still allowed for this view */
+      }
+      document.documentElement.dataset.gate = 'accepted';
+      gate.hidden = true;
+      gate.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('is-gated');
+      behind.forEach(el => {
+        try { el.inert = false; } catch (e) { /* ignore */ }
+      });
+      $('.brand')?.focus({ preventScroll: true });
+    });
   }
 
   /* ---------------------------------------------------------
-     12. Boot
+     13. Boot
      --------------------------------------------------------- */
   function boot() {
     renderStats();
@@ -718,4 +919,28 @@
   } else {
     boot();
   }
+  window.saveOrderData = function() {
+    const { items, total, discount } = getCartSummary();
+    const activeTab = $('.tab.is-active');
+    const methods = { 'tab-upi': 'UPI', 'tab-paypal': 'PayPal', 'tab-crypto': 'Crypto' };
+    const method = methods[activeTab?.id] || 'UPI';
+    const order = {
+      items: items.map(item => ({
+        id: item.id,
+        name: item.name,
+        type: item.type,
+        price: item.price
+      })),
+      total,
+      saved: discount,
+      method,
+      telegram: $('#telegramInput')?.value.trim() || '',
+      date: new Date().toISOString()
+    };
+    try {
+      localStorage.setItem(CONFIG.orderKey, JSON.stringify(order));
+    } catch (e) {}
+    return order;
+  };
+
 })();

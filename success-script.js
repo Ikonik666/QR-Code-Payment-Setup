@@ -7,14 +7,15 @@
   'use strict';
 
   const TELEGRAM_USERNAME = 'DesiTease_4';
-  const inrFmt = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 });
-  const money = n => '₹' + inrFmt.format(Math.round(Number(n) || 0));
+  const ORDER_KEY = 'orderData';
+  const inr = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 });
+  const money = n => '₹' + inr.format(Math.round(Number(n) || 0));
 
-  const $ = sel => document.querySelector(sel);
+  const $ = (sel, root = document) => root.querySelector(sel);
 
   function readOrder() {
     try {
-      const raw = localStorage.getItem('orderData');
+      const raw = localStorage.getItem(ORDER_KEY);
       if (!raw) return null;
       const order = JSON.parse(raw);
       if (!order || !Array.isArray(order.items) || order.items.length === 0) return null;
@@ -22,7 +23,6 @@
       const items = order.items
         .filter(item => item && typeof item.name === 'string' && Number(item.price) >= 0)
         .map(item => ({
-          id: String(item.id || ''),
           name: item.name,
           type: typeof item.type === 'string' ? item.type : '',
           price: Number(item.price) || 0
@@ -30,12 +30,17 @@
 
       if (!items.length) return null;
 
-      const sum = items.reduce((acc, item) => acc + item.price, 0);
-      const total = Number(order.total);
+      const sum = items.reduce((total, item) => total + item.price, 0);
+      const statedTotal = Number(order.total);
+      const date = order.date ? new Date(order.date) : new Date();
+
       return {
         items,
-        total: Number.isFinite(total) && total > 0 ? total : sum,
-        date: order.date ? new Date(order.date) : new Date()
+        total: Number.isFinite(statedTotal) && statedTotal > 0 ? statedTotal : sum,
+        saved: Number(order.saved) > 0 ? Number(order.saved) : 0,
+        method: typeof order.method === 'string' ? order.method : '',
+        telegram: typeof order.telegram === 'string' ? order.telegram : '',
+        date: Number.isFinite(date.getTime()) ? date : new Date()
       };
     } catch (e) {
       return null;
@@ -43,12 +48,10 @@
   }
 
   function orderReference(date) {
-    const stamp = Number.isFinite(date.getTime()) ? date.getTime() : Date.now();
-    return 'DT-' + stamp.toString(36).toUpperCase().slice(-6);
+    return 'DT-' + date.getTime().toString(36).toUpperCase().slice(-6);
   }
 
   function formatDate(date) {
-    if (!Number.isFinite(date.getTime())) return 'Just now';
     try {
       return new Intl.DateTimeFormat('en-IN', {
         day: 'numeric',
@@ -62,117 +65,106 @@
     }
   }
 
-  function renderOrder(order) {
-    const itemsBox = $('#orderItems');
-    const totalBox = $('#orderTotal');
-    const totalValue = $('#orderTotalValue');
-    const meta = $('#orderMeta');
-    if (!itemsBox) return;
+  function row(text, value, className = '') {
+    const line = document.createElement('div');
+    line.className = 'row' + (className ? ' ' + className : '');
+    const label = document.createElement('span');
+    label.textContent = text;
+    const amount = document.createElement('b');
+    amount.textContent = value;
+    line.append(label, amount);
+    return line;
+  }
 
-    itemsBox.replaceChildren();
+  function renderOrder(order) {
+    const box = $('#orderItems');
+    if (!box) return;
+    box.replaceChildren();
 
     order.items.forEach(item => {
-      const row = document.createElement('div');
-      row.className = 'order-item';
-
-      const text = document.createElement('div');
-      text.className = 'order-item__text';
-
-      const name = document.createElement('span');
-      name.className = 'order-item__name';
-      name.textContent = item.name;
-
-      text.appendChild(name);
-
-      if (item.type) {
-        const type = document.createElement('span');
-        type.className = 'order-item__type';
-        type.textContent = item.type;
-        text.appendChild(type);
-      }
-
-      const price = document.createElement('span');
-      price.className = 'order-item__price';
-      price.textContent = money(item.price);
-
-      row.append(text, price);
-      itemsBox.appendChild(row);
+      const label = item.type ? `${item.name} · ${item.type}` : item.name;
+      box.appendChild(row(label, money(item.price)));
     });
-
-    if (meta) {
-      meta.textContent = `${orderReference(order.date)} · ${formatDate(order.date)}`;
+    box.appendChild(row('Total', money(order.total), 'row--total'));
+    if (order.saved > 0) {
+      const saved = document.createElement('p');
+      saved.className = 'row row--save';
+      saved.textContent = `You saved ${money(order.saved)} with your bundle`;
+      box.appendChild(saved);
     }
 
-    if (totalBox && totalValue) {
-      totalBox.hidden = false;
-      totalValue.textContent = money(order.total);
+    const meta = $('#orderMeta');
+    if (meta) {
+      meta.textContent = `${orderReference(order.date)} · ${formatDate(order.date)}`;
+      meta.hidden = false;
+    }
+
+    const button = $('#sendOrder');
+    if (button) {
+      const lines = [
+        'Hi DesiTease — order confirmation',
+        '',
+        `Order: ${orderReference(order.date)}`,
+        `Placed: ${formatDate(order.date)}`,
+        ...(order.method ? [`Payment method: ${order.method}`] : []),
+        ...(order.telegram ? [`My Telegram: ${order.telegram}`] : []),
+        '',
+        'Items:',
+        ...order.items.map(item => `• ${item.name} — ${money(item.price)}`),
+        '',
+        ...(order.saved > 0 ? [`Bundle saving: − ${money(order.saved)}`] : []),
+        `Total: ${money(order.total)}`,
+        '',
+        'I have submitted the payment screenshot on the site. Please verify it and send my private Telegram access.'
+      ];
+      button.href = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(lines.join('\n'))}`;
+      button.setAttribute('aria-label', 'Send your order confirmation to DesiTease on Telegram');
     }
   }
 
   function showEmptyState() {
-    const itemsBox = $('#orderItems');
-    const meta = $('#orderMeta');
-    const status = $('#orderStatus');
-    const sendText = $('#sendOrderText');
-    const eyebrow = $('#successEyebrow');
-    const title = $('#successTitle');
-    const lede = $('#successLede');
-    const steps = $('#nextSteps');
-    const eta = $('#etaNote');
-
-    if (itemsBox) {
-      itemsBox.replaceChildren();
-      const line = document.createElement('p');
-      line.className = 'order__empty-line';
-      line.textContent = 'No order details were found in this browser. If you have already paid, send us a message with your Telegram handle and payment screenshot and we will locate it.';
-      itemsBox.appendChild(line);
+    const tick = $('.tick');
+    if (tick) {
+      tick.classList.add('tick--muted');
+      tick.querySelector('use')?.setAttribute('href', '#i-receipt');
     }
 
-    if (meta) meta.textContent = 'Nothing stored in this browser';
-    if (status) status.textContent = 'Need help?';
-    if (sendText) sendText.textContent = 'Message us on Telegram';
-    if (eyebrow) eyebrow.textContent = 'Order lookup';
-    if (title) title.innerHTML = 'We couldn’t find that <em>order</em>.';
+    const box = $('#orderItems');
+    if (box) {
+      box.replaceChildren();
+      const message = document.createElement('p');
+      message.className = 'muted';
+      message.textContent = 'We could not find an order in this browser. If you have already paid, send us your Telegram handle and payment screenshot and we will locate it.';
+      box.appendChild(message);
+    }
+
+    const title = $('#successTitle');
+    const lede = $('#successLede');
+    if (title) title.textContent = 'Order lookup';
     if (lede) lede.textContent = 'The confirmation details are only stored in the browser that placed the order. If you have already paid, message us and we will find it for you.';
-    if (steps) steps.hidden = true;
+
+    const meta = $('#orderMeta');
+    if (meta) meta.hidden = true;
+
+    const next = $('#nextBox');
+    if (next) next.hidden = true;
+    const eta = $('#eta');
     if (eta) eta.hidden = true;
-  }
 
-  function buildTelegramLink(order) {
-    const lines = [
-      'Hi DesiTease — order confirmation',
-      '',
-      `Order: ${orderReference(order.date)}`,
-      `Placed: ${formatDate(order.date)}`,
-      '',
-      'Items:',
-      ...order.items.map(item => `• ${item.name} — ${money(item.price)}`),
-      '',
-      `Total: ${money(order.total)}`,
-      '',
-      'I have submitted the payment screenshot on the site. Please verify it and send my private Telegram access.'
-    ];
-
-    return `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(lines.join('\n'))}`;
+    const button = $('#sendOrder');
+    if (button) {
+      button.href = `https://t.me/${TELEGRAM_USERNAME}`;
+      button.setAttribute('aria-label', 'Message DesiTease on Telegram');
+    }
   }
 
   function init() {
-    const year = $('#year');
-    if (year) year.textContent = new Date().getFullYear();
-
     const order = readOrder();
     if (!order) {
       showEmptyState();
       return;
     }
-
     renderOrder(order);
-
-    const btn = $('#sendOrderBtn');
-    if (btn) {
-      btn.href = buildTelegramLink(order);
-      btn.setAttribute('aria-label', 'Send your order confirmation to DesiTease on Telegram');
-    }
   }
 
   if (document.readyState === 'loading') {

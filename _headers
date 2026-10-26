@@ -3,7 +3,7 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), interest-cohort=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://api.coingecko.com; connect-src 'self' https://api.coingecko.com https://api.coinbase.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; form-action 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self'; connect-src 'self' https://api.coinbase.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; form-action 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests
 
 # immutable, content-hashed-in-practice long lived assets
 /assets/*
@@ -30,6 +30,9 @@
   Cache-Control: public, max-age=0, must-revalidate
 
 /script.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/gate-init.js
   Cache-Control: public, max-age=0, must-revalidate
 
 /success-style.css

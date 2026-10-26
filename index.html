@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-gate="accepted">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -8,28 +8,40 @@
 <meta name="theme-color" content="#0a0608">
 <meta name="color-scheme" content="dark">
 <link rel="canonical" href="https://desitease.netlify.app/">
+
+<!-- Open Graph / social -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="DesiTease">
 <meta property="og:title" content="DesiTease — Premium Archive">
 <meta property="og:description" content="Original stories, audio drama and AI-created content. Lifetime access, instant delivery.">
 <meta property="og:url" content="https://desitease.netlify.app/">
-<meta property="og:image" content="https://desitease.netlify.app/assets/brand/og-card.jpg">
+<meta property="og:image" content="https://desitease.netlify.app/assets/brand/og-card-desitease.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="DesiTease — Premium Archive">
 <meta name="twitter:description" content="Original stories, audio drama and AI-created content. Lifetime access, instant delivery.">
-<meta name="twitter:image" content="https://desitease.netlify.app/assets/brand/og-card.jpg">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="alternate icon" href="/favicon-32x32.png" sizes="32x32">
+<meta name="twitter:image" content="https://desitease.netlify.app/assets/brand/og-card-desitease.jpg">
+
+<link rel="icon" href="/assets/brand/icons/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="/assets/brand/icons/favicon-32x32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/brand/icons/icon-192.png">
 <link rel="manifest" href="/site.webmanifest">
+<script src="/gate-init.js"></script>
+
+<!-- Fonts: trimmed to the weights actually used -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="/assets/bg/hero.webp" fetchpriority="high">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/style.css?v=3">
 </head>
 
 <body>
 <a class="skip-link" href="#main">Skip to catalogue</a>
 
+<!-- ================= icon sprite ================= -->
 <svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
   <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></symbol>
@@ -50,11 +62,18 @@
   <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></symbol>
 </svg>
 
+<!-- ================= header ================= -->
 <header class="topbar">
   <div class="topbar__inner">
-    <a class="brand" href="#main" title="DesiTease — home"><span class="brand__mark" aria-hidden="true">DT</span><span class="brand__word"><span class="brand__a">Desi</span><span class="brand__b">Tease</span></span></a>
+    <a class="brand" href="#main" title="DesiTease — home">
+      <span class="brand__mark" aria-hidden="true">DT</span>
+      <span class="brand__word"><span class="brand__a">Desi</span><span class="brand__b">Tease</span></span>
+    </a>
     <p class="topbar__tag">Premium archive · Lifetime access</p>
-    <button class="topbar__cart" id="topCartBtn" type="button" aria-label="Open cart"><svg class="ico" aria-hidden="true"><use href="#i-cart"/></svg><span class="topbar__count" id="topCartCount" hidden>0</span></button>
+    <button class="topbar__cart" id="topCartBtn" type="button" aria-label="Open cart">
+      <svg class="ico" aria-hidden="true"><use href="#i-cart"/></svg>
+      <span class="topbar__count" id="topCartCount" hidden>0</span>
+    </button>
   </div>
 </header>
 
@@ -157,17 +176,36 @@
 
 </main>
 
+<!-- ================= footer ================= -->
 <footer class="foot">
   <div class="foot__inner">
-    <a class="brand brand--foot" href="#main"><span class="brand__mark" aria-hidden="true">DT</span><span class="brand__word"><span class="brand__a">Desi</span><span class="brand__b">Tease</span></span></a>
-    <p class="foot__tag">Questions? DM us — we reply in minutes.</p>
-    <div class="foot__social"><a href="https://t.me/DesiTease_4">Telegram</a><a href="https://instagram.com/DesiTease_">Instagram</a></div>
+    <a class="brand brand--foot" href="#main">
+      <span class="brand__mark" aria-hidden="true">DT</span>
+      <span class="brand__word"><span class="brand__a">Desi</span><span class="brand__b">Tease</span></span>
+    </a>
+    <p class="foot__tag">Questions, custom requests or international payment? DM us — we reply in minutes.</p>
+
+    <div class="foot__social">
+      <a class="social" href="https://t.me/DesiTease_4" target="_blank" rel="noopener noreferrer"><svg class="ico" aria-hidden="true"><use href="#i-telegram"/></svg> Telegram</a>
+      <a class="social" href="https://instagram.com/DesiTease_" target="_blank" rel="noopener noreferrer"><svg class="ico" aria-hidden="true"><use href="#i-instagram"/></svg> Instagram</a>
+    </div>
+
+    <p class="foot__legal">
+      18+ only. DesiTease distributes original, licensed and AI-synthetic material featuring consenting adults aged 18 and over.
+      We do not host, produce or distribute non-consensual, leaked or pirated material. Orders are non-refundable once access is granted.
+    </p>
+    <p class="foot__copy">© 2026 DesiTease Premium Store. All rights reserved.</p>
   </div>
 </footer>
 
+<!-- ================= mobile cart bar ================= -->
 <div class="cartbar" id="cartBar" hidden>
-  <div class="cartbar__info"><span id="cartBarCount">0</span><span id="cartBarTotal">₹0</span></div>
-  <button class="cartbar__cta" type="button" id="cartCheckout">Checkout</button>
+  <div class="cartbar__info">
+    <span class="cartbar__count" id="cartBarCount">0 items</span>
+    <span class="cartbar__total" id="cartBarTotal">₹0</span>
+  </div>
+  <button class="cartbar__clear" type="button" id="cartClear" aria-label="Clear cart"><svg class="ico" aria-hidden="true"><use href="#i-trash"/></svg></button>
+  <button class="cartbar__cta" type="button" id="cartCheckout">Checkout <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
 </div>
 
 <!-- ================= pack detail dialog ================= -->
@@ -177,7 +215,7 @@
     <button class="dlg__x" type="button" data-close aria-label="Close"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
   </div>
   <div class="dlg__body">
-    <img class="dlg__img" id="detailImg" width="800" height="800" alt="" decoding="async">
+    <img class="dlg__img" id="detailImg" width="1000" height="1250" alt="" decoding="async">
     <p class="dlg__text" id="detailDesc"></p>
     <dl class="specs" id="detailSpecs"></dl>
     <div class="dlg__foot">
@@ -205,21 +243,22 @@
 
     <!-- UPI -->
     <section class="pane is-active" id="pane-upi" role="tabpanel" aria-labelledby="tab-upi">
-      <a class="upi-intent-btn" id="upiIntentBtn" href="upi://pay?pa=desitease@fam&pn=DesiTease&cu=INR">
-        <svg class="ico" aria-hidden="true"><use href="#i-bolt"/></svg>Pay via Any UPI App (GPay / PhonePe / Paytm)
+      <p class="pane__hint">Scan with any UPI app (GPay, PhonePe, Paytm, BHIM).</p>
+      <img class="qr" src="/assets/brand/upi-qr-desitease.webp" width="720" height="720" alt="DesiTease UPI payment QR code" decoding="async">
+      <p class="pane__amount">Send exactly <b id="upiAmount">₹0</b></p>
+      <a class="cta cta--full upi-intent" id="upiIntentBtn" href="upi://pay?pa=desitease@fam&amp;pn=DesiTease&amp;cu=INR">
+        <svg class="ico" aria-hidden="true"><use href="#i-bolt"/></svg> Pay with any UPI app
       </a>
-      <p class="pane__hint">Or scan with any UPI app for the exact order total:</p>
-      <img class="qr" src="/assets/brand/upi-qr.webp" width="300" height="300" alt="DesiTease UPI QR Code" decoding="async">
-      <p class="pane__amount">Total due: <b id="upiAmount">₹0</b></p>
-      <div class="upi-copy-wrap">
-        <span>UPI ID: <code>desitease@fam</code></span>
-        <button type="button" class="btn-copy" data-copy="desitease@fam"><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg> Copy</button>
+      <div class="upi-id">
+        <span>UPI ID <b id="coUpiId">desitease@fam</b></span>
+        <button class="ghost ghost--inline" id="copyUpiBtn" type="button"><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg> Copy ID</button>
       </div>
+      <a class="ghost" href="/assets/brand/upi-qr-desitease.png" download="desitease-upi-qr.png"><svg class="ico" aria-hidden="true"><use href="#i-download"/></svg> Download QR</a>
     </section>
 
     <!-- PayPal -->
     <section class="pane" id="pane-paypal" role="tabpanel" aria-labelledby="tab-paypal" hidden>
-      <p class="pane__hint">International checkout via PayPal (Cards / PayPal balance).</p>
+      <p class="pane__hint">International checkout. You will be sent to PayPal to approve the payment.</p>
       <p class="fx">
         <span id="paypalInr">₹0</span>
         <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>
@@ -231,9 +270,9 @@
 
     <!-- Crypto -->
     <section class="pane" id="pane-crypto" role="tabpanel" aria-labelledby="tab-crypto" hidden>
-      <p class="pane__hint">Pick your preferred cryptocurrency &amp; network. Send the exact amount, then upload your screenshot below.</p>
+      <p class="pane__hint">Pick a network — the amount is calculated for you. Send the exact amount, then upload your screenshot below.</p>
       <div class="crypto" id="cryptoList"></div>
-      <p class="pane__foot">Amounts include a 20% crypto-processing margin. Rates refresh automatically.</p>
+      <p class="pane__foot">Amounts include a 20% crypto-processing margin. Rates refresh every 10 minutes.</p>
     </section>
 
     <p class="total">Payable amount <b id="coTotal">₹0</b></p>
@@ -242,6 +281,7 @@
       <input type="hidden" name="form-name" value="desi-orders">
       <input type="hidden" name="items" id="formItems">
       <input type="hidden" name="amount" id="formAmount">
+      <input type="hidden" name="method" id="formMethod">
       <p class="hp"><label>Leave this field empty <input name="bot-field"></label></p>
 
       <label class="field">
@@ -253,7 +293,7 @@
       <label class="field">
         <span>Payment screenshot</span>
         <input type="file" name="screenshot" id="screenshotInput" accept="image/*" required>
-        <small>PNG or JPG. We match it against your order and send access immediately.</small>
+        <small>PNG or JPG. We match it against your order and send access.</small>
       </label>
 
       <button class="cta cta--full" type="submit"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg> Submit &amp; get access</button>
@@ -261,10 +301,19 @@
   </div>
 </dialog>
 
-<div class="gate" id="ageGate" role="dialog" aria-modal="true" hidden><div class="gate__card"><p>18+</p><h1>Adults only</h1><p>This site contains explicit adult material for 18+ only.</p><button id="gateEnter">I am 18+ — enter</button><a href="https://www.google.com">Exit</a></div></div>
+<!-- ================= age gate ================= -->
+<div class="gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="gateTitle" tabindex="-1" hidden>
+  <div class="gate__card">
+    <p class="gate__badge">18+</p>
+    <h1 class="gate__title" id="gateTitle">Adults only</h1>
+    <p class="gate__text">This store contains explicit adult material for adults only. By entering you confirm that you are 18 or older and that you are legally permitted to view it in your country.</p>
+    <button class="cta cta--full" type="button" id="gateEnter">I am 18+ — enter</button>
+    <a class="gate__exit" href="https://www.google.com" rel="noopener noreferrer">Exit</a>
+  </div>
+</div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="/script.js" defer></script>
+<script src="/script.js?v=3" defer></script>
 </body>
 </html>

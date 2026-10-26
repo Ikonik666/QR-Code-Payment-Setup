@@ -13,6 +13,7 @@
   --ink-3: rgba(246, 241, 243, .58);
   --brand: #ff3b4e;
   --brand-2: #ff6b3d;
+  --gold: #f5c451;
   --ok: #2fbf71;
   --r-md: 16px;
   --r-lg: 22px;
@@ -65,6 +66,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
   animation: pop .5s cubic-bezier(.22, 1, .36, 1);
 }
 @keyframes pop { from { transform: scale(.7); opacity: 0; } }
+.tick--muted {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--ink-3);
+  animation: none;
+}
 
 .brand { display: inline-flex; align-items: center; gap: 10px; }
 .brand__mark {
@@ -143,10 +150,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
   display: inline-flex; align-items: center; gap: 8px;
   padding: 10px 18px; border-radius: 999px;
   border: 1px solid var(--line); background: var(--surface);
+  color: var(--ink-2);
   font-size: .8rem; font-weight: 700; text-decoration: none;
-  transition: border-color .18s, background .18s, transform .18s;
+  transition: border-color .18s, background .18s, color .18s, transform .18s;
 }
-.links a:hover { border-color: var(--brand); background: rgba(255, 59, 78, .1); transform: translateY(-2px); }
+.links a:hover { border-color: var(--brand); background: rgba(255, 59, 78, .1); color: #fff; transform: translateY(-2px); }
 
 .foot { margin-top: 26px; font-size: .8rem; }
 .foot a { color: var(--ink-3); text-decoration: none; }
@@ -154,4 +162,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+[hidden] { display: none !important; }
+.order-meta {
+  margin: -4px 0 10px;
+  color: var(--ink-3);
+  font-size: .74rem;
+  letter-spacing: .02em;
 }

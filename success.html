@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Order received — DesiTease</title>
-<meta name="robots" content="noindex, follow">
+<meta name="description" content="Your DesiTease order has been received. Send your confirmation on Telegram and we will verify and deliver your private access.">
+<meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0a0608">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/brand/icons/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="/assets/brand/icons/favicon-32x32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/brand/icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
@@ -29,17 +32,18 @@
 
     <p class="brand"><span class="brand__mark">DT</span><span class="brand__word"><b>Desi</b><i>Tease</i></span></p>
 
-    <h1 class="title">Payment received</h1>
-    <p class="lede">Thanks for your order. We are verifying your screenshot now — access usually lands in your Telegram within 5–30 minutes.</p>
+    <h1 class="title" id="successTitle">Payment received</h1>
+    <p class="lede" id="successLede">Thanks for your order. We are verifying your screenshot now — access usually lands in your Telegram within 5–30 minutes.</p>
 
     <section class="box" aria-labelledby="h-order">
       <h2 class="box__h" id="h-order"><svg class="ico" aria-hidden="true"><use href="#i-receipt"/></svg> Your order</h2>
+      <p class="order-meta" id="orderMeta" hidden></p>
       <div id="orderItems" class="rows">
         <p class="muted">Loading your order…</p>
       </div>
     </section>
 
-    <section class="box" aria-labelledby="h-next">
+    <section class="box" id="nextBox" aria-labelledby="h-next">
       <h2 class="box__h" id="h-next">What happens next</h2>
       <ol class="steps">
         <li><span>1</span>Send your order details to our admin with the button below.</li>
@@ -48,7 +52,7 @@
       </ol>
     </section>
 
-    <p class="eta"><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg> Typical processing time <b>5–30 minutes</b></p>
+    <p class="eta" id="eta"><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg> Typical processing time <b>5–30 minutes</b></p>
 
     <a class="cta" id="sendOrder" href="#" target="_blank" rel="noopener noreferrer">
       <svg class="ico" aria-hidden="true"><use href="#i-send"/></svg> Send order details to admin
