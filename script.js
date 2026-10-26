@@ -594,17 +594,17 @@
     });
 
     // checkout + cart actions
-    $('#cartCheckout').addEventListener('click', openCheckout);
-    $('#topCartBtn').addEventListener('click', openCheckout);
-    $('#cartClear').addEventListener('click', () => { state.cart.clear(); renderCart(); toast('Cart cleared'); });
+    $('#cartCheckout')?.addEventListener('click', openCheckout);
+    $('#topCartBtn')?.addEventListener('click', openCheckout);
+    $('#cartClear')?.addEventListener('click', () => { state.cart.clear(); renderCart(); toast('Cart cleared'); });
 
-    $('#megaBtn').addEventListener('click', () => {
+    $('#megaBtn')?.addEventListener('click', () => {
       packs.forEach(p => state.cart.add(p.id));
       renderCart();
       openCheckout();
     });
 
-    $('#detailAdd').addEventListener('click', e => {
+    $('#detailAdd')?.addEventListener('click', e => {
       addToCart(e.currentTarget.dataset.add);
       e.currentTarget.textContent = state.cart.has(e.currentTarget.dataset.add) ? 'Remove from cart' : 'Add to cart';
     });
@@ -638,7 +638,7 @@
       }
     });
 
-    $('#paypalBtn').addEventListener('click', () => {
+    $('#paypalBtn')?.addEventListener('click', () => {
       const total = cartTotal();
       const amount = paypalUsd(total);
       const label = `DesiTease order — ${money(total)} (INR)`;
@@ -675,7 +675,7 @@
 
     // order form
     const form = $('.order');
-    form.addEventListener('submit', () => {
+    form?.addEventListener('submit', () => {
       const { lines, saved } = cartLines();
       const order = {
         total: cartTotal(),
