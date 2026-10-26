@@ -1,717 +1,716 @@
 /* =========================================================
-   DesiTease — storefront
-   Catalogue, bag, bundles, checkout and small delights.
+   DesiTease — store front
+   Single source of truth = the catalogue markup in index.html.
+   The script reads prices/specs out of the DOM, so adding a pack
+   means editing one file and nothing else.
    ========================================================= */
 (() => {
   'use strict';
 
   /* ---------------------------------------------------------
-     1. Configuration
+     1. Configuration — tune the business numbers here
      --------------------------------------------------------- */
   const CONFIG = {
+    // rupees per 1 US dollar (used for the PayPal + crypto conversion)
     fxInrPerUsd: 91.68,
+    // true  = follow the live USDT/INR rate (fairer, the amount moves hourly)
+    // false = pin every order to fxInrPerUsd above (predictable for support)
     useLiveFx: true,
-    paypalMarkup: 1.20,
+
+    // international / on-chain processing margin applied to the INR total
+    paypalMarkup: 1.20,   // +20%
+    cryptoMarkup: 1.20,   // +20%
+
     paypalHandle: 'desitease',
-    upiId: 'desitease@fam',
+
+    // wallets
+    addr: {
+      usdtTron: 'TLquccw7uU4A6fTJekDsrsQbJEvnFv1eTD',
+      bsc:      '0x68cb68cfea2aacf2bec6a5f4c70cd4eb56155c15',
+      btc:      '114wbEsmXGo9tExmg2HKEZqPXYsAB9S4ei'
+    },
+
+    // bundle discounts
     vaultDiscount: 0.20,
-    megaDiscount: 0.30,
-    ageKey: 'desitease.age.v1',
-    cartKey: 'desitease.cart.v1'
+    megaDiscount:  0.30,
+
+    // live rates (INR per coin) — fallback only, the API below wins
+    fallbackRates: { tether: 91.7, bitcoin: 9200000, ethereum: 320000, binancecoin: 61000 },
+    rateEndpoint: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether,binancecoin&vs_currencies=inr',
+    rateFallbackEndpoint: 'https://api.coinbase.com/v2/exchange-rates?currency=INR',
+    rateTtlMs: 10 * 60 * 1000,
+
+    ageKey: 'dt-age-verified',
+    orderKey: 'dt-order'
   };
 
-  const $ = (sel, root = document) => root.querySelector(sel);
-  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  const COINS = [
+    { key: 'usdt-trc20', mark: '₮', name: 'USDT (Tether)', net: 'TRC20 · Tron',      addr: CONFIG.addr.usdtTron, coin: 'tether',      tag: 'Best', tagClass: 'ok' },
+    { key: 'usdt-bep20', mark: '₮', name: 'USDT (Tether)', net: 'BEP20 · BSC',       addr: CONFIG.addr.bsc,      coin: 'tether',      tag: 'Cheap', tagClass: 'warn' },
+    { key: 'usdt-erc20', mark: '₮', name: 'USDT (Tether)', net: 'ERC20 · Ethereum',  addr: CONFIG.addr.bsc,      coin: 'tether' },
+    { key: 'usdt-matic', mark: '₮', name: 'USDT (Tether)', net: 'Polygon · MATIC',   addr: CONFIG.addr.bsc,      coin: 'tether',      tag: 'Cheap', tagClass: 'warn' },
+    { key: 'btc',        mark: '₿', name: 'Bitcoin',        net: 'Main network',      addr: CONFIG.addr.btc,      coin: 'bitcoin',     tag: 'Popular', tagClass: 'hot' },
+    { key: 'btc-bsc',    mark: '₿', name: 'Bitcoin',        net: 'Wrapped · BSC',     addr: CONFIG.addr.bsc,      coin: 'bitcoin',     tag: 'Cheap', tagClass: 'warn' },
+    { key: 'eth',        mark: 'Ξ', name: 'Ethereum',       net: 'ERC20 · Mainnet',   addr: CONFIG.addr.bsc,      coin: 'ethereum',    tag: 'Popular', tagClass: 'hot' },
+    { key: 'eth-arb',    mark: 'Ξ', name: 'Ethereum',       net: 'Arbitrum · L2',     addr: CONFIG.addr.bsc,      coin: 'ethereum',    tag: 'Cheap', tagClass: 'warn' },
+    { key: 'eth-bsc',    mark: 'Ξ', name: 'Ethereum',       net: 'Wrapped · BSC',     addr: CONFIG.addr.bsc,      coin: 'ethereum',    tag: 'Cheap', tagClass: 'warn' },
+    { key: 'bnb',        mark: 'B', name: 'BNB',            net: 'BEP20 · BSC',       addr: CONFIG.addr.bsc,      coin: 'binancecoin', tag: 'Fast', tagClass: 'ok' }
+  ];
 
-  const inrFmt = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 });
-  const money = n => '₹' + inrFmt.format(Math.round(n));
-  const usdMoney = n => '$' + n.toFixed(2);
-
-  const CATALOGUE = [];
-  const VAULTS = {};
-  const cart = new Set();
+  const COIN_PRECISION = { bitcoin: 8, ethereum: 6, tether: 2, binancecoin: 4 };
 
   /* ---------------------------------------------------------
-     2. Small utilities
+     2. Small helpers
      --------------------------------------------------------- */
+  const $  = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+  const inr = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 });
+  const money = n => '₹' + inr.format(Math.round(n));
+  const usd = n => '$' + n.toFixed(2);
+
+  const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
   function toast(msg) {
     const el = $('#toast');
-    if (!el) return;
     el.textContent = msg;
     el.classList.add('is-on');
     clearTimeout(toast._t);
-    toast._t = setTimeout(() => el.classList.remove('is-on'), 2400);
+    toast._t = setTimeout(() => el.classList.remove('is-on'), 2600);
   }
 
-  function showCopyPill(label) {
-    const pill = $('#copyNotif');
-    const text = $('#copyNotifText');
-    if (!pill) return;
-    if (text) text.textContent = label;
-    pill.classList.add('show');
-    clearTimeout(showCopyPill._t);
-    showCopyPill._t = setTimeout(() => pill.classList.remove('show'), 2300);
-  }
-
-  function fallbackCopy(text, label) {
+  async function copy(text) {
     try {
-      const area = document.createElement('textarea');
-      area.value = text;
-      area.setAttribute('readonly', '');
-      area.style.position = 'fixed';
-      area.style.opacity = '0';
-      document.body.appendChild(area);
-      area.select();
-      document.execCommand('copy');
-      document.body.removeChild(area);
-    } catch (e) {
-      /* no-op — the address is still visible in the UI */
-    }
-    showCopyPill(label);
-  }
-
-  function copyToClipboard(text, label = 'Link') {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text)
-        .then(() => showCopyPill(label))
-        .catch(() => fallbackCopy(text, label));
-    } else {
-      fallbackCopy(text, label);
-    }
-  }
-
-  function parseSpecs(str) {
-    if (!str) return [];
-    return str.split(';').map(part => {
-      const idx = part.indexOf(':');
-      if (idx === -1) return { k: part.trim(), v: '' };
-      return { k: part.slice(0, idx).trim(), v: part.slice(idx + 1).trim() };
-    }).filter(s => s.k);
-  }
-
-  /* ---------------------------------------------------------
-     3. Catalogue ingestion
-     --------------------------------------------------------- */
-  function initCatalogue() {
-    $$('article.pack').forEach(article => {
-      const id = article.dataset.id;
-      if (!id) return;
-
-      const price = parseInt(article.dataset.price, 10) || 0;
-      const oldPrice = parseInt(article.dataset.old, 10) || Math.round(price * 1.35);
-      const name = $('.pack__name', article)?.textContent.trim() || id;
-      const blurb = article.dataset.blurb || $('.pack__desc', article)?.textContent.trim() || '';
-      const specs = parseSpecs(article.dataset.specs);
-      const imgEl = $('img', article);
-      const type = $('.pack__tag', article)?.textContent.trim() || 'Collection';
-      const vaultEl = article.closest('[data-vault]');
-      const vaultKey = vaultEl?.dataset.vault || 'other';
-
-      const item = {
-        id,
-        price,
-        oldPrice,
-        name,
-        blurb,
-        specs,
-        img: imgEl?.getAttribute('src') || '',
-        type,
-        vaultKey,
-        el: article
-      };
-      CATALOGUE.push(item);
-
-      if (!VAULTS[vaultKey]) {
-        VAULTS[vaultKey] = {
-          key: vaultKey,
-          items: [],
-          el: vaultEl,
-          labelEl: $(`[data-bundle-label="${vaultKey}"]`),
-          btn: $(`.bundle[data-bundle="${vaultKey}"]`)
-        };
-      }
-      VAULTS[vaultKey].items.push(item);
-    });
-
-    // Hydrate a persisted bag, ignoring packs that no longer exist.
-    try {
-      const stored = JSON.parse(localStorage.getItem(CONFIG.cartKey) || '[]');
-      if (Array.isArray(stored)) {
-        stored.forEach(id => {
-          if (CATALOGUE.some(item => item.id === id)) cart.add(id);
-        });
-      }
-    } catch (e) {
-      /* ignore malformed storage */
-    }
-
-    // Vault bundle maths
-    Object.values(VAULTS).forEach(vault => {
-      const sum = vault.items.reduce((acc, item) => acc + item.price, 0);
-      vault.sum = sum;
-      vault.bundlePrice = Math.round(sum * (1 - CONFIG.vaultDiscount));
-      vault.labelText = `Save 20% · Bundle ${money(vault.bundlePrice)}`;
-      if (vault.labelEl) vault.labelEl.textContent = vault.labelText;
-    });
-
-    // Complete vault maths
-    const total = CATALOGUE.reduce((acc, item) => acc + item.price, 0);
-    const megaPrice = Math.round(total * (1 - CONFIG.megaDiscount));
-    const savings = total - megaPrice;
-    const nowEl = $('[data-mega-price]');
-    const wasEl = $('[data-mega-was]');
-    const saveEl = $('[data-mega-save]');
-    if (nowEl) nowEl.textContent = money(megaPrice);
-    if (wasEl) wasEl.textContent = money(total);
-    if (saveEl) saveEl.textContent = `Save ${money(savings)}`;
-    VAULTS.__mega = { price: megaPrice, total, savings };
-
-    // What's inside the complete vault
-    const list = $('[data-mega-list]');
-    if (list) {
-      list.innerHTML = CATALOGUE.map(item => `
-        <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>${item.name}</li>
-      `).join('');
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      ta.remove();
+      return ok;
     }
   }
 
   /* ---------------------------------------------------------
-     4. Bag maths
+     3. Read the catalogue out of the DOM
      --------------------------------------------------------- */
-  function saveCart() {
-    try {
-      localStorage.setItem(CONFIG.cartKey, JSON.stringify([...cart]));
-    } catch (e) {
-      /* storage can fail in private mode */
-    }
+  const VAULT_LABELS = {
+    top:     'Top Picks',
+    premium: 'Premium Vault',
+    series:  'Signature Series'
+  };
+
+  function parseSpecs(raw) {
+    if (!raw) return [];
+    return raw.split(';')
+      .map(s => s.trim())
+      .filter(Boolean)
+      .map(pair => {
+        const i = pair.indexOf(':');
+        return i < 0 ? { label: pair, value: '' } : { label: pair.slice(0, i).trim(), value: pair.slice(i + 1).trim() };
+      });
   }
 
-  function getCartSummary() {
-    const items = CATALOGUE.filter(item => cart.has(item.id));
-    if (items.length === 0) {
-      return {
-        items: [],
-        total: 0,
-        rawTotal: 0,
-        discount: 0,
-        isMega: false,
-        bundleVaults: []
-      };
-    }
+  const packs = $$('.pack').map(el => ({
+    id:    el.dataset.id,
+    price: Number(el.dataset.price),
+    old:   Number(el.dataset.old),
+    vault: el.closest('.vault').dataset.vault,
+    name:  $('.pack__name', el).textContent.trim(),
+    desc:  $('.pack__desc', el).textContent.trim(),
+    blurb: el.dataset.blurb || '',
+    specs: parseSpecs(el.dataset.specs),
+    type:  $('.pack__type', el).textContent.trim(),
+    el
+  }));
 
-    const rawTotal = items.reduce((acc, item) => acc + item.price, 0);
+  const packById = new Map(packs.map(p => [p.id, p]));
 
-    // Complete-vault discount wins when every pack is selected.
-    if (items.length === CATALOGUE.length) {
-      const total = Math.round(rawTotal * (1 - CONFIG.megaDiscount));
-      return {
-        items,
-        total,
-        rawTotal,
-        discount: rawTotal - total,
-        isMega: true,
-        bundleVaults: Object.keys(VAULTS).filter(key => key !== '__mega')
-      };
-    }
+  const vaults = $$('.vault').map(el => {
+    const key = el.dataset.vault;
+    const own = packs.filter(p => p.vault === key);
+    const subtotal = own.reduce((s, p) => s + p.price, 0);
+    return {
+      key,
+      label: VAULT_LABELS[key] || key,
+      packs: own,
+      subtotal,
+      price: Math.round(subtotal * (1 - CONFIG.vaultDiscount))
+    };
+  });
+
+  const allSubtotal = packs.reduce((s, p) => s + p.price, 0);
+  const mega = {
+    price: Math.round(allSubtotal * (1 - CONFIG.megaDiscount)),
+    was: allSubtotal,
+    count: packs.length
+  };
+
+  /* ---------------------------------------------------------
+     4. State
+     --------------------------------------------------------- */
+  const state = {
+    cart: new Set(),
+    rates: { ...CONFIG.fallbackRates },
+    ratesLive: false,
+    rateTime: null,
+    // rupees per 1 USD — tracks the live USDT rate when available so the
+    // PayPal amount and the crypto amounts always agree with each other
+    fx: CONFIG.fxInrPerUsd,
+    detailId: null
+  };
+
+  /* ---------------------------------------------------------
+     5. Pricing engine (pure)
+     --------------------------------------------------------- */
+  function vaultBundlePrice(vault) {
+    return vault.price;
+  }
+
+  /** Total INR for the current cart, applying vault + mega discounts. */
+  function cartTotal(ids = state.cart) {
+    if (ids.size === 0) return 0;
+    if (ids.size === packs.length) return mega.price;
 
     let total = 0;
-    const bundleVaults = [];
-    const counted = new Set();
-
-    Object.values(VAULTS).forEach(vault => {
-      if (vault === VAULTS.__mega || !vault.items.length) return;
-      const complete = vault.items.every(item => cart.has(item.id));
-      if (complete) {
-        total += vault.bundlePrice;
-        bundleVaults.push(vault.key);
-        vault.items.forEach(item => counted.add(item.id));
+    for (const v of vaults) {
+      const idsIn = v.packs.map(p => p.id);
+      const all = idsIn.every(id => ids.has(id));
+      if (all) {
+        total += vaultBundlePrice(v);
+      } else {
+        for (const id of idsIn) if (ids.has(id)) total += packById.get(id).price;
       }
-    });
-
-    items.forEach(item => {
-      if (!counted.has(item.id)) total += item.price;
-    });
-
-    return {
-      items,
-      total,
-      rawTotal,
-      discount: rawTotal - total,
-      isMega: false,
-      bundleVaults
-    };
+    }
+    return total;
   }
 
-  function updateDetailButton() {
-    const btn = $('#detailAddBtn');
-    if (!btn || !btn.dataset.currentId) return;
-    const inCart = cart.has(btn.dataset.currentId);
-    btn.textContent = inCart ? 'Remove from bag' : 'Add to bag';
-    btn.classList.toggle('is-in-cart', inCart);
-  }
+  /** Break the cart down into display lines. */
+  function cartLines() {
+    const lines = [];
+    let saved = 0;
 
-  function updateCartUI() {
-    const summary = getCartSummary();
-    const count = cart.size;
-
-    const topCount = $('#topCartCount');
-    if (topCount) {
-      topCount.hidden = count === 0;
-      topCount.textContent = count;
+    if (state.cart.size === packs.length) {
+      saved = mega.was - mega.price;
+      return { mega: true, lines: [{ name: `Full Vault — all ${mega.count} packs`, price: mega.price }], saved };
     }
 
-    const cartBar = $('#cartBar');
-    if (cartBar) {
-      cartBar.hidden = count === 0;
-      document.body.classList.toggle('has-cart', count > 0);
-    }
+    for (const v of vaults) {
+      const ids = v.packs.map(p => p.id);
+      const inVault = ids.filter(id => state.cart.has(id));
+      if (!inVault.length) continue;
 
-    const cartCount = $('#cartBarCount');
-    const cartTotal = $('#cartBarTotal');
-    const cartNote = $('#cartBarNote');
-    if (cartCount) cartCount.textContent = `${count} item${count === 1 ? '' : 's'}`;
-    if (cartTotal) cartTotal.textContent = money(summary.total);
-    if (cartNote) {
-      cartNote.textContent = summary.discount > 0
-        ? `You save ${money(summary.discount)}`
-        : 'One payment · lifetime access';
-    }
-
-    $$('.add[data-add]').forEach(btn => {
-      const id = btn.dataset.add;
-      const inCart = cart.has(id);
-      btn.classList.toggle('is-in-cart', inCart);
-      btn.textContent = inCart ? 'Added ✓' : 'Add to bag';
-      btn.setAttribute('aria-pressed', String(inCart));
-    });
-
-    Object.values(VAULTS).forEach(vault => {
-      if (vault === VAULTS.__mega) return;
-      const active = vault.items.length > 0 && vault.items.every(item => cart.has(item.id));
-      if (vault.btn) {
-        vault.btn.classList.toggle('is-active', active);
-        vault.btn.setAttribute('aria-pressed', String(active));
+      if (inVault.length === ids.length) {
+        lines.push({ name: `${v.label} bundle (${ids.length} packs)`, price: v.price, vault: v.key });
+        saved += v.subtotal - v.price;
+      } else {
+        for (const id of inVault) {
+          const p = packById.get(id);
+          lines.push({ name: p.name, price: p.price, id });
+        }
       }
-      if (vault.labelEl) {
-        vault.labelEl.textContent = active ? 'Bundle in bag ✓' : vault.labelText;
-      }
-    });
-
-    const megaBtn = $('#megaBtn');
-    if (megaBtn) {
-      const allIn = CATALOGUE.length > 0 && CATALOGUE.every(item => cart.has(item.id));
-      megaBtn.firstChild.textContent = allIn ? 'Full vault in your bag ' : 'Unlock the vault ';
-      megaBtn.setAttribute('aria-pressed', String(allIn));
     }
-
-    updateDetailButton();
-    saveCart();
-
-    if ($('#checkoutModal') && !$('#checkoutModal').hidden) renderCheckout();
-  }
-
-  function toggleItem(id) {
-    if (!CATALOGUE.some(item => item.id === id)) return;
-    if (cart.has(id)) {
-      cart.delete(id);
-      toast('Removed from your bag');
-    } else {
-      cart.add(id);
-      toast('Added to your bag');
-    }
-    updateCartUI();
-  }
-
-  function toggleVault(key) {
-    const vault = VAULTS[key];
-    if (!vault || vault === VAULTS.__mega) return;
-    const allIn = vault.items.every(item => cart.has(item.id));
-    if (allIn) {
-      vault.items.forEach(item => cart.delete(item.id));
-      toast('Bundle removed');
-    } else {
-      vault.items.forEach(item => cart.add(item.id));
-      toast('Bundle added — 20% off');
-    }
-    updateCartUI();
-  }
-
-  function toggleMega() {
-    const allIn = CATALOGUE.length > 0 && CATALOGUE.every(item => cart.has(item.id));
-    if (allIn) {
-      cart.clear();
-      toast('Bag cleared');
-    } else {
-      CATALOGUE.forEach(item => cart.add(item.id));
-      toast('Complete vault added — 30% off');
-    }
-    updateCartUI();
-  }
-
-  function clearCart() {
-    cart.clear();
-    updateCartUI();
-    closeModal($('#checkoutModal'));
-    toast('Bag cleared');
+    return { mega: false, lines, saved };
   }
 
   /* ---------------------------------------------------------
-     5. Modals
+     6. Rendering
      --------------------------------------------------------- */
-  let lastFocused = null;
-
-  function focusableIn(modal) {
-    return $$('button, [href], input, select, textarea, summary, [tabindex]:not([tabindex="-1"])', modal)
-      .filter(el => !el.disabled && el.offsetParent !== null);
-  }
-
-  function openModal(modal) {
-    if (!modal) return;
-    lastFocused = document.activeElement;
-    modal.hidden = false;
-    document.body.classList.add('modal-open');
-    const target = $('.modal__close', modal) || modal;
-    requestAnimationFrame(() => target.focus({ preventScroll: true }));
-  }
-
-  function closeModal(modal) {
-    if (!modal || modal.hidden) return;
-    modal.hidden = true;
-    if (!$('.modal:not([hidden])')) document.body.classList.remove('modal-open');
-    if (lastFocused && typeof lastFocused.focus === 'function') {
-      lastFocused.focus({ preventScroll: true });
+  function renderBundleLabels() {
+    for (const v of vaults) {
+      const label = $(`[data-bundle-label="${v.key}"]`);
+      if (!label) continue;
+      const pct = Math.round(CONFIG.vaultDiscount * 100);
+      const already = v.packs.every(p => state.cart.has(p.id));
+      label.textContent = already
+        ? `Remove ${v.label} · ₹${v.price}`
+        : `Save ${pct}% · Bundle ${money(v.price)}`;
     }
   }
+
+  function renderMega() {
+    const now = $('[data-mega-price]');
+    const was = $('[data-mega-was]');
+    const save = $('[data-mega-save]');
+    if (now) now.textContent = money(mega.price);
+    if (was) was.textContent = money(mega.was);
+    if (save) save.textContent = `You keep ${money(mega.was - mega.price)} in your pocket`;
+
+    const list = $('[data-mega-list]');
+    if (list) {
+      list.innerHTML = packs.map(p => `
+        <li>
+          <svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>
+          <span>${escapeHtml(p.name)}</span>
+          <b>${money(p.price)}</b>
+        </li>`).join('');
+    }
+  }
+
+  function renderStats() {
+    const el = $('[data-stat="packs"]');
+    if (el) el.textContent = String(packs.length);
+  }
+
+  /** data-badge="New" on a card adds the corner ribbon if it isn't there yet. */
+  function renderBadges() {
+    packs.forEach(p => {
+      const badge = p.el.dataset.badge;
+      if (!badge || p.el.querySelector('.pack__flag')) return;
+      const flag = document.createElement('span');
+      flag.className = 'pack__flag';
+      flag.setAttribute('aria-hidden', 'true');
+      flag.textContent = badge;
+      $('.pack__media', p.el).appendChild(flag);
+    });
+  }
+
+  function renderCart() {
+    const total = cartTotal();
+    const n = state.cart.size;
+
+    $$('.pack').forEach(card => {
+      const on = state.cart.has(card.dataset.id);
+      card.classList.toggle('is-added', on);
+      const btn = $('.add', card);
+      if (btn) {
+        btn.innerHTML = on
+          ? '<svg class="ico" aria-hidden="true"><use href="#i-check"/></svg><span>Added</span>'
+          : '<svg class="ico" aria-hidden="true"><use href="#i-cart"/></svg><span>Add</span>';
+        btn.setAttribute('aria-pressed', String(on));
+      }
+    });
+
+    const bar = $('#cartBar');
+    if (bar) bar.hidden = n === 0;
+    const c = $('#cartBarCount');
+    if (c) c.textContent = `${n} item${n === 1 ? '' : 's'}`;
+    const t = $('#cartBarTotal');
+    if (t) t.textContent = money(total);
+
+    const badge = $('#topCartCount');
+    if (badge) {
+      badge.hidden = n === 0;
+      badge.textContent = n ? String(n) : '';
+    }
+
+    const cartBtn = $('#topCartBtn');
+    if (cartBtn) {
+      cartBtn.setAttribute('aria-label',
+        n ? `Open cart, ${n} item${n === 1 ? '' : 's'}, ${money(total)}` : 'Open cart');
+    }
+
+    renderBundleLabels();
+    renderCheckout();
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  /* ---------------------------------------------------------
+     7. Pack detail dialog
+     --------------------------------------------------------- */
+  const detailDialog = $('#detailDialog');
 
   function openDetail(id) {
-    const item = CATALOGUE.find(entry => entry.id === id);
-    const modal = $('#detailModal');
-    if (!item || !modal) return;
+    const p = packById.get(id);
+    if (!p) return;
+    state.detailId = id;
 
-    const title = $('#detailTitle');
-    const desc = $('#detailDesc');
-    const image = $('#detailImg');
-    const type = $('#detailTypeBadge');
-    const was = $('#detailWas');
-    const now = $('#detailNow');
-    const specs = $('#detailSpecs');
+    $('#detailTitle').textContent = p.name;
+    const img = $('#detailImg');
+    img.src = $('img', p.el).getAttribute('src');
+    img.alt = `${p.name} cover`;
+    $('#detailDesc').textContent = p.blurb || p.desc;
+    $('#detailWas').textContent = money(p.old);
+    $('#detailNow').textContent = money(p.price);
 
-    if (title) title.textContent = item.name;
-    if (desc) desc.textContent = item.blurb;
-    if (image) {
-      image.src = item.img;
-      image.alt = `${item.name} cover`;
+    $('#detailSpecs').innerHTML = p.specs.map(s => `
+      <div><dt>${escapeHtml(s.label)}</dt><dd>${escapeHtml(s.value)}</dd></div>`).join('');
+
+    const btn = $('#detailAdd');
+    const on = state.cart.has(id);
+    btn.textContent = on ? 'Remove from cart' : 'Add to cart';
+    btn.dataset.add = id;
+
+    if (!detailDialog.open) {
+      detailDialog._opener = document.activeElement;
+      detailDialog.showModal();
     }
-    if (type) type.textContent = item.type;
-    if (was) was.textContent = money(item.oldPrice);
-    if (now) now.textContent = money(item.price);
-    if (specs) {
-      specs.innerHTML = item.specs.map(spec => `
-        <div class="spec">
-          <span class="spec__k">${spec.k}</span>
-          <span class="spec__v">${spec.v}</span>
-        </div>
-      `).join('');
-    }
+  }
 
-    const addBtn = $('#detailAddBtn');
-    if (addBtn) addBtn.dataset.currentId = item.id;
-    updateDetailButton();
-    openModal(modal);
+  /* ---------------------------------------------------------
+     8. Checkout dialog
+     --------------------------------------------------------- */
+  const checkoutDialog = $('#checkoutDialog');
+  let activeCoin = COINS[0];
+
+  function openCheckout() {
+    if (state.cart.size === 0) { toast('Your cart is empty'); return; }
+    renderCheckout();
+    if (!checkoutDialog.open) {
+      checkoutDialog._opener = document.activeElement;
+      checkoutDialog.showModal();
+    }
   }
 
   function renderCheckout() {
-    const summary = getCartSummary();
-    const box = $('#orderSummary');
-    const badge = $('#summaryBadge');
+    const { mega: isMega, lines, saved } = cartLines();
+    const total = cartTotal();
 
-    if (box) {
-      box.innerHTML = summary.items.map(item => `
-        <div class="summary-item">
-          <div class="summary-item__text">
-            <strong>${item.name}</strong>
-            <span>${money(item.price)}</span>
-          </div>
-          <button class="summary-item__remove" type="button" data-del="${item.id}" aria-label="Remove ${item.name}">&times;</button>
-        </div>
-      `).join('');
+    $('#orderSummary').innerHTML =
+      lines.map(l => `
+        <div class="summary__row">
+          <span>${escapeHtml(l.name)}</span>
+          <span>${money(l.price)}${l.id ? `<button class="summary__rm" type="button" data-remove="${l.id}" aria-label="Remove ${escapeHtml(l.name)}">&times;</button>` : ''}</span>
+        </div>`).join('') +
+      (saved > 0 ? `<span class="summary__tag">You saved ${money(saved)}${isMega ? ' on the full vault' : ''}</span>` : '');
+
+    const totalEl = $('#coTotal');
+    if (totalEl) totalEl.textContent = money(total);
+
+    $('#upiAmount').textContent = money(total);
+    const intentBtn = $('#upiIntentBtn');
+    if (intentBtn) {
+      intentBtn.href = `upi://pay?pa=desitease@fam&pn=DesiTease&am=${total}&cu=INR&tn=Order%20${encodeURIComponent(Array.from(state.cart).join('+'))}`;
+    }
+    $('#paypalInr').textContent = money(total);
+    $('#paypalUsd').textContent = usd(paypalUsd(total));
+    const pn = $('#paypalNote');
+    if (pn) {
+      pn.textContent = state.ratesLive
+        ? `includes ${Math.round((CONFIG.paypalMarkup - 1) * 100)}% international processing · live rate`
+        : `includes ${Math.round((CONFIG.paypalMarkup - 1) * 100)}% international processing · rate is indicative`;
     }
 
-    const totalEl = $('#coCartTotal');
-    if (totalEl) totalEl.textContent = money(summary.total);
+    const items = $('#formItems');
+    const amount = $('#formAmount');
+    if (items) items.value = Array.from(state.cart).join(',');
+    if (amount) amount.value = String(total);
 
-    const upiIntentBtn = $('#upiIntentBtn');
-    if (upiIntentBtn) {
-      upiIntentBtn.href = `upi://pay?pa=${CONFIG.upiId}&pn=DesiTease&am=${summary.total}&cu=INR&tn=DesiTease_Order`;
-    }
-
-    const mobileTotal = $('#coMobileTotal');
-    const mobileNote = $('#coMobileNote');
-    if (mobileTotal) mobileTotal.textContent = money(summary.total);
-    if (mobileNote) {
-      const count = summary.items.length;
-      mobileNote.textContent = `${count} item${count === 1 ? '' : 's'}${summary.discount > 0 ? ` · save ${money(summary.discount)}` : ''}`;
-    }
-
-    if (badge) {
-      if (summary.discount > 0) {
-        badge.hidden = false;
-        badge.innerHTML = `<span>${summary.isMega ? 'Complete vault saving' : 'Bundle saving applied'}</span><b>− ${money(summary.discount)}</b>`;
-      } else {
-        badge.hidden = true;
-        badge.innerHTML = '';
-      }
-    }
-
-    const formItems = $('#formItems');
-    const formAmount = $('#formAmount');
-    if (formItems) formItems.value = summary.items.map(item => item.name).join(', ');
-    if (formAmount) formAmount.value = summary.total ? money(summary.total) : '';
-
-    updatePaypal(summary);
+    renderCrypto(total);
   }
 
-  function openCheckout() {
-    if (cart.size === 0) {
-      toast('Your bag is empty — add a collection first');
+  function paypalUsd(totalInr) {
+    return (totalInr * CONFIG.paypalMarkup) / state.fx;
+  }
+
+  function cryptoAmount(totalInr, coin) {
+    const rate = state.rates[coin.coin];
+    if (!rate) return null;
+    return (totalInr * CONFIG.cryptoMarkup) / rate;
+  }
+
+  function fmtCrypto(v, coin) {
+    if (v == null) return '—';
+    const p = COIN_PRECISION[coin.coin] ?? 6;
+    return v.toFixed(p);
+  }
+
+  function renderCrypto(total) {
+    const list = $('#cryptoList');
+    if (!list) return;
+    const usdEq = (total * CONFIG.cryptoMarkup) / state.fx;
+
+    const warn = state.ratesLive ? '' :
+      '<p class="crypto__warn">Live rate unavailable — the amounts below are indicative. Confirm with support before sending.</p>';
+
+    list.innerHTML = warn + COINS.map(c => {
+      const amt = cryptoAmount(total, c);
+      return `
+        <div class="coin" data-coin="${c.key}">
+          <button class="coin__head" type="button" aria-expanded="false">
+            <span class="coin__mark" aria-hidden="true">${c.mark}</span>
+            <span class="coin__id">
+              <span class="coin__name">${escapeHtml(c.name)}</span>
+              <span class="coin__net">${escapeHtml(c.net)}${c.tag ? ` · ${c.tag}` : ''}</span>
+            </span>
+            <span class="coin__amt">
+              <b>${fmtCrypto(amt, c)}</b>
+              <span>${escapeHtml(c.mark)} · ≈ ${usd(usdEq)}</span>
+            </span>
+            <svg class="ico coin__chev" aria-hidden="true"><use href="#i-chevron"/></svg>
+          </button>
+          <div class="coin__body">
+            <p class="coin__addr">${escapeHtml(c.addr)}</p>
+            <div class="coin__cta">
+              <button class="coin__btn" type="button" data-copy-addr="${c.key}"><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg> Copy address</button>
+              <button class="coin__btn coin__btn--pay" type="button" data-copy-all="${c.key}">Copy amount + address</button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    const note = $('.pane__foot', $('#pane-crypto'));
+    if (note) {
+      note.textContent = state.ratesLive
+        ? `Amounts include a ${Math.round((CONFIG.cryptoMarkup - 1) * 100)}% crypto-processing margin. Rate refreshed ${state.rateTime ? state.rateTime.toLocaleTimeString() : ''}.`
+        : `Amounts include a ${Math.round((CONFIG.cryptoMarkup - 1) * 100)}% crypto-processing margin.`;
+    }
+  }
+
+  /* ---------------------------------------------------------
+     9. Exchange rates
+     --------------------------------------------------------- */
+  async function refreshRates() {
+    const cached = sessionStorage.getItem('dt-rates');
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (Date.now() - parsed.at < CONFIG.rateTtlMs) {
+          state.rates = { ...parsed.rates };
+          state.ratesLive = true;
+          state.rateTime = new Date(parsed.at);
+          if (parsed.rates.tether > 0 && CONFIG.useLiveFx) state.fx = parsed.rates.tether;
+          return;
+        }
+      } catch { /* ignore */ }
+    }
+
+    const rates = await fetchRates();
+    if (!rates) {
+      state.ratesLive = false;   // keep the static fallback, UI flags it as indicative
       return;
     }
-    const modal = $('#checkoutModal');
-    if (!modal) return;
-    renderCheckout();
-    openModal(modal);
+
+    state.rates = { ...state.rates, ...rates };
+    state.ratesLive = true;
+    state.rateTime = new Date();
+    // USDT is pegged to the dollar, so its INR price is a good live proxy
+    // for the INR/USD rate — keeps PayPal and crypto conversions in step
+    if (rates.tether > 0 && CONFIG.useLiveFx) state.fx = rates.tether;
+    sessionStorage.setItem('dt-rates', JSON.stringify({ at: Date.now(), rates }));
   }
 
-  function updatePaypal(summary = getCartSummary()) {
-    const text = $('#paypalBtnText');
-    const btn = $('#paypalBtn');
-    if (!text || !btn) return;
-    const usd = (summary.total * CONFIG.paypalMarkup) / CONFIG.fxInrPerUsd;
-    text.textContent = `Pay with PayPal — ${usdMoney(usd)}`;
-    btn.dataset.usd = usd.toFixed(2);
-  }
-
-  async function refreshRate() {
-    if (!CONFIG.useLiveFx || !('fetch' in window)) return;
-    try {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 4000);
-      const res = await fetch('https://api.coinbase.com/v2/exchange-rates?currency=USD', {
-        signal: controller.signal,
-        headers: { Accept: 'application/json' }
-      });
-      clearTimeout(timer);
-      if (!res.ok) return;
-      const data = await res.json();
-      const inr = Number(data?.data?.rates?.INR);
-      if (inr > 40 && inr < 200) {
-        CONFIG.fxInrPerUsd = inr;
-        updatePaypal();
+  /** INR price per coin, from CoinGecko with a Coinbase fallback. */
+  async function fetchRates() {
+    const gecko = await fetchJson(CONFIG.rateEndpoint);
+    if (gecko) {
+      const out = {};
+      for (const c of COINS) {
+        const v = gecko[c.coin]?.inr;
+        if (v && v > 0) out[c.coin] = v;
       }
-    } catch (e) {
-      /* fall back to the configured rate */
+      if (out.tether) return out;
     }
+
+    // Coinbase returns "1 INR = X coin", so invert it
+    const cb = await fetchJson(CONFIG.rateFallbackEndpoint);
+    if (cb && cb.data && cb.data.rates) {
+      const out = {};
+      const map = { bitcoin: 'BTC', ethereum: 'ETH', tether: 'USDT', binancecoin: 'BNB' };
+      for (const c of COINS) {
+        const sym = map[c.coin];
+        const r = sym && Number(cb.data.rates[sym]);
+        if (r && r > 0) out[c.coin] = 1 / r;
+      }
+      if (out.tether) return out;
+    }
+    return null;
   }
 
-  /* ---------------------------------------------------------
-     6. Checkout interactions
-     --------------------------------------------------------- */
-  function selectTab(name) {
-    $$('.pay-tab').forEach(tab => {
-      const active = tab.dataset.tab === name;
-      tab.classList.toggle('is-active', active);
-      tab.setAttribute('aria-selected', String(active));
-      tab.tabIndex = active ? 0 : -1;
-    });
-    const panels = { upi: 'panelUpi', paypal: 'panelPaypal', crypto: 'panelCrypto' };
-    $$('.pay-panel').forEach(panel => {
-      panel.hidden = panel.id !== panels[name];
-    });
-  }
-
-  function saveOrderData() {
-    const summary = getCartSummary();
+  async function fetchJson(url) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 6000);
     try {
-      localStorage.setItem('orderData', JSON.stringify({
-        items: summary.items.map(item => ({ id: item.id, name: item.name, type: item.type, price: item.price })),
-        total: summary.total,
-        date: new Date().toISOString()
-      }));
-    } catch (e) {
-      /* the success page will fall back to its empty state */
+      const res = await fetch(url, { signal: ctrl.signal, cache: 'no-store' });
+      if (!res.ok) throw new Error('bad status');
+      return await res.json();
+    } catch {
+      return null;
+    } finally {
+      clearTimeout(timer);
     }
   }
 
   /* ---------------------------------------------------------
-     7. Age gate
+     10. Events
+     --------------------------------------------------------- */
+  function addToCart(id) {
+    if (!packById.has(id)) return;
+    state.cart.has(id) ? state.cart.delete(id) : state.cart.add(id);
+    renderCart();
+    if (state.cart.has(id)) toast(`${packById.get(id).name} added`);
+  }
+
+  function toggleVault(key) {
+    const v = vaults.find(x => x.key === key);
+    if (!v) return;
+    const allIn = v.packs.every(p => state.cart.has(p.id));
+    v.packs.forEach(p => allIn ? state.cart.delete(p.id) : state.cart.add(p.id));
+    renderCart();
+    toast(allIn ? `${v.label} removed` : `${v.label} bundle added`);
+  }
+
+  function bind() {
+    // add / remove
+    document.addEventListener('click', e => {
+      const add = e.target.closest('[data-add]');
+      if (add) { e.preventDefault(); addToCart(add.dataset.add); return; }
+
+      const detail = e.target.closest('[data-detail]');
+      if (detail) { e.preventDefault(); openDetail(detail.dataset.detail); return; }
+
+      const bundle = e.target.closest('[data-bundle]');
+      if (bundle) { e.preventDefault(); toggleVault(bundle.dataset.bundle); return; }
+
+      const rm = e.target.closest('[data-remove]');
+      if (rm) { e.preventDefault(); state.cart.delete(rm.dataset.remove); renderCart(); return; }
+
+      const xBtn = e.target.closest('[data-close]');
+      if (xBtn) { e.preventDefault(); xBtn.closest('dialog')?.close(); return; }
+
+      const copyAddr = e.target.closest('[data-copy-addr]');
+      if (copyAddr) {
+        const c = COINS.find(x => x.key === copyAddr.dataset.copyAddr);
+        if (c) { copy(c.addr).then(ok => toast(ok ? `${c.name} address copied` : 'Copy failed')); }
+        return;
+      }
+
+      const copyAll = e.target.closest('[data-copy-all]');
+      if (copyAll) {
+        const c = COINS.find(x => x.key === copyAll.dataset.copyAll);
+        if (c) {
+          const amt = fmtCrypto(cryptoAmount(cartTotal(), c), c);
+          copy(`${amt} ${c.mark}\n${c.addr}`).then(ok => toast(ok ? 'Amount and address copied' : 'Copy failed'));
+        }
+        return;
+      }
+
+      // coin accordion
+      const head = e.target.closest('.coin__head');
+      if (head) {
+        const coin = head.closest('.coin');
+        const open = coin.classList.toggle('is-open');
+        head.setAttribute('aria-expanded', String(open));
+      }
+    });
+
+    // checkout + cart actions
+    $('#cartCheckout').addEventListener('click', openCheckout);
+    $('#topCartBtn').addEventListener('click', openCheckout);
+    $('#cartClear').addEventListener('click', () => { state.cart.clear(); renderCart(); toast('Cart cleared'); });
+
+    $('#megaBtn').addEventListener('click', () => {
+      packs.forEach(p => state.cart.add(p.id));
+      renderCart();
+      openCheckout();
+    });
+
+    $('#detailAdd').addEventListener('click', e => {
+      addToCart(e.currentTarget.dataset.add);
+      e.currentTarget.textContent = state.cart.has(e.currentTarget.dataset.add) ? 'Remove from cart' : 'Add to cart';
+    });
+
+    // payment tabs
+    $$('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        $$('.tab').forEach(t => {
+          const on = t === tab;
+          t.classList.toggle('is-active', on);
+          t.setAttribute('aria-selected', String(on));
+        });
+        $$('.pane').forEach(p => {
+          const on = p.id === tab.getAttribute('aria-controls');
+          p.classList.toggle('is-active', on);
+          p.hidden = !on;
+        });
+      });
+    });
+
+    // paypal
+    document.addEventListener('click', e => {
+      const copyBtn = e.target.closest('[data-copy]');
+      if (copyBtn) {
+        const val = copyBtn.dataset.copy;
+        navigator.clipboard.writeText(val).then(() => {
+          toast(`Copied: ${val}`);
+        }).catch(() => {
+          toast('Copied to clipboard');
+        });
+      }
+    });
+
+    $('#paypalBtn').addEventListener('click', () => {
+      const total = cartTotal();
+      const amount = paypalUsd(total);
+      const label = `DesiTease order — ${money(total)} (INR)`;
+      const url = `https://paypal.me/${CONFIG.paypalHandle}/${amount.toFixed(2)}USD/${encodeURIComponent(label)}`;
+      window.open(url, '_blank', 'noopener');
+    });
+
+    // close dialogs on backdrop click
+    $$('dialog').forEach(dlg => {
+      dlg.addEventListener('click', e => {
+        if (e.target === dlg) dlg.close();
+      });
+    });
+
+    // Escape closes whatever is open (native dialog cancel is not universal
+    // in every embedded browser, so do it explicitly as well)
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Escape') return;
+      const open = $$('dialog').find(d => d.open);
+      if (open) {
+        e.preventDefault();
+        open.close();
+      }
+    });
+
+    // return focus to whatever opened the dialog
+    $$('dialog').forEach(dlg => {
+      dlg.addEventListener('close', () => {
+        const opener = dlg._opener;
+        dlg._opener = null;
+        if (opener && document.contains(opener)) opener.focus();
+      });
+    });
+
+    // order form
+    const form = $('.order');
+    form.addEventListener('submit', () => {
+      const { lines, saved } = cartLines();
+      const order = {
+        total: cartTotal(),
+        saved,
+        items: Array.from(state.cart).map(id => {
+          const p = packById.get(id);
+          return { id, name: p.name, price: p.price, type: p.type };
+        }),
+        method: $('.tab.is-active')?.textContent.trim().replace(/\s+/g, ' ') || 'UPI',
+        telegram: $('#telegramInput').value.trim(),
+        at: new Date().toISOString()
+      };
+      try { localStorage.setItem(CONFIG.orderKey, JSON.stringify(order)); } catch { /* ignore */ }
+    });
+  }
+
+  /* ---------------------------------------------------------
+     11. Age gate
      --------------------------------------------------------- */
   function initAgeGate() {
-    document.documentElement.dataset.gate = 'accepted';
+    const gate = $('#ageGate');
+    if (gate) gate.hidden = true;
   }
 
   /* ---------------------------------------------------------
-     8. Reveal on scroll
-     --------------------------------------------------------- */
-  function initReveal() {
-    const blocks = $$('.reveal');
-    if (!blocks.length) return;
-
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced || !('IntersectionObserver' in window)) {
-      blocks.forEach(block => block.classList.add('is-visible'));
-      return;
-    }
-
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-
-    blocks.forEach(block => observer.observe(block));
-  }
-
-  /* ---------------------------------------------------------
-     9. Event bindings
-     --------------------------------------------------------- */
-  function bindEvents() {
-    $$('[data-detail]').forEach(el => {
-      el.addEventListener('click', () => openDetail(el.dataset.detail));
-    });
-
-    $$('.add[data-add]').forEach(btn => {
-      btn.addEventListener('click', event => {
-        event.stopPropagation();
-        toggleItem(btn.dataset.add);
-      });
-    });
-
-    $$('.bundle[data-bundle]').forEach(btn => {
-      btn.addEventListener('click', () => toggleVault(btn.dataset.bundle));
-    });
-
-    $('#megaBtn')?.addEventListener('click', toggleMega);
-    $('#topCartBtn')?.addEventListener('click', openCheckout);
-    $('#cartCheckout')?.addEventListener('click', openCheckout);
-    $('#cartClearBtn')?.addEventListener('click', clearCart);
-
-    $$('[data-close]').forEach(el => {
-      el.addEventListener('click', () => closeModal($(`#${el.dataset.close}`)));
-    });
-
-    const detailAdd = $('#detailAddBtn');
-    detailAdd?.addEventListener('click', () => {
-      if (detailAdd.dataset.currentId) toggleItem(detailAdd.dataset.currentId);
-    });
-
-    $('#orderSummary')?.addEventListener('click', event => {
-      const remove = event.target.closest('.summary-item__remove');
-      if (!remove) return;
-      cart.delete(remove.dataset.del);
-      updateCartUI();
-      if (cart.size === 0) {
-        closeModal($('#checkoutModal'));
-        toast('Your bag is empty');
-      } else {
-        renderCheckout();
-      }
-    });
-
-    const tabs = $$('.pay-tab');
-    tabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => selectTab(tab.dataset.tab));
-      tab.addEventListener('keydown', event => {
-        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
-        event.preventDefault();
-        const direction = event.key === 'ArrowRight' ? 1 : -1;
-        const next = tabs[(index + direction + tabs.length) % tabs.length];
-        selectTab(next.dataset.tab);
-        next.focus();
-      });
-    });
-
-    $('#copyUpiBtn')?.addEventListener('click', () => copyToClipboard(CONFIG.upiId, 'UPI ID'));
-
-    $('#paypalBtn')?.addEventListener('click', () => {
-      const btn = $('#paypalBtn');
-      const usd = btn?.dataset.usd;
-      if (!CONFIG.paypalHandle || !usd) {
-        toast('PayPal is unavailable right now');
-        return;
-      }
-      window.open(`https://www.paypal.me/${CONFIG.paypalHandle}/${usd}`, '_blank', 'noopener');
-    });
-
-    $$('.crypto-group__head').forEach(head => {
-      head.addEventListener('click', () => {
-        const group = head.closest('.crypto-group');
-        if (!group) return;
-        const open = group.classList.toggle('is-open');
-        head.setAttribute('aria-expanded', String(open));
-      });
-    });
-
-    $$('.network').forEach(button => {
-      button.addEventListener('click', () => {
-        const address = button.dataset.copy;
-        const coin = button.dataset.coin || 'Crypto';
-        if (address) copyToClipboard(address, `${coin} address`);
-      });
-    });
-
-    $('#desiOrderForm')?.addEventListener('submit', event => {
-      if (cart.size === 0) {
-        event.preventDefault();
-        toast('Your bag is empty');
-        return;
-      }
-      saveOrderData();
-    });
-
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape') {
-        closeModal($('#detailModal'));
-        closeModal($('#checkoutModal'));
-      }
-
-      if (event.key !== 'Tab') return;
-      const open = $$('.modal').find(modal => !modal.hidden);
-      if (!open) return;
-      const items = focusableIn(open);
-      if (!items.length) return;
-      const first = items[0];
-      const last = items[items.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    });
-
-    const head = $('#siteHead');
-    const onScroll = () => head?.classList.toggle('is-scrolled', window.scrollY > 20);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
-    const year = $('#year');
-    if (year) year.textContent = new Date().getFullYear();
-  }
-
-  /* ---------------------------------------------------------
-     10. Boot
+     12. Boot
      --------------------------------------------------------- */
   function boot() {
-    initCatalogue();
-    bindEvents();
-    updateCartUI();
+    renderStats();
+    renderBadges();
+    renderMega();
+    renderCart();
+    bind();
     initAgeGate();
-    initReveal();
-    refreshRate();
+    refreshRates().then(renderCart);
   }
 
   if (document.readyState === 'loading') {
