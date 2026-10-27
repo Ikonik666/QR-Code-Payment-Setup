@@ -168,14 +168,10 @@ a { color: inherit; }
 .hero__bg {
   position: absolute; inset: 0; z-index: -1;
   background:
-    radial-gradient(90rem 40rem at 78% -10%, rgba(14, 165, 233, .20), transparent 60%),
-    radial-gradient(70rem 36rem at 8% 8%, rgba(168, 85, 247, .22), transparent 62%),
-    radial-gradient(circle at 50% 0%, #151928 0%, #07090e 70%);
+    radial-gradient(ellipse 70% 55% at 50% 12%, rgba(28, 48, 88, 0.45) 0%, rgba(12, 22, 42, 0.20) 50%, transparent 80%);
 }
 .hero__bg::after {
-  content: ""; position: absolute; inset: 0;
-  background: url('/assets/bg/hero.webp') center / cover no-repeat;
-  opacity: .16; mix-blend-mode: luminosity;
+  display: none !important;
 }
 .hero__inner {
   width: min(100% - 32px, var(--shell));
@@ -185,12 +181,18 @@ a { color: inherit; }
 }
 .hero__eyebrow {
   display: inline-flex; align-items: center; gap: 9px;
-  padding: 6px 14px 6px 10px; border-radius: 999px;
-  border: 1px solid var(--line); background: var(--surface);
-  font-size: .74rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--ink-2);
+  padding: 6px 15px 6px 12px; border-radius: 999px;
+  border: 1px solid rgba(255, 51, 102, 0.38);
+  background: rgba(255, 51, 102, 0.12);
+  font-size: .76rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: #ff6b8b;
+  box-shadow: 0 0 16px rgba(255, 51, 102, 0.15);
 }
-.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 4px rgba(47, 191, 113, .18); }
+.dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #ff3366;
+  box-shadow: 0 0 0 4px rgba(255, 51, 102, 0.25);
+}
 .hero__title { margin: 18px 0 0; font-size: clamp(2.4rem, 7.2vw, 4.6rem); }
 .grad {
   background: linear-gradient(100deg, var(--brand), var(--brand-2) 42%, var(--gold));
