@@ -60,7 +60,9 @@ html {
 
 body {
   min-height: 100svh;
-  background: radial-gradient(circle at 50% 0%, #151928 0%, #07090e 65%, #05060a 100%) fixed;
+  background-color: #07090e;
+  background-image: radial-gradient(circle at 50% 0%, #151928 0%, #07090e 70%);
+  background-repeat: no-repeat;
   color: var(--ink);
   font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
   font-size: 16px;
@@ -226,11 +228,9 @@ a { color: inherit; }
 .vaults { width: min(100% - 32px, var(--shell)); margin: 0 auto; }
 
 .vault {
-  padding: clamp(40px, 7vw, 72px) 0;
+  padding: clamp(32px, 5vw, 60px) 0;
   border-top: 1px solid var(--line);
   scroll-margin-top: 80px;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 720px;
 }
 .vault:first-child { border-top: 0; }
 
@@ -261,16 +261,19 @@ a { color: inherit; }
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(12px, 1.6vw, 20px);
+  gap: 12px;
 }
-@media (min-width: 600px) {
-  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  /* Two-card vaults sit centred under the three-card rows rather than
-     leaving an empty third column. Six tracks give each card the exact
-     same width as it has in the standard three-column grid. */
-  .grid--pair { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-  .grid--pair > .pack { grid-column: span 2; }
-  .grid--pair > .pack:first-child { grid-column: 2 / span 2; }
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+@media (min-width: 860px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+  }
 }
 
 .pack {
@@ -280,10 +283,11 @@ a { color: inherit; }
   border-radius: 16px;
   background: linear-gradient(180deg, #111728 0%, #0c101a 100%);
   overflow: hidden;
-  transition: transform var(--slow) var(--ease), border-color var(--slow) var(--ease), box-shadow var(--slow) var(--ease), background var(--slow) var(--ease);
+  transform: translateZ(0);
+  transition: transform var(--fast) var(--ease), border-color var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
 }
 .pack:hover {
-  transform: translateY(-4px);
+  transform: translateY(-4px) translateZ(0);
   background: linear-gradient(180deg, #161e33 0%, #0f1422 100%);
 }
 .pack:active { transform: scale(0.98); }
@@ -359,7 +363,7 @@ a { color: inherit; }
 }
 
 .pack__body {
-  display: flex; flex-direction: column; gap: 6px;
+  display: flex; flex-direction: column; gap: 4px;
   padding: 12px 14px 14px; flex: 1;
 }
 .pack__name {
@@ -373,22 +377,22 @@ a { color: inherit; }
 .pack__desc {
   font-size: 0.78rem;
   color: var(--ink-3);
-  line-height: 1.4;
+  line-height: 1.38;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 2.8em;
+  min-height: 2.76em;
 }
 
-.pack__buy { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 6px; }
+.pack__buy { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; margin-top: auto; padding-top: 6px; }
 .price { display: flex; flex-direction: column; line-height: 1.05; }
 .price__was { font-size: .72rem; color: var(--ink-3); font-weight: 500; }
-.price__now { font-family: 'Baloo 2', sans-serif; font-size: 1.42rem; font-weight: 800; }
+.price__now { font-family: 'Baloo 2', sans-serif; font-size: 1.35rem; font-weight: 800; }
 
 .add {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 9px 15px; border-radius: 10px;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border-radius: 9px;
   background: var(--surface-2); border: 1px solid var(--line-strong);
   font-size: .76rem; font-weight: 800; letter-spacing: .02em;
   transition: background var(--fast) var(--ease), color var(--fast) var(--ease), border-color var(--fast) var(--ease), transform var(--fast) var(--ease);
@@ -417,6 +421,7 @@ a { color: inherit; }
   content: ""; position: absolute; inset: -1px; z-index: -1; border-radius: inherit;
   background: conic-gradient(from var(--a, 0deg), var(--brand), var(--brand-2), var(--gold), var(--premium), var(--brand));
   opacity: .32; filter: blur(28px);
+  will-change: transform; transform: translateZ(0);
   animation: spin 14s linear infinite;
 }
 @property --a { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
