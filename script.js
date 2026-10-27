@@ -19,7 +19,7 @@
     cryptoMarkup: 1.20,
 
     paypalHandle: 'desitease',
-    upiId: 'desitease@fam',
+    upiId: 'desigurshermax@fam',
 
     // wallets
     addr: {
@@ -830,7 +830,7 @@
       const total = cartTotal();
       const amount = paypalUsd(total);
       const label = `DesiTease order — ${money(total)} (INR)`;
-      const url = `https://paypal.me/${CONFIG.paypalHandle}/${amount.toFixed(2)}USD/${encodeURIComponent(label)}`;
+      const url = `https://paypal.me/${CONFIG.paypalHandle}/${amount.toFixed(2)}USD`;
       window.open(url, '_blank', 'noopener');
     });
 

@@ -35,12 +35,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="/assets/bg/hero.webp" fetchpriority="high">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="/style.css?v=10">
+<link rel="stylesheet" href="/style.css?v=12">
 </head>
 
 <body>
-<a class="skip-link" href="#main">Skip to catalogue</a>
-
 <!-- ================= icon sprite ================= -->
 <svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
@@ -60,6 +58,8 @@
   <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 21h16"/></symbol>
   <symbol id="i-telegram" viewBox="0 0 24 24"><path d="M21.9 4.3 2.9 11.4c-1 .4-1 1.1 0 1.4l4.7 1.5 1.8 5.6c.2.7.4.7 1 .4l2.6-2 4.8 3.5c.8.5 1.3.2 1.5-.8l2.7-12.7c.2-1.1-.4-1.6-1.1-1Z"/><path d="m7.6 14.3 11-8.4-8.6 9.6-.3 4.1-2.1-5.3Z"/></symbol>
   <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-paypal" viewBox="0 0 24 24"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.789.789 0 0 1 .78-.663h7.244c2.41 0 4.316.59 5.378 1.662 1.054 1.063 1.348 2.527.876 4.354-.51 1.968-1.745 3.518-3.67 4.607-1.32.748-2.91 1.134-4.728 1.134H8.718l-1.01 5.864a.641.641 0 0 1-.632.66z" fill="currentColor"/></symbol>
+<symbol id="i-bitcoin" viewBox="0 0 24 24"><path d="M9 3v2m6-2v2M6 8h10a3 3 0 0 1 0 6H6m0 0h11a3 3 0 0 1 0 6H6m3-12v12m3-12v12m0 0v2m-3-2v2" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round"/></symbol>
 </svg>
 
 <!-- ================= header ================= -->
@@ -83,7 +83,21 @@
   <div class="hero__inner">
     <p class="hero__eyebrow"><span class="dot"></span> New drops every week</p>
     <h1 class="hero__title">Your private<br><span class="grad">archive</span>, unlocked.</h1>
-    <p class="hero__sub">Original stories, audio drama and AI-created content — delivered to your Telegram in minutes. Pay once, keep it forever.</p>
+        <p class="hero__sub">Original stories, audio drama and AI-created content — delivered to your Telegram in minutes. Pay once, keep it forever.</p>
+    <div class="trust-bar">
+      <div class="trust-badge">
+        <svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>
+        <span>Lifetime Access</span>
+      </div>
+      <div class="trust-badge">
+        <svg class="ico" aria-hidden="true"><use href="#i-refresh"/></svg>
+        <span>Regular Updates</span>
+      </div>
+      <div class="trust-badge">
+        <svg class="ico" aria-hidden="true"><use href="#i-support"/></svg>
+        <span>24/7 Support</span>
+      </div>
+    </div>
     <ul class="hero__stats" role="list"><li><b data-stat="packs">12</b><span>Packs</span></li><li><b data-stat="files">60K+</b><span>Files</span></li><li><b>4.9★</b><span>Buyer rating</span></li></ul>
   </div>
 </section>
@@ -235,47 +249,52 @@
   <div class="dlg__body">
     <div class="summary" id="orderSummary"></div>
 
+    <div class="co-payable-heading">Payable Amount: <b id="coTotal">₹0</b></div>
+
     <div class="tabs" role="tablist" aria-label="Payment method">
       <button class="tab is-active" role="tab" id="tab-upi" aria-controls="pane-upi" aria-selected="true" type="button"><svg class="ico" aria-hidden="true"><use href="#i-qr"/></svg> UPI</button>
-      <button class="tab" role="tab" id="tab-paypal" aria-controls="pane-paypal" aria-selected="false" type="button"><span class="tab__brand">P</span> PayPal</button>
-      <button class="tab" role="tab" id="tab-crypto" aria-controls="pane-crypto" aria-selected="false" type="button"><span class="tab__brand">₿</span> Crypto</button>
+      <button class="tab" role="tab" id="tab-paypal" aria-controls="pane-paypal" aria-selected="false" type="button"><span class="tab__brand"><svg class="ico" aria-hidden="true" style="font-size:0.95rem"><use href="#i-paypal"/></svg></span> PayPal</button>
+      <button class="tab" role="tab" id="tab-crypto" aria-controls="pane-crypto" aria-selected="false" type="button"><span class="tab__brand"><svg class="ico" aria-hidden="true" style="font-size:0.95rem"><use href="#i-bitcoin"/></svg></span> Crypto</button>
     </div>
 
     <!-- UPI -->
     <section class="pane is-active" id="pane-upi" role="tabpanel" aria-labelledby="tab-upi">
-      <p class="pane__hint">Scan with any UPI app (GPay, PhonePe, Paytm, BHIM).</p>
-      <img class="qr" src="/assets/brand/upi-qr-desitease.webp" width="720" height="720" alt="DesiTease UPI payment QR code" decoding="async">
-      <p class="pane__amount">Send exactly <b id="upiAmount">₹0</b></p>
-      <a class="cta cta--full upi-intent" id="upiIntentBtn" href="upi://pay?pa=desitease@fam&amp;pn=DesiTease&amp;cu=INR">
-        <svg class="ico" aria-hidden="true"><use href="#i-bolt"/></svg> Pay with any UPI app
-      </a>
-      <div class="upi-id">
-        <span>UPI ID <b id="coUpiId">desitease@fam</b></span>
-        <button class="ghost ghost--inline" id="copyUpiBtn" type="button"><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg> Copy ID</button>
+      <p class="pane__hint">Scan to pay with any UPI App (GPay, PhonePe, Paytm, CRED)</p>
+      <div class="qr-wrap">
+        <img class="qr" src="/upi-qr.jpg" width="300" height="300" alt="DesiTease UPI payment QR code" decoding="async">
       </div>
-      <a class="ghost" href="/assets/brand/upi-qr-desitease.png" download="desitease-upi-qr.png"><svg class="ico" aria-hidden="true"><use href="#i-download"/></svg> Download QR</a>
+      <div class="upi-box">
+        <div class="upi-id-label">UPI ID: <span class="upi-id-val" id="coUpiId">desigurshermax@fam</span></div>
+        <button class="cta cta--upi-copy" id="copyUpiBtn" type="button">
+          <svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg> Copy UPI
+        </button>
+      </div>
+      <a class="qr-download-link" href="/upi-qr.jpg" download="desitease-upi-qr.jpg">
+        <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg> Download QR Code
+      </a>
     </section>
 
     <!-- PayPal -->
     <section class="pane" id="pane-paypal" role="tabpanel" aria-labelledby="tab-paypal" hidden>
-      <p class="pane__hint">International checkout. You will be sent to PayPal to approve the payment.</p>
-      <p class="fx">
+      <p class="pane__hint">International checkout via PayPal. You will be sent to PayPal to approve the payment.</p>
+      <div class="fx">
         <span id="paypalInr">₹0</span>
         <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>
         <span id="paypalUsd">$0.00</span>
-        <em id="paypalNote">includes 20% international processing</em>
-      </p>
-      <button class="cta cta--paypal" type="button" id="paypalBtn"><span class="tab__brand">P</span> Pay with PayPal</button>
+        <em id="paypalNote">includes 20% international processing · live rate</em>
+      </div>
+      <button class="cta cta--paypal" type="button" id="paypalBtn">
+        <svg class="ico" aria-hidden="true" style="font-size:1.1rem"><use href="#i-paypal"/></svg> Pay with PayPal
+      </button>
+      <p class="pane__foot">Secure payment via PayPal. After payment, enter your Telegram and upload your screenshot below.</p>
     </section>
 
     <!-- Crypto -->
     <section class="pane" id="pane-crypto" role="tabpanel" aria-labelledby="tab-crypto" hidden>
-      <p class="pane__hint">Pick a network — the amount is calculated for you. Send the exact amount, then upload your screenshot below.</p>
+      <p class="pane__hint">Pick a network — amount is calculated automatically. Send exact amount, then upload screenshot below.</p>
       <div class="crypto" id="cryptoList"></div>
       <p class="pane__foot">Amounts include a 20% crypto-processing margin. Rates refresh every 10 minutes.</p>
     </section>
-
-    <p class="total">Payable amount <b id="coTotal">₹0</b></p>
 
     <form class="order" name="desi-orders" method="POST" data-netlify="true" netlify-honeypot="bot-field" enctype="multipart/form-data" action="/success.html">
       <input type="hidden" name="form-name" value="desi-orders">
@@ -286,12 +305,12 @@
 
       <label class="field">
         <span>Telegram username</span>
-        <input type="text" name="telegram" id="telegramInput" placeholder="@yourname" required autocomplete="off">
-        <small>No username? Enter your registered phone number instead.</small>
+        <input type="text" name="telegram" id="telegramInput" placeholder="Telegram Username (@YourName)" required autocomplete="off">
+        <small>If no username, enter registered phone number</small>
       </label>
 
       <label class="field">
-        <span>Payment screenshot</span>
+        <span>Upload Payment Screenshot</span>
         <input type="file" name="screenshot" id="screenshotInput" accept="image/*" required>
         <small>PNG or JPG. We match it against your order and send access.</small>
       </label>
@@ -314,6 +333,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="/script.js?v=5" defer></script>
+<script src="/script.js?v=7" defer></script>
 </body>
 </html>
