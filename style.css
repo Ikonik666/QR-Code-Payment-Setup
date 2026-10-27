@@ -253,7 +253,7 @@ a { color: inherit; }
   box-shadow: 0 8px 24px rgba(255, 59, 78, .28);
   transition: transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease), filter var(--fast) var(--ease);
 }
-.bundle:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255, 59, 78, .4); }
+.bundle:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0, 0, 0, .4); }
 .bundle:active { transform: translateY(0) scale(.98); }
 .bundle .ico { font-size: 1rem; }
 
@@ -292,34 +292,37 @@ a { color: inherit; }
 }
 .pack:active { transform: scale(0.98); }
 
-/* Category specific border colors and hover glow borders */
+/* Category specific border colors (clean crisp borders, NO neon glow halo) */
+.pack:hover {
+  transform: translateY(-4px) translateZ(0);
+  background: linear-gradient(180deg, #161e33 0%, #0f1422 100%);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+}
+
 #vault-top .pack {
-  border-color: rgba(255, 149, 0, 0.32);
+  border-color: rgba(255, 149, 0, 0.28);
 }
 #vault-top .pack:hover {
-  border-color: #ff9500;
-  box-shadow: 0 10px 26px rgba(255, 149, 0, 0.28);
+  border-color: rgba(255, 149, 0, 0.65);
 }
 
 #vault-premium .pack {
-  border-color: rgba(168, 85, 247, 0.32);
+  border-color: rgba(168, 85, 247, 0.28);
 }
 #vault-premium .pack:hover {
-  border-color: #a855f7;
-  box-shadow: 0 10px 26px rgba(168, 85, 247, 0.28);
+  border-color: rgba(168, 85, 247, 0.65);
 }
 
 #vault-series .pack {
-  border-color: rgba(255, 42, 85, 0.32);
+  border-color: rgba(255, 42, 85, 0.28);
 }
 #vault-series .pack:hover {
-  border-color: #ff2a55;
-  box-shadow: 0 10px 26px rgba(255, 42, 85, 0.28);
+  border-color: rgba(255, 42, 85, 0.65);
 }
 
 .pack.is-added {
   border-color: #10b981 !important;
-  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.4), 0 8px 20px rgba(16, 185, 129, 0.25) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
 }
 
 .pack__media {
@@ -607,7 +610,7 @@ a { color: inherit; }
   border: 2px solid #ff4757;
   color: #fff;
   background: rgba(255, 71, 87, 0.08);
-  box-shadow: 0 0 14px rgba(255, 71, 87, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .pane { display: none; }

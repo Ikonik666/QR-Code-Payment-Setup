@@ -775,7 +775,36 @@
     selectTab($('#tab-upi'));
 
     $('#copyUpiBtn')?.addEventListener('click', () => {
-      copy(CONFIG.upiId).then(ok => toast(ok ? 'UPI ID copied' : 'Copy failed'));
+      const btn = $('#copyUpiBtn');
+      copy(CONFIG.upiId).then(ok => {
+        if (ok) {
+          toast('UPI ID copied to clipboard');
+          if (btn) {
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<svg class="ico" aria-hidden="true" style="color:#2fbf71"><use href="#i-check"/></svg> <span style="color:#2fbf71">Copied!</span>';
+            setTimeout(() => { btn.innerHTML = orig; }, 2000);
+          }
+        } else {
+          toast('Copy failed');
+        }
+      });
+    });
+
+    const screenshotInput = $('#screenshotInput');
+    screenshotInput?.addEventListener('change', () => {
+      const file = screenshotInput.files?.[0];
+      let info = $('#screenshotFeedback');
+      if (!info) {
+        info = document.createElement('div');
+        info.id = 'screenshotFeedback';
+        info.style.cssText = 'font-size:0.75rem; color:#2fbf71; font-weight:600; margin-top:6px; display:flex; align-items:center; gap:6px;';
+        screenshotInput.parentNode.appendChild(info);
+      }
+      if (file) {
+        info.innerHTML = '✓ ' + escapeHtml(file.name) + ' selected (' + (file.size / 1024).toFixed(0) + ' KB)';
+      } else {
+        info.textContent = '';
+      }
     });
 
     $('#paypalBtn')?.addEventListener('click', () => {
@@ -833,6 +862,7 @@
         date: new Date().toISOString()
       };
       try {
+        localStorage.setItem('orderData', JSON.stringify(order));
         localStorage.setItem(CONFIG.orderKey, JSON.stringify(order));
       } catch (e) {
         /* the confirmation page has an empty state */
@@ -938,6 +968,7 @@
       date: new Date().toISOString()
     };
     try {
+      localStorage.setItem('orderData', JSON.stringify(order));
       localStorage.setItem(CONFIG.orderKey, JSON.stringify(order));
     } catch (e) {}
     return order;

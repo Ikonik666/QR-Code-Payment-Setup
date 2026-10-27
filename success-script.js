@@ -15,7 +15,7 @@
 
   function readOrder() {
     try {
-      const raw = localStorage.getItem(ORDER_KEY);
+      const raw = localStorage.getItem('orderData') || localStorage.getItem('dt-last-order');
       if (!raw) return null;
       const order = JSON.parse(raw);
       if (!order || !Array.isArray(order.items) || order.items.length === 0) return null;
