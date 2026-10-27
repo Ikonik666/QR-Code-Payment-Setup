@@ -719,7 +719,18 @@
       const copyAddr = event.target.closest('[data-copy-addr]');
       if (copyAddr) {
         const coin = COINS.find(entry => entry.key === copyAddr.dataset.copyAddr);
-        if (coin) copy(coin.addr).then(ok => toast(ok ? `${coin.name} address copied` : 'Copy failed'));
+        if (coin) {
+          copy(coin.addr).then(ok => {
+            if (ok) {
+              toast(`${coin.name} address copied`);
+              const orig = copyAddr.innerHTML;
+              copyAddr.innerHTML = '<svg class="ico" aria-hidden="true" style="color:#2fbf71"><use href="#i-check"/></svg> <span style="color:#2fbf71">Copied!</span>';
+              setTimeout(() => { copyAddr.innerHTML = orig; }, 2000);
+            } else {
+              toast('Copy failed');
+            }
+          });
+        }
         return;
       }
 
@@ -728,8 +739,16 @@
         const coin = COINS.find(entry => entry.key === copyAll.dataset.copyAll);
         if (coin) {
           const amount = fmtCrypto(cryptoAmount(cartTotal(), coin), coin);
-          copy(`${amount} ${coin.mark}\n${coin.addr}`)
-            .then(ok => toast(ok ? 'Amount and address copied' : 'Copy failed'));
+          copy(`${amount} ${coin.mark}\n${coin.addr}`).then(ok => {
+            if (ok) {
+              toast('Amount and address copied');
+              const orig = copyAll.innerHTML;
+              copyAll.innerHTML = '<svg class="ico" aria-hidden="true" style="color:#2fbf71"><use href="#i-check"/></svg> <span style="color:#2fbf71">Copied!</span>';
+              setTimeout(() => { copyAll.innerHTML = orig; }, 2000);
+            } else {
+              toast('Copy failed');
+            }
+          });
         }
         return;
       }
