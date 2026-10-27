@@ -1047,18 +1047,19 @@ html[data-gate="accepted"] .gate { display: none; }
 }
 
 /* =========================================================
-   CHECKOUT MODAL (RESTORED HIGH-CONVERTING DESIGN)
-   Clean white card, red accents, FontAwesome icons, compact
-   viewport layout that requires zero scrolling on mobile.
+   CHECKOUT MODAL (DARK BLUEISH THEME - ZERO SCROLL ON MOBILE)
+   Obsidian midnight surface (#0d121f), soft blue-grey borders,
+   glowing red accents, crisp QR card, compact vertical flow.
    ========================================================= */
 #checkoutDialog.dlg--checkout {
   width: min(100% - 20px, 420px) !important;
   max-width: 420px !important;
-  background: #ffffff !important;
-  color: #1e293b !important;
+  background: #0d121f !important;
+  background: linear-gradient(180deg, #111728 0%, #0a0d17 100%) !important;
+  color: #f1f5f9 !important;
   border-radius: 22px !important;
-  border: none !important;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 25px 75px rgba(0, 0, 0, 0.9), 0 0 40px rgba(225, 29, 72, 0.15) !important;
   padding: 0 !important;
   margin: auto !important;
   max-height: 94vh !important;
@@ -1066,8 +1067,8 @@ html[data-gate="accepted"] .gate { display: none; }
 }
 
 #checkoutDialog.dlg--checkout::backdrop {
-  background: rgba(3, 5, 12, 0.85) !important;
-  backdrop-filter: blur(12px) !important;
+  background: rgba(3, 4, 8, 0.88) !important;
+  backdrop-filter: blur(14px) !important;
 }
 
 #checkoutDialog .dlg__head {
@@ -1075,33 +1076,34 @@ html[data-gate="accepted"] .gate { display: none; }
   align-items: center !important;
   justify-content: center !important;
   position: relative !important;
-  background: #ffffff !important;
+  background: transparent !important;
   border-bottom: none !important;
-  padding: 18px 20px 0 !important;
+  padding: 16px 18px 0 !important;
 }
 
 #checkoutDialog .dlg__title {
-  color: #e55039 !important;
-  font-family: 'Baloo 2', 'Montserrat', cursive !important;
-  font-size: 1.65rem !important;
+  color: #ffffff !important;
+  font-family: 'Baloo 2', cursive !important;
+  font-size: 1.55rem !important;
   font-weight: 800 !important;
   margin: 0 !important;
   text-align: center !important;
   line-height: 1.2 !important;
+  letter-spacing: -0.01em !important;
 }
 
 #checkoutDialog .dlg__x {
   position: absolute !important;
-  top: 14px !important;
-  right: 16px !important;
-  background: transparent !important;
-  border: none !important;
-  color: #64748b !important;
-  font-size: 1.6rem !important;
+  top: 12px !important;
+  right: 14px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #94a3b8 !important;
+  font-size: 1.4rem !important;
   font-weight: bold !important;
   cursor: pointer !important;
-  width: 32px !important;
-  height: 32px !important;
+  width: 30px !important;
+  height: 30px !important;
   display: grid !important;
   place-items: center !important;
   border-radius: 50% !important;
@@ -1109,35 +1111,40 @@ html[data-gate="accepted"] .gate { display: none; }
 }
 
 #checkoutDialog .dlg__x:hover {
-  background: rgba(0, 0, 0, 0.06) !important;
-  color: #e55039 !important;
+  background: rgba(225, 29, 72, 0.2) !important;
+  border-color: rgba(225, 29, 72, 0.5) !important;
+  color: #ffffff !important;
 }
 
 #checkoutDialog .dlg__body {
-  padding: 12px 20px 20px !important;
+  padding: 10px 18px 18px !important;
   overflow-y: auto !important;
-  max-height: calc(94vh - 54px) !important;
+  max-height: calc(94vh - 48px) !important;
 }
 
 /* Tabs */
 #checkoutDialog .tabs {
   display: flex !important;
-  gap: 8px !important;
-  margin: 0 0 10px !important;
+  gap: 6px !important;
+  margin: 0 0 8px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  padding: 3px !important;
 }
 
 #checkoutDialog .tab {
   flex: 1 !important;
   padding: 8px 6px !important;
   text-align: center !important;
-  background: #f1f5f9 !important;
+  background: transparent !important;
   border-radius: 9px !important;
   font-family: 'Montserrat', sans-serif !important;
-  font-size: 0.88rem !important;
+  font-size: 0.84rem !important;
   font-weight: 700 !important;
-  color: #475569 !important;
+  color: #94a3b8 !important;
   cursor: pointer !important;
-  border: 1.5px solid transparent !important;
+  border: none !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -1147,20 +1154,19 @@ html[data-gate="accepted"] .gate { display: none; }
 }
 
 #checkoutDialog .tab:hover {
-  background: #e2e8f0 !important;
-  color: #1e293b !important;
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.06) !important;
 }
 
 #checkoutDialog .tab.is-active,
 #checkoutDialog .tab.active {
-  background: #ffffff !important;
-  border-color: #e55039 !important;
-  color: #e55039 !important;
-  box-shadow: 0 3px 10px rgba(229, 80, 57, 0.15) !important;
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.4) !important;
 }
 
 #checkoutDialog .tab i {
-  font-size: 0.95rem !important;
+  font-size: 0.92rem !important;
 }
 
 /* UPI Section */
@@ -1175,27 +1181,27 @@ html[data-gate="accepted"] .gate { display: none; }
 
 #checkoutDialog .pane__hint {
   font-family: 'Montserrat', sans-serif !important;
-  font-size: 0.82rem !important;
-  color: #64748b !important;
+  font-size: 0.78rem !important;
+  color: #94a3b8 !important;
   margin: 0 0 4px !important;
   font-weight: 500 !important;
 }
 
 #checkoutDialog .qr-wrap {
-  margin: 2px auto !important;
-  text-align: center !important;
+  margin: 3px auto !important;
+  background: #ffffff !important;
+  padding: 6px !important;
+  border-radius: 12px !important;
+  width: fit-content !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6) !important;
 }
 
 #checkoutDialog .qr-wrap img.qr {
-  width: 140px !important;
-  height: 140px !important;
-  border-radius: 10px !important;
-  border: 2px solid #e2e8f0 !important;
+  width: 135px !important;
+  height: 135px !important;
+  border-radius: 8px !important;
   display: block !important;
   margin: 0 auto !important;
-  background: #ffffff !important;
-  padding: 2px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
 }
 
 #checkoutDialog .qr-links {
@@ -1204,20 +1210,20 @@ html[data-gate="accepted"] .gate { display: none; }
   justify-content: center !important;
   gap: 8px !important;
   margin: 5px 0 8px !important;
-  font-size: 0.82rem !important;
+  font-size: 0.8rem !important;
   font-family: 'Montserrat', sans-serif !important;
 }
 
 #checkoutDialog .qr-links a,
 #checkoutDialog .qr-links button {
-  color: #e55039 !important;
+  color: #ff4d6d !important;
   text-decoration: underline !important;
   background: transparent !important;
   border: none !important;
   font-weight: 600 !important;
   cursor: pointer !important;
   padding: 0 !important;
-  font-size: 0.82rem !important;
+  font-size: 0.8rem !important;
   font-family: inherit !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -1226,31 +1232,31 @@ html[data-gate="accepted"] .gate { display: none; }
 
 #checkoutDialog .qr-links a:hover,
 #checkoutDialog .qr-links button:hover {
-  color: #c0392b !important;
+  color: #ffffff !important;
 }
 
 #checkoutDialog .qr-links .qr-sep {
-  color: #94a3b8 !important;
-  font-size: 0.9rem !important;
+  color: rgba(255, 255, 255, 0.25) !important;
+  font-size: 0.85rem !important;
 }
 
-/* PayPal Button */
+/* PayPal */
 #checkoutDialog .cta--paypal {
   width: 100% !important;
-  padding: 12px 16px !important;
+  padding: 11px 16px !important;
   border-radius: 9px !important;
   background: #0070ba !important;
   color: #ffffff !important;
   border: none !important;
   font-family: 'Montserrat', sans-serif !important;
-  font-size: 0.92rem !important;
+  font-size: 0.9rem !important;
   font-weight: 700 !important;
   cursor: pointer !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 8px !important;
-  box-shadow: 0 4px 12px rgba(0, 112, 186, 0.25) !important;
+  box-shadow: 0 4px 12px rgba(0, 112, 186, 0.3) !important;
   transition: all 0.2s ease !important;
   margin-top: 4px !important;
 }
@@ -1259,17 +1265,17 @@ html[data-gate="accepted"] .gate { display: none; }
   transform: translateY(-1px) !important;
 }
 
-/* Summary Box */
+/* Summary Box (Dark Blueish Glass) */
 #checkoutDialog .summary {
-  background: #fff9c4 !important;
-  border: 1px solid #f0e68c !important;
-  border-radius: 9px !important;
+  background: rgba(17, 24, 39, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 10px !important;
   padding: 6px 10px !important;
   margin-bottom: 8px !important;
-  max-height: 95px !important;
+  max-height: 90px !important;
   overflow-y: auto !important;
   text-align: left !important;
-  color: #1e293b !important;
+  color: #f1f5f9 !important;
 }
 
 #checkoutDialog .summary__row,
@@ -1278,10 +1284,10 @@ html[data-gate="accepted"] .gate { display: none; }
   justify-content: space-between !important;
   align-items: center !important;
   font-family: 'Montserrat', sans-serif !important;
-  font-size: 0.82rem !important;
+  font-size: 0.8rem !important;
   font-weight: 600 !important;
-  color: #1e293b !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+  color: #e2e8f0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
   padding: 3px 0 !important;
 }
 
@@ -1291,7 +1297,7 @@ html[data-gate="accepted"] .gate { display: none; }
 }
 
 #checkoutDialog .summary__rm {
-  color: #e55039 !important;
+  color: #f43f5e !important;
   cursor: pointer !important;
   margin-left: 8px !important;
   background: transparent !important;
@@ -1302,10 +1308,10 @@ html[data-gate="accepted"] .gate { display: none; }
 }
 
 #checkoutDialog .bundle-tag {
-  color: #15803d !important;
+  color: #4ade80 !important;
   font-family: 'Montserrat', sans-serif !important;
   font-weight: 800 !important;
-  font-size: 0.78rem !important;
+  font-size: 0.76rem !important;
   margin-top: 3px !important;
   display: block !important;
   text-align: center !important;
@@ -1315,15 +1321,16 @@ html[data-gate="accepted"] .gate { display: none; }
 #checkoutDialog .co-total,
 #checkoutDialog .co-payable-heading {
   text-align: center !important;
-  font-size: 1.4rem !important;
+  font-size: 1.45rem !important;
   font-weight: 800 !important;
-  color: #e55039 !important;
+  color: #ff4d6d !important;
   margin: 4px 0 8px !important;
   font-family: 'Baloo 2', 'Montserrat', cursive !important;
   letter-spacing: -0.01em !important;
   border: none !important;
   background: transparent !important;
   padding: 0 !important;
+  text-shadow: 0 0 20px rgba(255, 77, 109, 0.35) !important;
 }
 
 /* Form */
@@ -1343,8 +1350,8 @@ html[data-gate="accepted"] .gate { display: none; }
   font-family: 'Montserrat', sans-serif !important;
   font-weight: 700 !important;
   margin-bottom: 3px !important;
-  font-size: 0.78rem !important;
-  color: #1e293b !important;
+  font-size: 0.76rem !important;
+  color: #cbd5e1 !important;
   text-align: left !important;
 }
 
@@ -1352,28 +1359,29 @@ html[data-gate="accepted"] .gate { display: none; }
 #checkoutDialog .co-input {
   width: 100% !important;
   padding: 8px 12px !important;
-  border: 1px solid #cbd5e1 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
   border-radius: 8px !important;
   margin-bottom: 2px !important;
-  font-size: 0.84rem !important;
+  font-size: 0.82rem !important;
   font-family: 'Montserrat', sans-serif !important;
-  background: #ffffff !important;
-  color: #1e293b !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
   box-sizing: border-box !important;
 }
 
 #checkoutDialog input[type="text"]:focus,
 #checkoutDialog .co-input:focus {
   outline: none !important;
-  border-color: #e55039 !important;
-  box-shadow: 0 0 0 3px rgba(229, 80, 57, 0.12) !important;
+  border-color: #ff4d6d !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.2) !important;
 }
 
 #checkoutDialog .field small,
 #checkoutDialog .co-help {
   font-family: 'Montserrat', sans-serif !important;
-  font-size: 0.7rem !important;
-  color: #64748b !important;
+  font-size: 0.68rem !important;
+  color: #94a3b8 !important;
   text-align: left !important;
   display: block !important;
   margin: 0 0 4px !important;
@@ -1383,12 +1391,12 @@ html[data-gate="accepted"] .gate { display: none; }
 #checkoutDialog .co-input-file {
   width: 100% !important;
   padding: 4px 8px !important;
-  border: 1px solid #cbd5e1 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
   border-radius: 8px !important;
   margin-bottom: 8px !important;
-  font-size: 0.78rem !important;
-  background: #ffffff !important;
-  color: #1e293b !important;
+  font-size: 0.76rem !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: #94a3b8 !important;
   box-sizing: border-box !important;
 }
 
@@ -1397,14 +1405,14 @@ html[data-gate="accepted"] .gate { display: none; }
   width: 100% !important;
   padding: 11px 16px !important;
   border-radius: 9px !important;
-  background: linear-gradient(135deg, #e55039 0%, #eb3b5a 100%) !important;
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
   color: #ffffff !important;
   border: none !important;
   font-family: 'Montserrat', sans-serif !important;
-  font-size: 0.96rem !important;
+  font-size: 0.95rem !important;
   font-weight: 800 !important;
   cursor: pointer !important;
-  box-shadow: 0 4px 14px rgba(229, 80, 57, 0.35) !important;
+  box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4) !important;
   transition: all 0.2s ease !important;
   display: flex !important;
   align-items: center !important;
@@ -1415,5 +1423,5 @@ html[data-gate="accepted"] .gate { display: none; }
 #checkoutDialog .cta--full:hover,
 #checkoutDialog .co-btn:hover {
   transform: translateY(-1px) !important;
-  box-shadow: 0 6px 18px rgba(229, 80, 57, 0.45) !important;
+  box-shadow: 0 6px 20px rgba(225, 29, 72, 0.55) !important;
 }
