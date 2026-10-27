@@ -450,7 +450,7 @@
 
     // Update Total
     const payableStr = money(total);
-    if ($('#coTotal')) $('#coTotal').textContent = payableStr;
+    if ($('#coTotal')) $('#coTotal').textContent = `Payable Amount: ${payableStr}`;
     if ($('#coCartTotal')) $('#coCartTotal').textContent = `Payable Amount: ${payableStr}`;
     const upiAmount = $('#upiAmount');
     if (upiAmount) upiAmount.textContent = payableStr;
@@ -800,7 +800,7 @@
           toast('UPI ID copied to clipboard');
           if (btn) {
             const orig = btn.innerHTML;
-            btn.innerHTML = '<svg class="ico" aria-hidden="true" style="color:#2fbf71"><use href="#i-check"/></svg> <span style="color:#2fbf71">Copied!</span>';
+            btn.innerHTML = '<i class="fas fa-check" style="color:#15803d"></i> <span style="color:#15803d; font-weight:700;">Copied!</span>';
             setTimeout(() => { btn.innerHTML = orig; }, 2000);
           }
         } else {
