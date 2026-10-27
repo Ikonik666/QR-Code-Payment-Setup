@@ -450,7 +450,7 @@
 
     // Update Total
     const payableStr = money(total);
-    if ($('#coTotal')) $('#coTotal').textContent = `Payable Amount: ${payableStr}`;
+    if ($('#coTotal')) $('#coTotal').textContent = payableStr;
     if ($('#coCartTotal')) $('#coCartTotal').textContent = `Payable Amount: ${payableStr}`;
     const upiAmount = $('#upiAmount');
     if (upiAmount) upiAmount.textContent = payableStr;
