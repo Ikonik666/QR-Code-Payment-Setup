@@ -430,22 +430,33 @@
     const baseTotal = cartTotal();
     const summary = getCartSummary();
 
+    const isFullCollection = isMega;
     let couponDiscount = 0;
     const couponKey = (state.coupon || '').trim().toUpperCase();
-    const couponRate = CONFIG.validCoupons ? (CONFIG.validCoupons[couponKey] || 0) : 0;
-    if (couponRate > 0 && baseTotal > 0) {
-      couponDiscount = Math.round(baseTotal * couponRate);
+    const isSunday = (couponKey === 'SUNDAY50' || couponKey === 'SUNDAY' || couponKey === 'DESI50');
+
+    if (isSunday && isFullCollection) {
+      couponDiscount = Math.round(mega.price * 0.50);
+    } else if (isSunday && !isFullCollection) {
+      couponDiscount = 0;
     }
     const finalTotal = Math.max(0, baseTotal - couponDiscount);
 
     const summaryBox = $('#orderSummary');
     if (summaryBox) {
       let discountBanner = '';
-      if (couponRate > 0) {
+      if (isSunday && isFullCollection) {
         discountBanner = `
           <div class="bundle-tag summary__tag coupon-applied-tag">
-            <span>🎉 50% SUNDAY BUNDLE DISCOUNT APPLIED (-${money(couponDiscount)})</span>
+            <span>🎉 50% SUNDAY FULL COLLECTION DISCOUNT APPLIED (-${money(couponDiscount)})</span>
             <button type="button" class="coupon-rm-btn" id="rmCouponBtn" aria-label="Remove coupon" title="Remove coupon">&times;</button>
+          </div>
+        `;
+      } else if (isSunday && !isFullCollection) {
+        discountBanner = `
+          <div class="bundle-tag summary__tag" style="background: rgba(255, 177, 66, 0.14); border-color: rgba(255, 177, 66, 0.5); color: #ffb142;">
+            <span>⚠️ SUNDAY50 is valid only on The Full Collection (All 12 Packs)!</span>
+            <button type="button" class="coupon-chip" id="upgradeToMegaBtn" style="margin-left: 6px;">Upgrade for ₹834</button>
           </div>
         `;
       } else if (isMega) {
@@ -481,15 +492,16 @@
     }
 
     // Update coupon box if coupon active
-    const couponBox = $('#coCouponBox');
-    if (couponBox) {
-      const msgEl = $('#couponMsg');
-      if (couponRate > 0) {
-        if (msgEl) {
-          msgEl.textContent = `🎉 Coupon ${couponKey} active: 50% OFF applied!`;
-          msgEl.className = 'co-coupon-msg is-success';
-          msgEl.hidden = false;
-        }
+    const msgEl = $('#couponMsg');
+    if (msgEl) {
+      if (isSunday && isFullCollection) {
+        msgEl.textContent = `🎉 Coupon ${couponKey} active: 50% OFF on Full Collection (₹834)!`;
+        msgEl.className = 'co-coupon-msg is-success';
+        msgEl.hidden = false;
+      } else if (isSunday && !isFullCollection) {
+        msgEl.innerHTML = '⚠️ <strong>SUNDAY50</strong> is valid only on <strong>The Full Collection (All 12 Packs)</strong>. <button type="button" class="coupon-chip" id="upgradeToMegaBtn">Upgrade for ₹834</button>';
+        msgEl.className = 'co-coupon-msg is-error';
+        msgEl.hidden = false;
       }
     }
 
@@ -523,7 +535,7 @@
     const items = $('#formItems');
     const amount = $('#formAmount');
     if (items) {
-      const couponSuffix = couponRate > 0 ? ` [Coupon ${couponKey}: 50% OFF]` : '';
+      const couponSuffix = (isSunday && isFullCollection) ? ` [Coupon ${couponKey}: 50% OFF Full Collection]` : '';
       items.value = summary.items.map(item => item.name).join(', ') + couponSuffix;
     }
     if (amount) amount.value = payableStr;
@@ -722,21 +734,34 @@
       return;
     }
 
-    if (CONFIG.validCoupons && CONFIG.validCoupons[code]) {
+    const isSunday = (code === 'SUNDAY50' || code === 'SUNDAY' || code === 'DESI50');
+    const isFullCollection = (packs.length > 0 && packs.every(pack => state.cart.has(pack.id)));
+
+    if (isSunday) {
+      if (!isFullCollection) {
+        if (msgEl) {
+          msgEl.innerHTML = '⚠️ <strong>SUNDAY50</strong> applies only to <strong>The Full Collection (All 12 Packs)</strong>. <button type="button" class="coupon-chip" id="upgradeToMegaBtn">Upgrade to Full Collection for ₹834</button>';
+          msgEl.className = 'co-coupon-msg is-error';
+          msgEl.hidden = false;
+        }
+        toast('SUNDAY50 is valid only on The Full Collection (All 12 Packs)');
+        return;
+      }
+
       state.coupon = code;
       try {
         sessionStorage.setItem('dt_coupon', code);
       } catch (e) {}
       if (msgEl) {
-        msgEl.textContent = `🎉 Coupon ${code} applied! 50% OFF active.`;
+        msgEl.textContent = `🎉 Coupon ${code} applied! 50% OFF on The Full Collection active (₹834 total).`;
         msgEl.className = 'co-coupon-msg is-success';
         msgEl.hidden = false;
       }
       renderCheckout();
-      toast(`Coupon ${code} applied: 50% OFF!`);
+      toast(`Coupon ${code} applied: 50% OFF The Full Collection!`);
     } else {
       if (msgEl) {
-        msgEl.textContent = '⚠️ Invalid coupon code. Try SUNDAY50';
+        msgEl.textContent = '⚠️ Invalid coupon code. Try SUNDAY50 on the Full Collection.';
         msgEl.className = 'co-coupon-msg is-error';
         msgEl.hidden = false;
       }
@@ -916,12 +941,10 @@
 
     // Listen for coupon triggers and remove button
     document.addEventListener('click', (e) => {
-      const chip = e.target.closest('#chipSunday50, #chipSunday50Checkout, #barCouponClaim');
+      const chip = e.target.closest('#chipSunday50, #chipSunday50Checkout, #barCouponClaim, #upgradeToMegaBtn');
       if (chip) {
         e.preventDefault();
-        if (state.cart.size === 0) {
-          grabMega();
-        }
+        grabMega();
         applyCoupon('SUNDAY50');
         openCheckout();
         return;

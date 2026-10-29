@@ -1534,3 +1534,12 @@ html[data-gate="accepted"] .gate { display: none; }
   max-height: 120px;
   overflow-y: auto;
 }
+
+.mega__sunday-tag {
+  display: block;
+  font-size: 0.95rem;
+  color: #2ed573;
+  font-weight: 800;
+  margin-top: 4px;
+  letter-spacing: -0.01em;
+}
