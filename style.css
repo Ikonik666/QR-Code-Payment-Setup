@@ -1926,74 +1926,155 @@ html[data-gate="accepted"] .gate { display: none; }
 }
 
 /* 1. Normal Day Urgency Bar (Fake Timer) */
+/* 1. Normal Day Flash Sale Banner (Sexy background image & glowing gradient) */
 .bar-normal {
-  background: #090d16;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  color: var(--ink-2, #94a3b8);
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 8px 14px;
+  position: relative;
+  background: #080c18;
+  border-bottom: 1.5px solid rgba(255, 71, 87, 0.45);
+  box-shadow: 0 4px 20px rgba(255, 45, 85, 0.22);
+  overflow: hidden;
+  min-height: 44px;
 }
 
 .bar-normal[hidden] {
   display: none !important;
 }
 
+.bar-normal__bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/bg/hero-lounge.webp');
+  background-size: cover;
+  background-position: center 25%;
+  opacity: 0.25;
+  filter: saturate(1.4) contrast(1.15);
+  pointer-events: none;
+}
+
+.bar-normal__glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    rgba(8, 12, 24, 0.94) 0%,
+    rgba(255, 45, 85, 0.22) 40%,
+    rgba(255, 107, 129, 0.18) 60%,
+    rgba(8, 12, 24, 0.94) 100%
+  );
+  pointer-events: none;
+}
+
 .bar-normal__inner {
-  max-width: 1200px;
+  position: relative;
+  max-width: 1240px;
   margin: 0 auto;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
   gap: 10px;
-  flex-wrap: wrap;
+}
+
+.bar-normal__left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .bar-normal__badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 71, 87, 0.15);
-  border: 1px solid rgba(255, 71, 87, 0.45);
-  color: #ff4757;
-  padding: 2px 8px;
+  background: linear-gradient(135deg, rgba(255, 71, 87, 0.4), rgba(255, 47, 85, 0.2));
+  border: 1px solid #ff4757;
+  color: #fff;
+  padding: 3px 9px;
   border-radius: 999px;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 0 12px rgba(255, 71, 87, 0.35);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.bar-normal__msg {
-  color: #cbd5e1;
-  font-weight: 700;
+.bar-normal__deal {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.bar-normal__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .bar-normal__timer {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  color: #fff;
+  gap: 5px;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bar-normal__timer-lbl {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.bar-normal__timer-digits {
+  font-family: ui-monospace, Menlo, monospace;
   font-weight: 800;
+  color: #fff;
+  white-space: nowrap;
 }
 
 .timer-digit {
-  font-family: ui-monospace, Menlo, monospace;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 2px 6px;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #ff6b7d;
+  padding: 2px 5px;
+  color: #ff6b81;
+  font-weight: 800;
 }
 
-.bar-normal__pill {
-  font-size: 0.68rem;
-  color: #f1c40f;
-  background: rgba(241, 196, 15, 0.12);
-  border: 1px solid rgba(241, 196, 15, 0.35);
-  padding: 2px 8px;
-  border-radius: 999px;
+.bar-normal__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, #ff4757, #ff2d55);
+  color: #fff;
+  font-size: 0.75rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  padding: 5px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 2px 12px rgba(255, 45, 85, 0.45);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bar-normal__cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(255, 45, 85, 0.65);
 }
 
 /* 2. Sunday Sexy Promotional Banner */
@@ -2577,4 +2658,77 @@ html[data-gate="accepted"] .gate { display: none; }
   text-transform: uppercase;
   color: var(--ink-3);
   font-weight: 600;
+}
+
+
+/* Responsive adjustments for bar-normal and bar-sunday */
+@media (max-width: 640px) {
+  .bar-normal {
+    min-height: 42px;
+  }
+  .bar-normal__inner {
+    padding: 6px 10px;
+    justify-content: space-between;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  .bar-normal__left {
+    gap: 6px;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+  .bar-normal__badge {
+    padding: 2px 6px;
+    font-size: 0.64rem;
+    gap: 4px;
+  }
+  .bar-normal__badge .pulse-dot {
+    width: 5px;
+    height: 5px;
+  }
+  .bar-normal__deal {
+    font-size: 0.82rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .bar-normal__right {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .bar-normal__timer-lbl {
+    display: none;
+  }
+  .bar-normal__timer {
+    font-size: 0.74rem;
+  }
+  .timer-digit {
+    padding: 1px 4px;
+    font-size: 0.72rem;
+  }
+  .bar-normal__cta {
+    padding: 3px 8px;
+    font-size: 0.68rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .bar-normal__inner {
+    padding: 5px 6px;
+    gap: 4px;
+  }
+  .bar-normal__deal {
+    font-size: 0.76rem;
+  }
+  .bar-normal__cta {
+    display: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .bar-normal__deal {
+    font-size: 0.78rem;
+  }
+  .bar-normal__cta {
+    display: none;
+  }
 }

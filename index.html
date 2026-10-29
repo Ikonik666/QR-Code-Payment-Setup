@@ -68,13 +68,20 @@
 <div class="promo-header" id="promoHeader">
   <!-- Normal Day Banner (Fake 14m Timer) -->
   <aside class="bar-normal" id="barNormal" role="region" aria-label="Limited time flash deal">
+    <div class="bar-normal__bg" aria-hidden="true"></div>
+    <div class="bar-normal__glow" aria-hidden="true"></div>
     <div class="bar-normal__inner">
-      <span class="bar-normal__badge"><span class="pulse-dot" aria-hidden="true"></span> FLASH SALE</span>
-      <span class="bar-normal__msg">30% OFF ALL VAULTS ENDS IN</span>
-      <div class="bar-normal__timer" aria-live="polite">
-        <span class="timer-digit" id="timerMins">14</span>m : <span class="timer-digit" id="timerSecs">35</span>s
+      <div class="bar-normal__left">
+        <span class="bar-normal__badge"><span class="pulse-dot" aria-hidden="true"></span> FLASH SALE</span>
+        <span class="bar-normal__deal">30% OFF ALL VAULTS</span>
       </div>
-      <span class="bar-normal__pill">PRICES INCREASE SOON</span>
+      <div class="bar-normal__right">
+        <div class="bar-normal__timer" aria-live="polite">
+          <span class="bar-normal__timer-lbl">ENDS IN</span>
+          <span class="bar-normal__timer-digits"><span class="timer-digit" id="timerMins">14</span>m : <span class="timer-digit" id="timerSecs">35</span>s</span>
+        </div>
+        <a href="#vault-top" class="bar-normal__cta" id="flashClaimBtn">Claim 30% Off →</a>
+      </div>
     </div>
   </aside>
 
