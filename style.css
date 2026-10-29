@@ -1427,7 +1427,8 @@ html[data-gate="accepted"] .gate { display: none; }
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  margin-bottom: 12px;
+  margin-top: 16px;
+  margin-bottom: 14px;
 }
 
 .dlg--checkout .tab {
@@ -1581,11 +1582,12 @@ html[data-gate="accepted"] .gate { display: none; }
 
 /* Summary Collapsible Accordion */
 .summary__collapse {
-  margin-top: 6px;
+  margin-top: 12px;
+  margin-bottom: 16px;
   background: rgba(10, 15, 26, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--r-sm, 6px);
-  padding: 4px 8px;
+  padding: 6px 12px;
 }
 .summary__toggle {
   display: flex;
