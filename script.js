@@ -929,7 +929,7 @@
     // Coupon apply button
     
     // Sunday Banner CTA and Offer Mode Switch
-    $('#sundayHeroClaim')?.addEventListener('click', (e) => {
+    $('#sundayClaimBtn, #sundayHeroClaim')?.addEventListener('click', (e) => {
       e.preventDefault();
       grabMega();
       applyCoupon('SUNDAY50');
@@ -944,6 +944,11 @@
       toast(next ? 'Switched to Sunday 50% Mode' : 'Switched to Normal Day Mode');
       initOfferEngine();
       if (checkoutDialog?.open) renderCheckout();
+    });
+
+    $('#couponToggle')?.addEventListener('click', () => {
+      const exp = $('#couponExpand');
+      if (exp) exp.hidden = !exp.hidden;
     });
 
     $('#applyCouponBtn')?.addEventListener('click', () => {
@@ -1163,9 +1168,8 @@
 
   function initOfferEngine() {
     const isSunday = isSundayActive();
-    const urgencyBarNormal = $('#urgencyBarNormal');
-    const sundayBanner = $('#sundayBanner');
-    const megaSundayCallout = $('#megaSundayCallout');
+    const normalAnnouncement = $('#normalAnnouncement');
+    const sundayAnnouncement = $('#sundayAnnouncement');
     const megaBadge = $('[data-mega-badge]');
     const megaPrice = $('[data-mega-price]');
     const megaWas = $('[data-mega-was]');
@@ -1174,27 +1178,25 @@
     const toggleBtn = $('#offerToggleBtn');
 
     if (isSunday) {
-      // 1. Show Sunday sexy banner, hide normal urgency bar
-      if (urgencyBarNormal) urgencyBarNormal.hidden = true;
-      if (sundayBanner) sundayBanner.hidden = false;
+      // 1. Show Sunday announcement, hide normal
+      if (normalAnnouncement) normalAnnouncement.hidden = true;
+      if (sundayAnnouncement) sundayAnnouncement.hidden = false;
 
       // 2. The 30% is completely gone on The Full Vault!
       if (megaBadge) {
-        megaBadge.textContent = '🔥 50% OFF SUNDAY EXCLUSIVE';
+        megaBadge.textContent = '🔥 Sunday Special · 50% Off';
         megaBadge.classList.add('is-sunday');
       }
       if (megaPrice) megaPrice.textContent = '₹834';
       if (megaWas) megaWas.textContent = '₹1,668';
-      if (megaSave) megaSave.textContent = 'You save ₹1,549 today (Flat 50% OFF with SUNDAY50)';
-      if (megaBtn) megaBtn.textContent = 'Grab Full Collection @ ₹834';
-      if (megaSundayCallout) megaSundayCallout.hidden = false;
+      if (megaSave) megaSave.textContent = 'Save ₹1,549 today (Flat 50% OFF with SUNDAY50)';
+      if (megaBtn) megaBtn.textContent = 'Get Complete Vault @ ₹834';
       if (toggleBtn) {
-        toggleBtn.textContent = '● Sunday 50% Active (Click for Normal Day)';
+        toggleBtn.textContent = '● Sunday 50% Mode (Click for Normal Day)';
         toggleBtn.style.borderColor = '#ff4757';
         toggleBtn.style.color = '#fff';
       }
 
-      // Automatically set SUNDAY50 as active coupon on Sunday
       if (!state.coupon) {
         state.coupon = 'SUNDAY50';
       }
@@ -1213,28 +1215,18 @@
         const mStr = String(m).padStart(2, '0');
         const sStr = String(s).padStart(2, '0');
 
-        const elH = $('#sundayHours');
-        const elM = $('#sundayMins');
-        const elS = $('#sundaySecs');
-        if (elH) elH.textContent = hStr;
-        if (elM) elM.textContent = mStr;
-        if (elS) elS.textContent = sStr;
-
-        const megaTimer = $('#megaTimerText');
-        if (megaTimer) megaTimer.textContent = `${hStr}h ${mStr}m ${sStr}s`;
-        const coTimer = $('#coTimerText');
-        if (coTimer) coTimer.textContent = `${hStr}h ${mStr}m`;
+        const elDigits = $('#sundayTimerDigits');
+        if (elDigits) elDigits.textContent = `${hStr}h ${mStr}m ${sStr}s`;
       }
       updateSundayTimer();
       setInterval(updateSundayTimer, 1000);
 
     } else {
       // Normal Days (Mon - Sat)
-      // 1. Show fake off timer urgency bar, hide Sunday banner
-      if (urgencyBarNormal) urgencyBarNormal.hidden = false;
-      if (sundayBanner) sundayBanner.hidden = true;
+      if (normalAnnouncement) normalAnnouncement.hidden = false;
+      if (sundayAnnouncement) sundayAnnouncement.hidden = true;
 
-      // 2. Normal 30% discount is active
+      // Normal 30% discount is active
       if (megaBadge) {
         megaBadge.textContent = '30% off everything';
         megaBadge.classList.remove('is-sunday');
@@ -1243,14 +1235,12 @@
       if (megaWas) megaWas.textContent = '₹2,383';
       if (megaSave) megaSave.textContent = 'You keep ₹715 in your pocket';
       if (megaBtn) megaBtn.textContent = 'Grab the bundle';
-      if (megaSundayCallout) megaSundayCallout.hidden = true;
       if (toggleBtn) {
-        toggleBtn.textContent = '○ Normal Day Mode (Click to preview Sunday Offer)';
+        toggleBtn.textContent = '○ Normal Day Mode (Click for Sunday 50%)';
         toggleBtn.style.borderColor = 'rgba(255, 255, 255, 0.16)';
         toggleBtn.style.color = '#94a3b8';
       }
 
-      // If Sunday coupon was saved, clear it for normal days
       if (state.coupon === 'SUNDAY50' || state.coupon === 'SUNDAY' || state.coupon === 'DESI50') {
         state.coupon = null;
         try { sessionStorage.removeItem('dt_coupon'); } catch (e) {}
@@ -1283,15 +1273,8 @@
         const mStr = String(m).padStart(2, '0');
         const sStr = String(s).padStart(2, '0');
 
-        const elMins = $('#timerMins');
-        const elSecs = $('#timerSecs');
-        if (elMins) elMins.textContent = mStr;
-        if (elSecs) elSecs.textContent = sStr;
-
-        const megaTimer = $('#megaTimerText');
-        if (megaTimer) megaTimer.textContent = `${mStr}m ${sStr}s`;
-        const coTimer = $('#coTimerText');
-        if (coTimer) coTimer.textContent = `${mStr}:${sStr}`;
+        const elDigits = $('#timerDigits');
+        if (elDigits) elDigits.textContent = `${mStr}:${sStr}`;
       }
 
       updateFakeTimer();

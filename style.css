@@ -1758,3 +1758,157 @@ html[data-gate="accepted"] .gate { display: none; }
     justify-content: center;
   }
 }
+
+
+/* =========================================================
+   MINIMALIST TOP ANNOUNCEMENT & CLEAN PROMO ENGINE
+   ========================================================= */
+.top-announcement {
+  background: rgba(10, 14, 24, 0.96);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  color: var(--ink-2, #94a3b8);
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 0.78rem;
+  padding: 8px 16px;
+  position: relative;
+  z-index: 50;
+}
+
+.top-announcement__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.announcement-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.announcement-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255, 71, 87, 0.15);
+  border: 1px solid rgba(255, 71, 87, 0.35);
+  color: #ff4757;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.announcement-badge.is-sunday {
+  background: rgba(46, 213, 115, 0.15);
+  border-color: rgba(46, 213, 115, 0.4);
+  color: #2ed573;
+}
+
+.announcement-text {
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+.announcement-text strong {
+  color: #fff;
+  font-weight: 800;
+}
+
+.announcement-timer {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-weight: 800;
+  color: #fff;
+  margin-left: 2px;
+}
+
+.announcement-cta {
+  background: #ff4757;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: opacity var(--fast) var(--ease);
+}
+
+.announcement-cta:hover {
+  opacity: 0.9;
+}
+
+/* Minimalist Coupon Row */
+.co-coupon-wrap {
+  margin: 4px 0 10px;
+  text-align: center;
+}
+
+.co-coupon-toggle {
+  background: none;
+  border: none;
+  color: var(--ink-2, #94a3b8);
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 3px 6px;
+  transition: color var(--fast) var(--ease);
+}
+
+.co-coupon-toggle:hover {
+  color: #fff;
+}
+
+.co-coupon-expand {
+  margin-top: 8px;
+  animation: fadeIn 0.2s ease;
+}
+
+.co-coupon-input-group {
+  display: flex;
+  gap: 8px;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.co-coupon-input {
+  flex: 1;
+  background: rgba(8, 12, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--r-sm, 6px);
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+.co-coupon-btn {
+  padding: 6px 14px;
+  background: #ff4757;
+  color: #fff;
+  border: none;
+  border-radius: var(--r-sm, 6px);
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .top-announcement {
+    padding: 6px 10px;
+    font-size: 0.72rem;
+  }
+  .announcement-content {
+    gap: 6px;
+  }
+}

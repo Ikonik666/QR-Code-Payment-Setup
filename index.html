@@ -35,7 +35,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="/assets/bg/hero.webp" fetchpriority="high">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="/style.css?v=25">
+<link rel="stylesheet" href="/style.css?v=30">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -64,22 +64,23 @@
 </svg>
 
 <!-- ================= header ================= -->
-<!-- ================= top announcement & promo banners ================= -->
-<div class="promo-header-container" id="promoHeader">
-  <!-- 1. Normal Days Urgency Bar (Fake Timer) -->
-  <aside class="urgency-bar urgency-bar--normal" id="urgencyBarNormal" role="region" aria-label="Limited time flash deal">
-    <div class="urgency-bar__inner">
-      <span class="urgency-bar__lead">
-        <span class="pulse-dot" aria-hidden="true"></span>
-        <strong class="urgency-bar__tag">FLASH SALE</strong>
-        <span class="urgency-bar__sep">·</span>
-        <span class="urgency-bar__msg">30% OFF ALL VAULTS ENDS IN</span>
-      </span>
-      <div class="urgency-timer" aria-live="polite">
-        <div class="timer-segment"><span class="timer-val" id="timerMins">14</span><span class="timer-lbl">m</span></div>
-        <span class="timer-div">:</span>
-        <div class="timer-segment"><span class="timer-val" id="timerSecs">35</span><span class="timer-lbl">s</span></div>
-      </div>
+<!-- ================= top announcement ================= -->
+<aside class="top-announcement" id="topAnnouncement" role="region" aria-label="Store Announcement">
+  <div class="top-announcement__inner">
+    <!-- Normal Day Content -->
+    <div class="announcement-content" id="normalAnnouncement">
+      <span class="announcement-badge">FLASH SALE</span>
+      <span class="announcement-text">30% off all vaults ends in <strong class="announcement-timer" id="timerDigits">14:35</strong></span>
+    </div>
+
+    <!-- Sunday Content -->
+    <div class="announcement-content" id="sundayAnnouncement" hidden>
+      <span class="announcement-badge is-sunday">SUNDAY 50% DROP</span>
+      <span class="announcement-text">Full 12-Pack Vault for <strong>₹834</strong> · Ends in <strong class="announcement-timer" id="sundayTimerDigits">23h 15m</strong></span>
+      <button type="button" class="announcement-cta" id="sundayClaimBtn">Claim ₹834</button>
+    </div>
+  </div>
+</aside>
       <span class="urgency-bar__pill">PRICES INCREASE SOON</span>
     </div>
   </aside>
@@ -225,19 +226,10 @@
 
 <section class="mega" aria-labelledby="h-mega">
   <div class="mega__inner">
-        <div class="mega__copy">
-      <div class="mega__header-row">
-        <p class="mega__badge" data-mega-badge>30% off everything</p>
-        <div class="mega__timer-badge">
-          <span class="pulse-live"></span>
-          <span>Deal ends in <strong id="megaTimerText">14m 35s</strong></span>
-        </div>
-      </div>
+    <div class="mega__copy">
+      <p class="mega__badge" data-mega-badge>30% off everything</p>
       <h2 class="mega__title" id="h-mega">The Full Vault</h2>
       <p class="mega__sub">Every pack on the site, one payment, permanent access.</p>
-      <div class="mega__sunday-coupon" id="megaSundayCallout" hidden>
-        <span>🎁 <strong>Sunday Special:</strong> All 12 packs for <strong>50% OFF</strong>! Code <strong class="coupon-chip" id="chipSunday50">SUNDAY50</strong> active (Only <strong>₹834</strong>).</span>
-      </div>
       <p class="mega__price"><span class="mega__now" data-mega-price>₹1,668</span><s class="mega__was" data-mega-was>₹2,383</s></p>
       <p class="mega__save" data-mega-save>You keep ₹715 in your pocket</p>
       <button class="cta" type="button" id="megaBtn">Grab the bundle</button>
@@ -312,14 +304,16 @@
     <!-- Centered Payable Amount matching Image 2 -->
     <div class="co-payable-heading">Payable Amount: <b id="coTotal">₹0</b></div>
 
-    <!-- Sunday 50% Coupon Box -->
-    <div class="co-coupon-box" id="coCouponBox">
-      <div class="co-coupon-input-group">
-        <input type="text" id="couponInput" class="co-coupon-input" placeholder="Coupon Code (e.g. SUNDAY50)" autocomplete="off" autocapitalize="characters">
-        <button type="button" id="applyCouponBtn" class="co-coupon-btn">Apply</button>
+        <!-- Minimalist Promo Code Toggle -->
+    <div class="co-coupon-wrap" id="coCouponWrap">
+      <button type="button" class="co-coupon-toggle" id="couponToggle">Have a promo code?</button>
+      <div class="co-coupon-expand" id="couponExpand" hidden>
+        <div class="co-coupon-input-group">
+          <input type="text" id="couponInput" class="co-coupon-input" placeholder="Coupon Code" autocomplete="off" autocapitalize="characters">
+          <button type="button" id="applyCouponBtn" class="co-coupon-btn">Apply</button>
+        </div>
+        <div class="co-coupon-msg" id="couponMsg" hidden></div>
       </div>
-      <div class="co-coupon-hint"><span>🔥 Sunday Special: <strong class="coupon-chip" id="chipSunday50Checkout">SUNDAY50</strong> gives 50% OFF on The Full Collection (All 12 Packs)!</span></div>
-      <div class="co-coupon-msg" id="couponMsg" hidden></div>
     </div>
 
     <!-- Tabs with authentic icons matching Image 2 -->
@@ -404,6 +398,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="/script.js?v=25" defer></script>
+<script src="/script.js?v=30" defer></script>
 </body>
 </html>
