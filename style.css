@@ -2529,3 +2529,14 @@ html[data-gate="accepted"] .gate { display: none; }
   font-weight: 800;
   user-select: none;
 }
+
+.hero__cat-pill--main {
+  background: rgba(255, 59, 78, 0.14);
+  border-color: rgba(255, 59, 78, 0.38);
+  color: #ffffff;
+  font-weight: 700;
+}
+.hero__cat-pill--main:hover {
+  background: rgba(255, 59, 78, 0.25);
+  border-color: rgba(255, 59, 78, 0.6);
+}

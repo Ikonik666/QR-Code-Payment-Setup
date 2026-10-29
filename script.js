@@ -127,13 +127,13 @@
      3. Read the catalogue out of the DOM
      --------------------------------------------------------- */
   const VAULT_LABELS = {
-    top: 'MMS & Desi Erotica',
-    prem: 'Actresses, OTT & AI',
-    premium: 'Actresses, OTT & AI',
-    series: 'Spy Cam & Taboo Vault',
-    library: 'MMS & Desi Erotica',
-    studio: 'Actresses, OTT & AI',
-    atelier: 'Spy Cam & Taboo Vault'
+    top: 'Top Picks',
+    prem: 'Premium Vault',
+    premium: 'Premium Vault',
+    series: 'Dark Vault',
+    library: 'Top Picks',
+    studio: 'Premium Vault',
+    atelier: 'Dark Vault'
   };
 
   const packs = $$('.pack').map(el => ({
