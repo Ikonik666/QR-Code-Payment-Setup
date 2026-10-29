@@ -1495,7 +1495,7 @@ html[data-gate="accepted"] .gate { display: none; }
   align-items: center;
   justify-content: center;
   gap: 6px;
-  margin: 6px auto 10px;
+  margin: 12px auto 6px;
   color: #ff6b7d;
   font-size: 0.82rem;
   font-weight: 700;
