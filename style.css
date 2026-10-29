@@ -361,37 +361,53 @@ a { color: inherit; }
 }
 
 
+/* Base Pack Badges: Matching Size, Height, Border and Baseline */
+.pack__type,
 .card-info-icon {
   position: absolute;
-  right: 10px;
   bottom: 10px;
-  z-index: 5;
+  height: 28px;
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
-  padding: 5px 11px;
-  border-radius: 7px;
-  background: rgba(7, 9, 14, 0.82);
+  padding: 0 10px;
+  border-radius: 6px;
+  background: rgba(8, 12, 22, 0.88);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  font-family: 'Montserrat', system-ui, sans-serif;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
   font-size: 0.65rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-  transition: transform var(--fast) var(--ease), background var(--fast) var(--ease), border-color var(--fast) var(--ease);
+  color: #f1f5f9;
+  line-height: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+  pointer-events: none;
 }
+
+/* .pack__type styled in base_boxes_css */
+
+.card-info-icon {
+  right: 10px;
+  z-index: 4;
+}
+
 .card-info-icon .ico {
+  width: 13px;
+  height: 13px;
   font-size: 0.78rem;
-  color: var(--gold);
+  color: var(--gold, #ffb142);
+  display: block;
 }
+
 .pack:hover .card-info-icon {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.18);
   border-color: rgba(255, 255, 255, 0.45);
-  transform: scale(1.05);
 }
 
 .pack__media {
@@ -897,14 +913,22 @@ body.is-gated { overflow: hidden; }
   .price span, .price__now { font-size: 1.38rem; } .price s, .price__was { font-size: 0.82rem; }
   .add { padding: 8px 11px; font-size: .7rem; }
   .add .ico { display: none; }
-  .pack__type,
+    .pack__type,
+  .card-info-icon,
   .pack__info {
-    left: auto; right: auto; bottom: 8px;
-    padding: 4px 6px; font-size: .54rem; letter-spacing: .02em;
+    bottom: 8px;
+    height: 24px;
+    padding: 0 8px;
+    font-size: 0.58rem;
+    letter-spacing: 0.04em;
+    border-radius: 5px;
+    box-sizing: border-box;
   }
-  .pack__type { left: 8px; }
-  .pack__info { right: 8px; gap: 4px; }
-  .pack__info .ico { font-size: .82em; }
+  .pack__type { left: 8px; right: auto; }
+  .card-info-icon,
+  .pack__info { right: 8px; left: auto; gap: 4px; }
+  .card-info-icon .ico,
+  .pack__info .ico { width: 11px; height: 11px; font-size: 0.72rem; }
   .specs { grid-template-columns: 1fr 1fr; }
   
 /* Trust bar tabs under hero */
