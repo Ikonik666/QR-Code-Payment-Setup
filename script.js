@@ -971,15 +971,7 @@
       openCheckout();
     });
 
-    $('#offerToggleBtn')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      const current = isSundayActive();
-      const next = !current;
-      sessionStorage.setItem('dt_sunday_preview', next ? '1' : '0');
-      toast(next ? 'Switched to Sunday 50% Mode' : 'Switched to Normal Day Mode');
-      initOfferEngine();
-      if (checkoutDialog?.open) renderCheckout();
-    });
+
 
     $('#couponToggle')?.addEventListener('click', () => {
       const exp = $('#couponExpand');
@@ -1197,11 +1189,8 @@
     if (params.get('offer') === 'normal' || params.get('sunday') === '0' || params.get('sunday') === 'false') {
       return false;
     }
-    const preview = sessionStorage.getItem('dt_sunday_preview');
-    if (preview === '1') return true;
-    if (preview === '0') return false;
 
-    // Real-world: Sunday is getDay() === 0 (starts 00:00:00, ends 23:59:59 Sunday)
+    // Automatically activates on Sundays (starts 00:00:00 Sunday, deactivates Monday 00:00:00)
     return new Date().getDay() === 0;
   }
 
@@ -1215,7 +1204,7 @@
     const megaWas = $('[data-mega-was]');
     const megaSave = $('[data-mega-save]');
     const megaBtn = $('#megaBtn');
-    const toggleBtn = $('#offerToggleBtn');
+    
 
     if (isSunday) {
       // 1. Show Sunday sexy banner, hide normal urgency bar
@@ -1232,11 +1221,7 @@
       if (megaSave) megaSave.textContent = 'SAVE 50% TODAY';
       if (megaBtn) megaBtn.textContent = 'Get Complete Vault · ₹834';
       if (megaSundayCallout) megaSundayCallout.hidden = false;
-      if (toggleBtn) {
-        toggleBtn.textContent = '● Sunday 50% Active (Click for Normal Day)';
-        toggleBtn.style.borderColor = '#ff4757';
-        toggleBtn.style.color = '#fff';
-      }
+      
 
       // Automatically set SUNDAY50 as active coupon on Sunday
       if (!state.coupon) {
@@ -1288,11 +1273,7 @@
       if (megaSave) megaSave.textContent = 'SAVE 30%';
       if (megaBtn) megaBtn.textContent = 'Get Complete Vault · ₹1,668';
       if (megaSundayCallout) megaSundayCallout.hidden = true;
-      if (toggleBtn) {
-        toggleBtn.textContent = '○ Normal Day Mode (Click to preview Sunday Offer)';
-        toggleBtn.style.borderColor = 'rgba(255, 255, 255, 0.16)';
-        toggleBtn.style.color = '#94a3b8';
-      }
+      
 
       // If Sunday coupon was saved, clear it for normal days
       if (state.coupon === 'SUNDAY50' || state.coupon === 'SUNDAY' || state.coupon === 'DESI50') {
