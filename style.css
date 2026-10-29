@@ -2462,45 +2462,6 @@ html[data-gate="accepted"] .gate { display: none; }
 }
 
 
-/* Hero Category Navigation Ribbon */
-.hero__cats {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  max-width: 720px;
-  margin: 16px auto 0;
-  padding: 0 10px;
-}
-.hero__cat-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  border-radius: 999px;
-  color: #e2e8f0;
-  font-size: 0.76rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-.hero__cat-pill:hover {
-  background: rgba(255, 59, 78, 0.16);
-  border-color: rgba(255, 59, 78, 0.45);
-  color: #ffffff;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 59, 78, 0.2);
-}
-.hero__cat-pill .cat-icon {
-  font-size: 0.85rem;
-  line-height: 1;
-}
-
 /* Trust Bar & Items */
 .trust-bar {
   display: flex;
@@ -2530,12 +2491,7 @@ html[data-gate="accepted"] .gate { display: none; }
   user-select: none;
 }
 
-.hero__cat-pill--main {
-  background: rgba(255, 59, 78, 0.14);
-  border-color: rgba(255, 59, 78, 0.38);
-  color: #ffffff;
-  font-weight: 700;
-}
+
 .hero__cat-pill--main:hover {
   background: rgba(255, 59, 78, 0.25);
   border-color: rgba(255, 59, 78, 0.6);
