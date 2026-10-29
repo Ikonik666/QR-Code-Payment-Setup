@@ -35,7 +35,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="/assets/bg/hero.webp" fetchpriority="high">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="/style.css?v=15">
+<link rel="stylesheet" href="/style.css?v=16">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -64,6 +64,24 @@
 </svg>
 
 <!-- ================= header ================= -->
+<!-- ================= urgency announcement banner ================= -->
+<aside class="urgency-bar" id="urgencyBar" role="region" aria-label="Limited time flash deal">
+  <div class="urgency-bar__inner">
+    <span class="urgency-bar__lead">
+      <span class="pulse-dot" aria-hidden="true"></span>
+      <strong class="urgency-bar__tag">FLASH SALE</strong>
+      <span class="urgency-bar__sep">·</span>
+      <span class="urgency-bar__msg">30% OFF ALL VAULTS ENDS IN</span>
+    </span>
+    <div class="urgency-timer" aria-live="polite">
+      <div class="timer-segment"><span class="timer-val" id="timerMins">14</span><span class="timer-lbl">m</span></div>
+      <span class="timer-div">:</span>
+      <div class="timer-segment"><span class="timer-val" id="timerSecs">35</span><span class="timer-lbl">s</span></div>
+    </div>
+    <span class="urgency-bar__pill">PRICES INCREASE SOON</span>
+  </div>
+</aside>
+
 <header class="topbar">
   <div class="topbar__inner">
     <a class="brand" href="#main" title="DesiTease — home">
@@ -178,7 +196,13 @@
 <section class="mega" aria-labelledby="h-mega">
   <div class="mega__inner">
     <div class="mega__copy">
-      <p class="mega__badge">30% off everything</p>
+      <div class="mega__header-row">
+        <p class="mega__badge">30% off everything</p>
+        <div class="mega__timer-badge">
+          <span class="pulse-live"></span>
+          <span>Deal ends in <strong id="megaTimerText">14m 35s</strong></span>
+        </div>
+      </div>
       <h2 class="mega__title" id="h-mega">The Full Vault</h2>
       <p class="mega__sub">Every pack on the site, one payment, permanent access.</p>
       <p class="mega__price"><span class="mega__now" data-mega-price>₹1,668</span><s class="mega__was" data-mega-was>₹2,383</s></p>
@@ -248,6 +272,10 @@
   </div>
 
   <div class="dlg__body">
+    <div class="co-urgency-notice">
+      <svg class="ico" aria-hidden="true" style="color:#ff4d6d"><use href="#i-bolt"/></svg>
+      <span>Cart &amp; 20% discount reserved for <strong id="coTimerText">14:35</strong>. Complete order now!</span>
+    </div>
     <div class="summary" id="orderSummary"></div>
 
     <div class="tabs" role="tablist" aria-label="Payment method">
@@ -329,6 +357,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="/script.js?v=9" defer></script>
+<script src="/script.js?v=10" defer></script>
 </body>
 </html>

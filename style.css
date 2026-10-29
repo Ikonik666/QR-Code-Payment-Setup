@@ -454,9 +454,37 @@ a { color: inherit; }
 }
 
 .pack__buy { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; margin-top: auto; padding-top: 6px; }
-.price { display: flex; flex-direction: column; line-height: 1.05; }
-.price__was { font-size: .72rem; color: var(--ink-3); font-weight: 500; }
-.price__now { font-family: 'Baloo 2', sans-serif; font-size: 1.35rem; font-weight: 800; }
+.price {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.1;
+  gap: 2px;
+}
+.price s,
+.price__was {
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-decoration: line-through;
+  text-decoration-color: #ef4444;
+  text-decoration-thickness: 2.2px;
+  letter-spacing: 0.02em;
+  opacity: 0.92;
+  margin-bottom: 2px;
+  display: inline-block;
+}
+.price span,
+.price__now {
+  font-family: 'Baloo 2', 'Montserrat', sans-serif;
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-shadow: 0 0 16px rgba(255, 255, 255, 0.25);
+}
 
 .add {
   display: inline-flex; align-items: center; gap: 6px;
@@ -503,10 +531,36 @@ a { color: inherit; }
 }
 .mega__title { margin: 16px 0 0; font-size: clamp(1.9rem, 5vw, 3rem); }
 .mega__sub { margin-top: 8px; color: var(--ink-2); font-size: .92rem; max-width: 42ch; }
-.mega__price { display: flex; align-items: baseline; gap: 12px; margin-top: 22px; }
-.mega__now { font-family: 'Baloo 2', sans-serif; font-size: clamp(2.1rem, 6vw, 3.2rem); font-weight: 800; line-height: 1; }
-.mega__was { color: var(--ink-3); font-size: 1.05rem; font-weight: 600; }
-.mega__save { margin-top: 8px; color: var(--ok); font-size: .85rem; font-weight: 700; }
+.mega__price { display: flex; align-items: baseline; gap: 14px; margin-top: 20px; }
+.mega__now {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: clamp(2.4rem, 6vw, 3.4rem);
+  font-weight: 900;
+  line-height: 1;
+  color: #ffffff;
+  text-shadow: 0 0 24px rgba(255, 59, 78, 0.4);
+}
+.mega__was {
+  color: #94a3b8;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-decoration: line-through;
+  text-decoration-color: #ef4444;
+  text-decoration-thickness: 2.5px;
+}
+.mega__save {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.16);
+  border: 1px solid rgba(34, 197, 94, 0.45);
+  color: #4ade80;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
 
 .mega__list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
 .mega__list li {
@@ -836,7 +890,7 @@ body.is-gated { overflow: hidden; }
   .pack__body { padding: 12px 12px 14px; gap: 6px; }
   .pack__name { font-size: .96rem; }
   .pack__desc { font-size: .78rem; }
-  .price__now { font-size: 1.2rem; }
+  .price span, .price__now { font-size: 1.38rem; } .price s, .price__was { font-size: 0.82rem; }
   .add { padding: 8px 11px; font-size: .7rem; }
   .add .ico { display: none; }
   .pack__type,
@@ -941,4 +995,177 @@ html[data-gate="accepted"] .gate { display: none; }
 
 @media (max-height: 720px) {
   .gate { align-items: start; overflow-y: auto; }
+}
+
+
+/* =========================================================
+   URGENCY & LIVE DEAL TIMERS
+   ========================================================= */
+.urgency-bar {
+  background: linear-gradient(90deg, #18090f 0%, #2f0b15 50%, #18090f 100%);
+  border-bottom: 1px solid rgba(255, 59, 78, 0.35);
+  color: #fff;
+  padding: 9px 16px;
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 0.8rem;
+  position: relative;
+  z-index: 50;
+  box-shadow: 0 4px 20px rgba(255, 59, 78, 0.18);
+}
+.urgency-bar__inner {
+  width: min(100% - 24px, var(--shell));
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+.urgency-bar__lead {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+  animation: urgentPulse 1.4s infinite;
+}
+@keyframes urgentPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.35); }
+}
+.urgency-bar__tag {
+  color: #ff4d6d;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+.urgency-bar__sep {
+  color: rgba(255, 255, 255, 0.3);
+}
+.urgency-bar__msg {
+  color: #f1f5f9;
+  font-weight: 600;
+}
+.urgency-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.timer-segment {
+  display: inline-flex;
+  align-items: baseline;
+  background: rgba(255, 59, 78, 0.18);
+  border: 1px solid rgba(255, 59, 78, 0.45);
+  border-radius: 6px;
+  padding: 2px 7px;
+  box-shadow: 0 0 10px rgba(255, 59, 78, 0.2);
+}
+.timer-val {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-weight: 900;
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+.timer-lbl {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #ff4d6d;
+  margin-left: 2px;
+}
+.timer-div {
+  font-weight: 800;
+  color: #ff4d6d;
+  animation: urgentBlink 1s infinite;
+}
+@keyframes urgentBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+.urgency-bar__pill {
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+/* Mega Timer Badge */
+.mega__header-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.mega__timer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.38);
+  color: #fca5a5;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.mega__timer-badge strong {
+  color: #ffffff;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+.pulse-live {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
+  animation: urgentPulse 1.4s infinite;
+}
+
+/* Checkout Urgency Notice */
+.co-urgency-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 59, 78, 0.1);
+  border: 1px solid rgba(255, 59, 78, 0.28);
+  border-radius: 9px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  font-size: 0.78rem;
+  color: #fca5a5;
+  font-weight: 600;
+  text-align: center;
+}
+.co-urgency-notice strong {
+  color: #ffffff;
+  font-family: ui-monospace, monospace;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .urgency-bar {
+    padding: 7px 12px;
+  }
+  .urgency-bar__inner {
+    gap: 6px 10px;
+  }
+  .urgency-bar__msg {
+    display: none;
+  }
+  .urgency-bar__pill {
+    font-size: 0.65rem;
+    padding: 2px 7px;
+  }
 }

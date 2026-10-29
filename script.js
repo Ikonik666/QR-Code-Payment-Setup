@@ -953,6 +953,59 @@
   /* ---------------------------------------------------------
      13. Boot
      --------------------------------------------------------- */
+  
+  /* ---------------------------------------------------------
+     Deal Countdown Timer (Urgency Engine)
+     --------------------------------------------------------- */
+  function initDealTimer() {
+    const DURATION_SECS = 14 * 60 + 35; // 14 mins 35 secs
+    const STORAGE_KEY = 'dt_urgency_expiry_v2';
+
+    let expiry = parseInt(sessionStorage.getItem(STORAGE_KEY) || '0', 10);
+    const now = Date.now();
+
+    if (!expiry || expiry <= now) {
+      expiry = now + DURATION_SECS * 1000;
+      sessionStorage.setItem(STORAGE_KEY, String(expiry));
+    }
+
+    function updateTimers() {
+      const currentTime = Date.now();
+      let remainingSecs = Math.max(0, Math.floor((expiry - currentTime) / 1000));
+
+      // Perpetual loop so it never gets stuck at 00:00
+      if (remainingSecs <= 0) {
+        expiry = Date.now() + DURATION_SECS * 1000;
+        sessionStorage.setItem(STORAGE_KEY, String(expiry));
+        remainingSecs = DURATION_SECS;
+      }
+
+      const m = Math.floor(remainingSecs / 60);
+      const s = remainingSecs % 60;
+      const mStr = String(m).padStart(2, '0');
+      const sStr = String(s).padStart(2, '0');
+
+      const elMins = document.getElementById('timerMins');
+      const elSecs = document.getElementById('timerSecs');
+      if (elMins) elMins.textContent = mStr;
+      if (elSecs) elSecs.textContent = sStr;
+
+      const megaTimer = document.getElementById('megaTimerText');
+      if (megaTimer) megaTimer.textContent = `${mStr}m ${sStr}s`;
+
+      const coTimer = document.getElementById('coTimerText');
+      if (coTimer) coTimer.textContent = `${mStr}:${sStr}`;
+
+      const genericTimers = document.querySelectorAll('.timer-display');
+      genericTimers.forEach(el => {
+        el.textContent = `${mStr}:${sStr}`;
+      });
+    }
+
+    updateTimers();
+    setInterval(updateTimers, 1000);
+  }
+
   function boot() {
     renderStats();
     renderBadges();
@@ -960,6 +1013,7 @@
     renderCart();
     bind();
     initAgeGate();
+    initDealTimer();
     refreshRates().then(renderCart);
   }
 
