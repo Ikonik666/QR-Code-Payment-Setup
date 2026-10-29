@@ -924,7 +924,13 @@ body.is-gated { overflow: hidden; }
     border-radius: 5px;
     box-sizing: border-box;
   }
-  .pack__type { left: 8px; right: auto; }
+  .pack__type {
+    left: 8px;
+    right: auto;
+    max-width: calc(100% - 75px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   .card-info-icon,
   .pack__info { right: 8px; left: auto; gap: 4px; }
   .card-info-icon .ico,
