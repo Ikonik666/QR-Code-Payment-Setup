@@ -963,6 +963,24 @@
     
     // Coupon apply button
     
+    // Normal Flash Sale 30% Offer CTA & Banner Click -> Smooth scroll to bottom 30% bundle offer
+    function scrollToBundle(e) {
+      if (e) e.preventDefault();
+      const bundle = document.getElementById('bundleOffer') || document.querySelector('.mega');
+      if (bundle) {
+        bundle.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        bundle.classList.remove('bundle-highlight');
+        void bundle.offsetWidth;
+        bundle.classList.add('bundle-highlight');
+      }
+    }
+
+    $('#flashClaimBtn')?.addEventListener('click', scrollToBundle);
+    $('#barNormal')?.addEventListener('click', (e) => {
+      if (e.target.closest('#flashClaimBtn')) return;
+      scrollToBundle(e);
+    });
+
     // Sunday Banner CTA and Offer Mode Switch
     $('#sundayClaimBtn, #sundayHeroClaim')?.addEventListener('click', (e) => {
       e.preventDefault();
