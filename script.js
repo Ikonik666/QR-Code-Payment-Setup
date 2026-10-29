@@ -165,6 +165,8 @@
     };
   });
 
+  const vaultByKey = new Map(vaults.map(v => [v.key, v]));
+
   const allSubtotal = packs.reduce((sum, pack) => sum + pack.price, 0);
   const mega = {
     price: Math.round(allSubtotal * (1 - CONFIG.megaDiscount)),
@@ -865,7 +867,7 @@
         if (vKey === 'mega') {
           state.cart.clear();
         } else {
-          const v = vaultByKey.get(vKey);
+          const v = vaultByKey?.get(vKey) || vaults.find(entry => entry.key === vKey);
           if (v) v.packs.forEach(p => state.cart.delete(p.id));
         }
         renderCart();
