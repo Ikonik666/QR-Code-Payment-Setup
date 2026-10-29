@@ -1169,3 +1169,368 @@ html[data-gate="accepted"] .gate { display: none; }
     padding: 2px 7px;
   }
 }
+
+
+/* =========================================================
+   CHECKOUT DIALOG (DARK THEME - ZERO SCROLL COMPACT)
+   ========================================================= */
+.dlg--checkout {
+  width: min(100% - 20px, 480px);
+  max-width: calc(100vw - 20px);
+  max-height: min(94svh, 860px);
+  margin: auto;
+  padding: 0;
+  border-radius: var(--r-xl, 16px);
+  background: linear-gradient(180deg, #111728 0%, #090d16 100%);
+  color: var(--ink, #f1f5f9);
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.dlg--checkout .dlg__head {
+  padding: 12px 16px;
+  background: rgba(12, 16, 26, 0.96);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dlg--checkout .dlg__body {
+  padding: 14px 16px 18px;
+  overflow-y: auto;
+  max-height: calc(min(94svh, 860px) - 56px);
+}
+
+.co-payable-heading {
+  text-align: center;
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 8px 0 12px;
+  letter-spacing: -0.01em;
+}
+
+.co-payable-heading b {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.55rem;
+  color: #fff;
+  font-weight: 800;
+  margin-left: 4px;
+}
+
+/* Coupon Box */
+.co-coupon-box {
+  background: rgba(17, 23, 40, 0.85);
+  border: 1px dashed rgba(255, 77, 109, 0.35);
+  border-radius: var(--r-md, 8px);
+  padding: 8px 10px;
+  margin-bottom: 12px;
+}
+
+.co-coupon-input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.co-coupon-input {
+  flex: 1;
+  background: rgba(8, 12, 20, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--r-sm, 6px);
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+
+.co-coupon-input:focus {
+  border-color: #ff4757;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 71, 87, 0.2);
+}
+
+.co-coupon-btn {
+  padding: 8px 16px;
+  background: #ff4757;
+  color: #fff;
+  border: none;
+  border-radius: var(--r-sm, 6px);
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background var(--fast) var(--ease), transform var(--fast) var(--ease);
+}
+
+.co-coupon-btn:hover {
+  background: #ff6b7d;
+  transform: translateY(-1px);
+}
+
+.co-coupon-hint {
+  margin-top: 6px;
+  font-size: 0.76rem;
+  color: var(--ink-2, #94a3b8);
+  text-align: center;
+}
+
+.coupon-chip {
+  display: inline-block;
+  background: rgba(255, 77, 109, 0.18);
+  border: 1px solid rgba(255, 77, 109, 0.5);
+  color: #ff6b7d;
+  padding: 1px 7px;
+  border-radius: 4px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: all var(--fast) var(--ease);
+}
+
+.coupon-chip:hover {
+  background: #ff4d6d;
+  color: #fff;
+}
+
+.co-coupon-msg {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.co-coupon-msg.is-success {
+  background: rgba(46, 213, 115, 0.15);
+  color: #2ed573;
+  border: 1px solid rgba(46, 213, 115, 0.35);
+}
+
+.co-coupon-msg.is-error {
+  background: rgba(255, 71, 87, 0.15);
+  color: #ff4757;
+  border: 1px solid rgba(255, 71, 87, 0.35);
+}
+
+.coupon-applied-tag {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(46, 213, 115, 0.14) !important;
+  border: 1px dashed rgba(46, 213, 115, 0.55) !important;
+  color: #2ed573 !important;
+  font-weight: 800 !important;
+}
+
+.coupon-rm-btn {
+  background: none;
+  border: none;
+  color: #ff4757;
+  font-size: 1.2rem;
+  font-weight: 800;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+.coupon-rm-btn:hover {
+  color: #fff;
+}
+
+/* Tabs & Panes */
+.dlg--checkout .tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.dlg--checkout .tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 8px;
+  border-radius: var(--r-sm, 6px);
+  border: 1px solid var(--line, rgba(255,255,255,0.1));
+  background: var(--surface, #101625);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink-2, #94a3b8);
+  cursor: pointer;
+  transition: all var(--fast) var(--ease);
+}
+
+.dlg--checkout .tab:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.dlg--checkout .tab.is-active {
+  border: 2px solid #ff4757;
+  color: #fff;
+  background: rgba(255, 71, 87, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* QR & UPI Section */
+.qr-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 6px 0;
+}
+
+.qr-wrap .qr {
+  width: min(170px, 50vw);
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  background: #fff;
+  padding: 6px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.upi-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0 6px;
+  padding: 12px 14px;
+  border-radius: var(--r-md, 8px);
+  background: rgba(17, 23, 40, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.upi-id-label {
+  font-size: 0.84rem;
+  color: var(--ink-2, #94a3b8);
+  font-weight: 600;
+}
+
+.upi-id-val {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #f1c40f;
+  margin-left: 4px;
+}
+
+.cta--upi-copy {
+  margin-top: 2px;
+  padding: 11px 20px;
+  background: linear-gradient(135deg, #e55039, #eb2f06);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(229, 80, 57, 0.4);
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  transition: transform var(--fast) var(--ease), filter var(--fast) var(--ease);
+}
+
+.cta--upi-copy:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.qr-download-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 6px auto 10px;
+  color: #ff6b7d;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: underline;
+  width: 100%;
+  transition: color var(--fast) var(--ease);
+}
+
+.qr-download-link:hover {
+  color: #fff;
+}
+
+/* Urgency Bar Sunday Button */
+.bar-coupon-btn {
+  background: #ff4757;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: transform var(--fast) var(--ease), background var(--fast) var(--ease);
+}
+
+.bar-coupon-btn:hover {
+  background: #ff6b7d;
+  transform: scale(1.04);
+}
+
+/* Mega Sunday Banner */
+.mega__sunday-coupon {
+  margin: 10px 0 6px;
+  padding: 8px 12px;
+  background: rgba(255, 77, 109, 0.12);
+  border: 1px dashed rgba(255, 77, 109, 0.4);
+  border-radius: var(--r-sm, 6px);
+  font-size: 0.82rem;
+  color: #f1f5f9;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+
+/* Summary Collapsible Accordion */
+.summary__collapse {
+  margin-top: 6px;
+  background: rgba(10, 15, 26, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--r-sm, 6px);
+  padding: 4px 8px;
+}
+.summary__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-2, #94a3b8);
+  padding: 4px 0;
+  user-select: none;
+}
+.summary__toggle::-webkit-details-marker {
+  display: none;
+}
+.summary__arrow {
+  transition: transform var(--fast) var(--ease);
+  font-size: 0.75rem;
+}
+.summary__collapse[open] .summary__arrow {
+  transform: rotate(180deg);
+}
+.summary__content {
+  margin-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 4px;
+  max-height: 120px;
+  overflow-y: auto;
+}

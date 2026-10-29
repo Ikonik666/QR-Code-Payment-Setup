@@ -35,7 +35,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="/assets/bg/hero.webp" fetchpriority="high">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="/style.css?v=16">
+<link rel="stylesheet" href="/style.css?v=21">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -69,16 +69,16 @@
   <div class="urgency-bar__inner">
     <span class="urgency-bar__lead">
       <span class="pulse-dot" aria-hidden="true"></span>
-      <strong class="urgency-bar__tag">FLASH SALE</strong>
+      <strong class="urgency-bar__tag">🔥 SUNDAY MEGA OFFER</strong>
       <span class="urgency-bar__sep">·</span>
-      <span class="urgency-bar__msg">30% OFF ALL VAULTS ENDS IN</span>
+      <span class="urgency-bar__msg">FLAT 50% OFF WITH COUPON <strong>SUNDAY50</strong> · ENDS IN</span>
     </span>
     <div class="urgency-timer" aria-live="polite">
       <div class="timer-segment"><span class="timer-val" id="timerMins">14</span><span class="timer-lbl">m</span></div>
       <span class="timer-div">:</span>
       <div class="timer-segment"><span class="timer-val" id="timerSecs">35</span><span class="timer-lbl">s</span></div>
     </div>
-    <span class="urgency-bar__pill">PRICES INCREASE SOON</span>
+    <button type="button" class="bar-coupon-btn" id="barCouponClaim">Apply SUNDAY50</button>
   </div>
 </aside>
 
@@ -204,6 +204,9 @@
         </div>
       </div>
       <h2 class="mega__title" id="h-mega">The Full Vault</h2>
+      <div class="mega__sunday-coupon">
+        <span>🎁 <strong>Sunday Special:</strong> Tap <strong class="coupon-chip" id="chipSunday50">SUNDAY50</strong> for <strong>50% OFF</strong> at checkout!</span>
+      </div>
       <p class="mega__sub">Every pack on the site, one payment, permanent access.</p>
       <p class="mega__price"><span class="mega__now" data-mega-price>₹1,668</span><s class="mega__was" data-mega-was>₹2,383</s></p>
       <p class="mega__save" data-mega-save>You keep ₹715 in your pocket</p>
@@ -272,54 +275,69 @@
   </div>
 
   <div class="dlg__body">
-    <div class="co-urgency-notice">
-      <svg class="ico" aria-hidden="true" style="color:#ff4d6d"><use href="#i-bolt"/></svg>
-      <span>Cart &amp; 20% discount reserved for <strong id="coTimerText">14:35</strong>. Complete order now!</span>
-    </div>
+    <!-- Top Discount Banner & Order Summary Accordion -->
     <div class="summary" id="orderSummary"></div>
 
+    <!-- Centered Payable Amount matching Image 2 -->
+    <div class="co-payable-heading">Payable Amount: <b id="coTotal">₹0</b></div>
+
+    <!-- Sunday 50% Coupon Box -->
+    <div class="co-coupon-box" id="coCouponBox">
+      <div class="co-coupon-input-group">
+        <input type="text" id="couponInput" class="co-coupon-input" placeholder="Coupon Code (e.g. SUNDAY50)" autocomplete="off" autocapitalize="characters">
+        <button type="button" id="applyCouponBtn" class="co-coupon-btn">Apply</button>
+      </div>
+      <div class="co-coupon-hint">
+        <span>🔥 Sunday Special: Tap <strong class="coupon-chip" id="chipSunday50Checkout">SUNDAY50</strong> for 50% OFF!</span>
+      </div>
+      <div class="co-coupon-msg" id="couponMsg" hidden></div>
+    </div>
+
+    <!-- Tabs with authentic icons matching Image 2 -->
     <div class="tabs" role="tablist" aria-label="Payment method">
       <button class="tab is-active" role="tab" id="tab-upi" aria-controls="pane-upi" aria-selected="true" type="button"><i class="fas fa-qrcode"></i> UPI</button>
       <button class="tab" role="tab" id="tab-paypal" aria-controls="pane-paypal" aria-selected="false" type="button"><i class="fab fa-paypal"></i> PayPal</button>
       <button class="tab" role="tab" id="tab-crypto" aria-controls="pane-crypto" aria-selected="false" type="button"><i class="fab fa-bitcoin"></i> Crypto</button>
     </div>
 
-    <!-- UPI -->
+    <!-- UPI Pane matching Image 2 -->
     <section class="pane is-active" id="pane-upi" role="tabpanel" aria-labelledby="tab-upi">
-      <p class="pane__hint">Scan with any UPI app (GPay, PhonePe, Paytm, BHIM).</p>
-      <img class="qr" src="/upi-qr.jpg" width="720" height="720" alt="DesiTease UPI payment QR code" decoding="async">
-      <p class="pane__amount">Send exactly <b id="upiAmount">₹0</b></p>
-      <a class="cta cta--full upi-intent" id="upiIntentBtn" href="upi://pay?pa=desigurshermax@fam&amp;pn=DesiTease&amp;cu=INR">
-        <svg class="ico" aria-hidden="true"><use href="#i-bolt"/></svg> Pay with any UPI app
-      </a>
-      <div class="upi-id">
-        <span>UPI ID <b id="coUpiId">desigurshermax@fam</b></span>
-        <button class="ghost ghost--inline" id="copyUpiBtn" type="button"><i class="fas fa-copy"></i> Copy ID</button>
+      <p class="pane__hint">Scan to pay with any UPI App (GPay, PhonePe, Paytm, CRED)</p>
+      <div class="qr-wrap">
+        <img class="qr" src="/upi-qr.jpg" width="280" height="280" alt="DesiTease UPI payment QR code" decoding="async">
       </div>
-      <a class="ghost" href="/upi-qr.jpg" download="desitease-upi-qr.jpg"><i class="fas fa-download"></i> Download QR</a>
+      <div class="upi-box">
+        <div class="upi-id-label">UPI ID: <span class="upi-id-val" id="coUpiId">desigurshermax@fam</span></div>
+        <button class="cta cta--upi-copy" id="copyUpiBtn" type="button">
+          <i class="fas fa-copy"></i> Copy UPI
+        </button>
+      </div>
+      <a class="qr-download-link" href="/upi-qr.jpg" download="desitease-upi-qr.jpg">
+        <i class="fas fa-download"></i> Download QR Code
+      </a>
     </section>
 
     <!-- PayPal -->
     <section class="pane" id="pane-paypal" role="tabpanel" aria-labelledby="tab-paypal" hidden>
-      <p class="pane__hint">International checkout. You will be sent to PayPal to approve the payment.</p>
-      <p class="fx">
+      <p class="pane__hint">International checkout via PayPal (Cards / Balance).</p>
+      <div class="fx">
         <span id="paypalInr">₹0</span>
         <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>
         <span id="paypalUsd">$0.00</span>
-        <em id="paypalNote">includes 20% international processing</em>
-      </p>
+        <em id="paypalNote">includes 20% international processing · live rate</em>
+      </div>
       <button class="cta cta--paypal" type="button" id="paypalBtn"><i class="fab fa-paypal"></i> Pay with PayPal</button>
+      <p class="pane__foot">Secure payment via PayPal. After payment, enter your Telegram and upload your screenshot below.</p>
     </section>
 
     <!-- Crypto -->
     <section class="pane" id="pane-crypto" role="tabpanel" aria-labelledby="tab-crypto" hidden>
-      <p class="pane__hint">Pick a network — the amount is calculated for you. Send the exact amount, then upload your screenshot below.</p>
+      <p class="pane__hint">Pick a network — amount is calculated automatically. Send exact amount, then upload screenshot below.</p>
       <div class="crypto" id="cryptoList"></div>
       <p class="pane__foot">Amounts include a 20% crypto-processing margin. Rates refresh every 10 minutes.</p>
     </section>
 
-    <p class="total">Payable amount <b id="coTotal">₹0</b></p>
-
+    <!-- Form matching Image 2 -->
     <form class="order" name="desi-orders" method="POST" data-netlify="true" netlify-honeypot="bot-field" enctype="multipart/form-data" action="/success.html">
       <input type="hidden" name="form-name" value="desi-orders">
       <input type="hidden" name="items" id="formItems">
@@ -329,17 +347,17 @@
 
       <label class="field">
         <span>Telegram username</span>
-        <input type="text" name="telegram" id="telegramInput" placeholder="@yourname" required autocomplete="off">
-        <small>No username? Enter your registered phone number instead.</small>
+        <input type="text" name="telegram" id="telegramInput" placeholder="Telegram Username (@YourName)" required autocomplete="off">
+        <small>If no username, enter registered phone number</small>
       </label>
 
       <label class="field">
-        <span>Payment screenshot</span>
+        <span>Upload Payment Screenshot</span>
         <input type="file" name="screenshot" id="screenshotInput" accept="image/*" required>
         <small>PNG or JPG. We match it against your order and send access.</small>
       </label>
 
-      <button class="cta cta--full" type="submit"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg> Submit &amp; get access</button>
+      <button class="cta cta--full" type="submit"><i class="fas fa-check-circle"></i> Submit &amp; Get Access</button>
     </form>
   </div>
 </dialog>
@@ -357,6 +375,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="/script.js?v=10" defer></script>
+<script src="/script.js?v=21" defer></script>
 </body>
 </html>

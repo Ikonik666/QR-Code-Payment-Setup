@@ -20,6 +20,7 @@
 
     paypalHandle: 'desitease',
     upiId: 'desigurshermax@fam',
+    validCoupons: { 'SUNDAY50': 0.50, 'SUNDAY': 0.50, 'DESI50': 0.50 },
 
     // wallets
     addr: {
@@ -394,6 +395,11 @@
      --------------------------------------------------------- */
   let activeCoin = COINS[0];
 
+  function grabMega() {
+    packs.forEach(pack => state.cart.add(pack.id));
+    renderCart();
+  }
+
   function openCheckout() {
     if (state.cart.size === 0) {
       toast('Your cart is empty');
@@ -421,35 +427,74 @@
 
   function renderCheckout() {
     const { mega: isMega, lines, saved } = cartLines();
-    const total = cartTotal();
+    const baseTotal = cartTotal();
     const summary = getCartSummary();
+
+    let couponDiscount = 0;
+    const couponKey = (state.coupon || '').trim().toUpperCase();
+    const couponRate = CONFIG.validCoupons ? (CONFIG.validCoupons[couponKey] || 0) : 0;
+    if (couponRate > 0 && baseTotal > 0) {
+      couponDiscount = Math.round(baseTotal * couponRate);
+    }
+    const finalTotal = Math.max(0, baseTotal - couponDiscount);
 
     const summaryBox = $('#orderSummary');
     if (summaryBox) {
-      summaryBox.innerHTML =
-        lines.map(line => `
-          <div class="summary__row">
-            <span>${escapeHtml(line.name)}</span>
-            <span>${money(line.price)}<button class="summary__rm" type="button" ${line.id ? `data-remove="${line.id}"` : `data-remove-vault="${line.vault}"`} aria-label="Remove ${escapeHtml(line.name)}">&times;</button></span>
-          </div>`).join('');
-
-      if (isMega) {
-        summaryBox.innerHTML += `
+      let discountBanner = '';
+      if (couponRate > 0) {
+        discountBanner = `
+          <div class="bundle-tag summary__tag coupon-applied-tag">
+            <span>🎉 50% SUNDAY BUNDLE DISCOUNT APPLIED (-${money(couponDiscount)})</span>
+            <button type="button" class="coupon-rm-btn" id="rmCouponBtn" aria-label="Remove coupon" title="Remove coupon">&times;</button>
+          </div>
+        `;
+      } else if (isMega) {
+        discountBanner = `
           <div class="bundle-tag summary__tag">
             🔥 30% FULL VAULT DISCOUNT APPLIED (-${money(saved)})
           </div>
         `;
       } else if (saved > 0) {
-        summaryBox.innerHTML += `
+        discountBanner = `
           <div class="bundle-tag summary__tag">
             🎉 20% VAULT BUNDLE DISCOUNT APPLIED (-${money(saved)})
           </div>
         `;
       }
+
+      const rowsHtml = lines.map(line => `
+        <div class="summary__row">
+          <span>${escapeHtml(line.name)}</span>
+          <span>${money(line.price)}<button class="summary__rm" type="button" ${line.id ? `data-remove="${line.id}"` : `data-remove-vault="${line.vault}"`} aria-label="Remove ${escapeHtml(line.name)}">&times;</button></span>
+        </div>`).join('');
+
+      summaryBox.innerHTML = `
+        ${discountBanner}
+        <details class="summary__collapse"${lines.length <= 1 ? ' open' : ''}>
+          <summary class="summary__toggle">
+            <span>Packs in order (${lines.length})</span>
+            <span class="summary__arrow">▾</span>
+          </summary>
+          <div class="summary__content">${rowsHtml}</div>
+        </details>
+      `;
+    }
+
+    // Update coupon box if coupon active
+    const couponBox = $('#coCouponBox');
+    if (couponBox) {
+      const msgEl = $('#couponMsg');
+      if (couponRate > 0) {
+        if (msgEl) {
+          msgEl.textContent = `🎉 Coupon ${couponKey} active: 50% OFF applied!`;
+          msgEl.className = 'co-coupon-msg is-success';
+          msgEl.hidden = false;
+        }
+      }
     }
 
     // Update Total
-    const payableStr = money(total);
+    const payableStr = money(finalTotal);
     if ($('#coTotal')) $('#coTotal').textContent = payableStr;
     if ($('#coCartTotal')) $('#coCartTotal').textContent = `Payable Amount: ${payableStr}`;
     const upiAmount = $('#upiAmount');
@@ -457,10 +502,10 @@
 
     // Update 1-Tap Mobile UPI Intent Link with exact total
     const intent = $('#upiIntentBtn');
-    if (intent) intent.href = upiLink(total);
+    if (intent) intent.href = upiLink(finalTotal);
 
     // Update PayPal values
-    const usdAmount = paypalUsd(total);
+    const usdAmount = paypalUsd(finalTotal);
     if ($('#paypalInr')) $('#paypalInr').textContent = payableStr;
     if ($('#paypalUsd')) $('#paypalUsd').textContent = usd(usdAmount);
     const paypalBtnText = $('#paypalBtnText');
@@ -477,10 +522,13 @@
     // Fill Netlify hidden inputs
     const items = $('#formItems');
     const amount = $('#formAmount');
-    if (items) items.value = summary.items.map(item => item.name).join(', ');
+    if (items) {
+      const couponSuffix = couponRate > 0 ? ` [Coupon ${couponKey}: 50% OFF]` : '';
+      items.value = summary.items.map(item => item.name).join(', ') + couponSuffix;
+    }
     if (amount) amount.value = payableStr;
 
-    renderCrypto(total);
+    renderCrypto(finalTotal);
   }
 
   function getCartSummary() {
@@ -656,6 +704,64 @@
   /* ---------------------------------------------------------
      11. Events
      --------------------------------------------------------- */
+  /* ---------------------------------------------------------
+     10b. Coupon handling
+     --------------------------------------------------------- */
+  function applyCoupon(rawCode) {
+    const code = (rawCode || '').trim().toUpperCase();
+    const msgEl = $('#couponMsg');
+    const input = $('#couponInput');
+    if (input) input.value = code;
+
+    if (!code) {
+      if (msgEl) {
+        msgEl.textContent = 'Please enter a coupon code';
+        msgEl.className = 'co-coupon-msg is-error';
+        msgEl.hidden = false;
+      }
+      return;
+    }
+
+    if (CONFIG.validCoupons && CONFIG.validCoupons[code]) {
+      state.coupon = code;
+      try {
+        sessionStorage.setItem('dt_coupon', code);
+      } catch (e) {}
+      if (msgEl) {
+        msgEl.textContent = `🎉 Coupon ${code} applied! 50% OFF active.`;
+        msgEl.className = 'co-coupon-msg is-success';
+        msgEl.hidden = false;
+      }
+      renderCheckout();
+      toast(`Coupon ${code} applied: 50% OFF!`);
+    } else {
+      if (msgEl) {
+        msgEl.textContent = '⚠️ Invalid coupon code. Try SUNDAY50';
+        msgEl.className = 'co-coupon-msg is-error';
+        msgEl.hidden = false;
+      }
+      toast('Invalid coupon code. Try SUNDAY50');
+    }
+  }
+
+  function removeCoupon() {
+    state.coupon = null;
+    try {
+      sessionStorage.removeItem('dt_coupon');
+    } catch (e) {}
+    const msgEl = $('#couponMsg');
+    if (msgEl) {
+      msgEl.textContent = 'Coupon removed';
+      msgEl.className = 'co-coupon-msg';
+      msgEl.hidden = false;
+      setTimeout(() => { if (msgEl) msgEl.hidden = true; }, 2500);
+    }
+    const input = $('#couponInput');
+    if (input) input.value = '';
+    renderCheckout();
+    toast('Coupon removed');
+  }
+
   function bind() {
     document.addEventListener('click', event => {
       const add = event.target.closest('[data-add]');
@@ -792,6 +898,42 @@
       });
     });
     selectTab($('#tab-upi'));
+
+    
+    // Coupon apply button
+    $('#applyCouponBtn')?.addEventListener('click', () => {
+      const val = $('#couponInput')?.value;
+      applyCoupon(val);
+    });
+
+    // Enter key in coupon input
+    $('#couponInput')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        applyCoupon(e.target.value);
+      }
+    });
+
+    // Listen for coupon triggers and remove button
+    document.addEventListener('click', (e) => {
+      const chip = e.target.closest('#chipSunday50, #chipSunday50Checkout, #barCouponClaim');
+      if (chip) {
+        e.preventDefault();
+        if (state.cart.size === 0) {
+          grabMega();
+        }
+        applyCoupon('SUNDAY50');
+        openCheckout();
+        return;
+      }
+
+      const rmBtn = e.target.closest('#rmCouponBtn');
+      if (rmBtn) {
+        e.preventDefault();
+        removeCoupon();
+        return;
+      }
+    });
 
     $('#copyUpiBtn')?.addEventListener('click', () => {
       const btn = $('#copyUpiBtn');
