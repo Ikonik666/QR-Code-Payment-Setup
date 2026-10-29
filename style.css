@@ -196,14 +196,14 @@ a { color: inherit; }
   background: #ff3366;
   box-shadow: 0 0 0 4px rgba(255, 51, 102, 0.25);
 }
-.hero__title { margin: 18px 0 0; font-size: clamp(2.4rem, 7.2vw, 4.6rem); }
+.hero__title { margin: 12px 0 0; font-size: clamp(2.2rem, 6.5vw, 4.2rem); line-height: 1.1; }
 .grad {
   background: linear-gradient(100deg, var(--brand), var(--brand-2) 42%, var(--gold));
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 .hero__sub {
-  margin: 18px auto 0; max-width: 54ch;
-  color: var(--ink-2); font-size: clamp(.95rem, 2vw, 1.08rem);
+  margin: 12px auto 0; max-width: 48ch;
+  color: var(--ink-2); font-size: clamp(.88rem, 1.8vw, 1rem); line-height: 1.45;
 }
 
 /* Trust bar tabs under hero */
@@ -212,23 +212,21 @@ a { color: inherit; }
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin: 20px auto 0;
+  gap: 8px;
+  margin: 14px auto 0;
 }
 .trust-badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
+  gap: 6px;
+  padding: 5px 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  font-size: 0.74rem;
   font-weight: 600;
-  color: var(--ink-2);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 .trust-badge .ico {
   font-size: 0.95rem;
@@ -237,7 +235,7 @@ a { color: inherit; }
 
 .hero__stats {
   display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(20px, 6vw, 64px);
-  margin: 34px 0 0; padding: 0; list-style: none;
+  margin: 20px 0 0; padding: 0; list-style: none;
 }
 .hero__stats li { display: grid; gap: 2px; }
 .hero__stats b { font-family: 'Baloo 2', sans-serif; font-size: clamp(1.5rem, 4vw, 2.1rem); line-height: 1; }
@@ -909,23 +907,21 @@ body.is-gated { overflow: hidden; }
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin: 20px auto 0;
+  gap: 8px;
+  margin: 14px auto 0;
 }
 .trust-badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
+  gap: 6px;
+  padding: 5px 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  font-size: 0.74rem;
   font-weight: 600;
-  color: var(--ink-2);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 .trust-badge .ico {
   font-size: 0.95rem;

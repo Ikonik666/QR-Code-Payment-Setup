@@ -127,12 +127,13 @@
      3. Read the catalogue out of the DOM
      --------------------------------------------------------- */
   const VAULT_LABELS = {
-    top: 'Top Picks',
-    premium: 'Premium Vault',
-    series: 'Dark Vault',
-    library: 'Top Picks',
-    studio: 'Premium Vault',
-    atelier: 'Dark Vault'
+    top: 'Trending & Popular',
+    prem: 'Cinema & 4K Studio',
+    premium: 'Cinema & 4K Studio',
+    series: 'Private & Underground',
+    library: 'Trending & Popular',
+    studio: 'Cinema & 4K Studio',
+    atelier: 'Private & Underground'
   };
 
   const packs = $$('.pack').map(el => ({
