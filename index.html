@@ -35,7 +35,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="/assets/bg/hero.webp" fetchpriority="high">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="/style.css?v=30">
+<link rel="stylesheet" href="/style.css?v=32">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -64,50 +64,35 @@
 </svg>
 
 <!-- ================= header ================= -->
-<!-- ================= top announcement ================= -->
-<aside class="top-announcement" id="topAnnouncement" role="region" aria-label="Store Announcement">
-  <div class="top-announcement__inner">
-    <!-- Normal Day Content -->
-    <div class="announcement-content" id="normalAnnouncement">
-      <span class="announcement-badge">FLASH SALE</span>
-      <span class="announcement-text">30% off all vaults ends in <strong class="announcement-timer" id="timerDigits">14:35</strong></span>
-    </div>
-
-    <!-- Sunday Content -->
-    <div class="announcement-content" id="sundayAnnouncement" hidden>
-      <span class="announcement-badge is-sunday">SUNDAY 50% DROP</span>
-      <span class="announcement-text">Full 12-Pack Vault for <strong>₹834</strong> · Ends in <strong class="announcement-timer" id="sundayTimerDigits">23h 15m</strong></span>
-      <button type="button" class="announcement-cta" id="sundayClaimBtn">Claim ₹834</button>
-    </div>
-  </div>
-</aside>
-      <span class="urgency-bar__pill">PRICES INCREASE SOON</span>
+<!-- ================= top announcement & promo banners ================= -->
+<div class="promo-header" id="promoHeader">
+  <!-- Normal Day Banner (Fake 14m Timer) -->
+  <aside class="bar-normal" id="barNormal" role="region" aria-label="Limited time flash deal">
+    <div class="bar-normal__inner">
+      <span class="bar-normal__badge"><span class="pulse-dot" aria-hidden="true"></span> FLASH SALE</span>
+      <span class="bar-normal__msg">30% OFF ALL VAULTS ENDS IN</span>
+      <div class="bar-normal__timer" aria-live="polite">
+        <span class="timer-digit" id="timerMins">14</span>m : <span class="timer-digit" id="timerSecs">35</span>s
+      </div>
+      <span class="bar-normal__pill">PRICES INCREASE SOON</span>
     </div>
   </aside>
 
-  <!-- 2. Sunday Sexy Promotional Banner (Activated on Sundays) -->
-  <aside class="sunday-hero-banner" id="sundayBanner" role="region" aria-label="Sunday Mega Offer" hidden>
-    <div class="sunday-hero-banner__bg"></div>
-    <div class="sunday-hero-banner__glow"></div>
-    <div class="sunday-hero-banner__inner">
-      <div class="sunday-hero-banner__left">
-        <span class="sunday-hero-banner__badge">
-          <span class="pulse-dot" style="background:#2ed573;" aria-hidden="true"></span>
-          SUNDAY 50% DROP
-        </span>
-        <span class="sunday-hero-banner__title">
-          Full 12-Pack Collection for <strong>₹834</strong> <s>₹1,668</s>
-        </span>
+  <!-- Sunday Promotional Banner (Active on Sundays) -->
+  <aside class="bar-sunday" id="barSunday" role="region" aria-label="Sunday 50% Mega Offer" hidden>
+    <div class="bar-sunday__bg" aria-hidden="true"></div>
+    <div class="bar-sunday__glow" aria-hidden="true"></div>
+    <div class="bar-sunday__inner">
+      <div class="bar-sunday__left">
+        <span class="bar-sunday__badge"><span class="pulse-dot" style="background:#2ed573;" aria-hidden="true"></span> SUNDAY 50% DROP</span>
+        <span class="bar-sunday__deal">Full 12-Pack Vault for <strong>₹834</strong> <s class="bar-sunday__was">₹1,668</s></span>
       </div>
-      <div class="sunday-hero-banner__mid">
-        <span class="sunday-timer-label">ENDS TONIGHT:</span>
-        <div class="sunday-timer-digits" aria-live="polite">
-          <span id="sundayHours">00</span>h : <span id="sundayMins">00</span>m : <span id="sundaySecs">00</span>s
+      <div class="bar-sunday__right">
+        <div class="bar-sunday__timer" aria-live="polite">
+          <span class="bar-sunday__timer-lbl">ENDS IN</span>
+          <span class="bar-sunday__timer-digits"><b id="sundayHours">00</b>h : <b id="sundayMins">00</b>m : <b id="sundaySecs">00</b>s</span>
         </div>
-      </div>
-      <div class="sunday-hero-banner__right">
-        <span class="sunday-code-pill">CODE: <strong>SUNDAY50</strong></span>
-        <button type="button" class="sunday-cta-btn" id="sundayHeroClaim">Claim @ ₹834 →</button>
+        <button type="button" class="bar-sunday__cta" id="sundayClaimBtn">Claim @ ₹834 →</button>
       </div>
     </div>
   </aside>
@@ -226,10 +211,19 @@
 
 <section class="mega" aria-labelledby="h-mega">
   <div class="mega__inner">
-    <div class="mega__copy">
-      <p class="mega__badge" data-mega-badge>30% off everything</p>
+        <div class="mega__copy">
+      <div class="mega__header-row">
+        <p class="mega__badge" data-mega-badge>30% off everything</p>
+        <div class="mega__timer-badge">
+          <span class="pulse-live"></span>
+          <span>Deal ends in <strong id="megaTimerText">14m 35s</strong></span>
+        </div>
+      </div>
       <h2 class="mega__title" id="h-mega">The Full Vault</h2>
       <p class="mega__sub">Every pack on the site, one payment, permanent access.</p>
+      <div class="mega__sunday-coupon" id="megaSundayCallout" hidden>
+        <span>🎁 <strong>Sunday Special:</strong> All 12 packs for <strong>50% OFF</strong>! Code <strong class="coupon-chip" id="chipSunday50">SUNDAY50</strong> active (Only <strong>₹834</strong>).</span>
+      </div>
       <p class="mega__price"><span class="mega__now" data-mega-price>₹1,668</span><s class="mega__was" data-mega-was>₹2,383</s></p>
       <p class="mega__save" data-mega-save>You keep ₹715 in your pocket</p>
       <button class="cta" type="button" id="megaBtn">Grab the bundle</button>
@@ -398,6 +392,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="/script.js?v=30" defer></script>
+<script src="/script.js?v=32" defer></script>
 </body>
 </html>

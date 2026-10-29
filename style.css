@@ -1912,3 +1912,345 @@ html[data-gate="accepted"] .gate { display: none; }
     gap: 6px;
   }
 }
+
+
+/* =========================================================
+   PROMOTIONAL TOP BANNERS (NORMAL DAY & SUNDAY 50% DROP)
+   ========================================================= */
+.promo-header {
+  position: relative;
+  width: 100%;
+  z-index: 60;
+}
+
+/* 1. Normal Day Urgency Bar (Fake Timer) */
+.bar-normal {
+  background: #090d16;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--ink-2, #94a3b8);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 8px 14px;
+}
+
+.bar-normal[hidden] {
+  display: none !important;
+}
+
+.bar-normal__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bar-normal__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 71, 87, 0.15);
+  border: 1px solid rgba(255, 71, 87, 0.45);
+  color: #ff4757;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.bar-normal__msg {
+  color: #cbd5e1;
+  font-weight: 700;
+}
+
+.bar-normal__timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #fff;
+  font-weight: 800;
+}
+
+.timer-digit {
+  font-family: ui-monospace, Menlo, monospace;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ff6b7d;
+}
+
+.bar-normal__pill {
+  font-size: 0.68rem;
+  color: #f1c40f;
+  background: rgba(241, 196, 15, 0.12);
+  border: 1px solid rgba(241, 196, 15, 0.35);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+/* 2. Sunday Sexy Promotional Banner */
+.bar-sunday {
+  position: relative;
+  background: #080c18;
+  border-bottom: 1.5px solid rgba(255, 71, 87, 0.45);
+  box-shadow: 0 4px 20px rgba(255, 45, 85, 0.25);
+  overflow: hidden;
+}
+
+.bar-sunday[hidden] {
+  display: none !important;
+}
+
+.bar-sunday__bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/bg/hero-lounge.webp');
+  background-size: cover;
+  background-position: center 25%;
+  opacity: 0.22;
+  filter: saturate(1.4) contrast(1.15);
+  pointer-events: none;
+}
+
+.bar-sunday__glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, 
+    rgba(8, 12, 24, 0.96) 0%, 
+    rgba(255, 45, 85, 0.22) 40%, 
+    rgba(255, 107, 129, 0.18) 60%, 
+    rgba(8, 12, 24, 0.96) 100%
+  );
+  pointer-events: none;
+}
+
+.bar-sunday__inner {
+  position: relative;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.bar-sunday__left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bar-sunday__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(255, 71, 87, 0.4), rgba(255, 47, 85, 0.2));
+  border: 1px solid #ff4757;
+  color: #fff;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.bar-sunday__deal {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.bar-sunday__deal strong {
+  color: #2ed573;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.18rem;
+  font-weight: 800;
+  margin-left: 2px;
+}
+
+.bar-sunday__was {
+  color: #64748b;
+  font-size: 0.82rem;
+  margin-left: 4px;
+}
+
+.bar-sunday__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bar-sunday__timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  color: #cbd5e1;
+}
+
+.bar-sunday__timer-lbl {
+  font-weight: 800;
+  color: #ff6b7d;
+  letter-spacing: 0.05em;
+}
+
+.bar-sunday__timer-digits {
+  font-family: ui-monospace, Menlo, monospace;
+  background: rgba(0, 0, 0, 0.65);
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.88rem;
+}
+
+.bar-sunday__cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  background: linear-gradient(135deg, #ff4757, #eb2f06);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255, 71, 87, 0.4);
+  transition: transform var(--fast) var(--ease), filter var(--fast) var(--ease);
+}
+
+.bar-sunday__cta:hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   RESPONSIVE OPTIMIZATIONS (MOBILE / TABLET)
+   ========================================================= */
+@media (max-width: 768px) {
+  /* Announcement Banners on Mobile */
+  .bar-normal {
+    padding: 6px 10px;
+    font-size: 0.72rem;
+  }
+  .bar-normal__inner {
+    justify-content: center;
+    gap: 6px;
+  }
+  .bar-normal__pill {
+    display: none; /* keep normal bar single line on mobile */
+  }
+
+  .bar-sunday__inner {
+    padding: 7px 10px;
+    justify-content: center;
+    text-align: center;
+    gap: 6px;
+  }
+  .bar-sunday__left,
+  .bar-sunday__right {
+    justify-content: center;
+  }
+  .bar-sunday__deal strong {
+    font-size: 1.05rem;
+  }
+
+  /* The Full Vault Mega Card on Mobile */
+  .mega__inner {
+    padding: 18px 14px;
+    gap: 14px;
+  }
+  .mega__copy {
+    text-align: center;
+    align-items: center;
+  }
+  .mega__header-row {
+    justify-content: center;
+  }
+  .mega__list {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  .mega__list li {
+    padding: 6px 8px !important;
+    font-size: 0.72rem !important;
+    gap: 5px !important;
+  }
+  .mega__list b {
+    display: none; /* hide individual pack prices inside mega checklist on small mobile screens */
+  }
+
+  /* Grid & Pack Cards on Mobile */
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .pack {
+    border-radius: 12px;
+  }
+  .pack__body {
+    padding: 8px 10px 10px;
+  }
+  .pack__title {
+    font-size: 0.86rem;
+    line-height: 1.25;
+  }
+  .pack__blurb {
+    font-size: 0.72rem;
+    line-height: 1.25;
+    margin-top: 3px;
+    -webkit-line-clamp: 2;
+  }
+  .pack__pricing {
+    margin-top: 8px;
+  }
+  .price {
+    font-size: 1.15rem;
+  }
+  .price s {
+    font-size: 0.78rem;
+  }
+  .pack__btn {
+    padding: 6px 10px;
+    font-size: 0.76rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar__inner {
+    padding: 8px 12px;
+  }
+  .brand__word {
+    font-size: 1.1rem;
+  }
+  .hero__title {
+    font-size: 1.6rem;
+    line-height: 1.2;
+  }
+  .hero__sub {
+    font-size: 0.82rem;
+  }
+  .vault__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .bundle {
+    width: 100%;
+    justify-content: center;
+  }
+}
