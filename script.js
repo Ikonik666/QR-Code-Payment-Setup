@@ -429,37 +429,38 @@
     const { mega: isMega, lines, saved } = cartLines();
     const baseTotal = cartTotal();
     const summary = getCartSummary();
+    const isSunday = isSundayActive();
 
     const isFullCollection = isMega;
     let couponDiscount = 0;
     const couponKey = (state.coupon || '').trim().toUpperCase();
-    const isSunday = (couponKey === 'SUNDAY50' || couponKey === 'SUNDAY' || couponKey === 'DESI50');
+    const hasSundayCoupon = isSunday || (couponKey === 'SUNDAY50' || couponKey === 'SUNDAY' || couponKey === 'DESI50');
 
-    if (isSunday && isFullCollection) {
+    if (hasSundayCoupon && isFullCollection) {
       couponDiscount = Math.round(mega.price * 0.50);
-    } else if (isSunday && !isFullCollection) {
-      couponDiscount = 0;
     }
     const finalTotal = Math.max(0, baseTotal - couponDiscount);
 
     const summaryBox = $('#orderSummary');
     if (summaryBox) {
       let discountBanner = '';
-      if (isSunday && isFullCollection) {
+      if (hasSundayCoupon && isFullCollection) {
+        // SUNDAY 50% IS ACTIVE: THE 30% IS COMPLETELY GONE!
         discountBanner = `
           <div class="bundle-tag summary__tag coupon-applied-tag">
             <span>🎉 50% SUNDAY FULL COLLECTION DISCOUNT APPLIED (-${money(couponDiscount)})</span>
             <button type="button" class="coupon-rm-btn" id="rmCouponBtn" aria-label="Remove coupon" title="Remove coupon">&times;</button>
           </div>
         `;
-      } else if (isSunday && !isFullCollection) {
+      } else if (hasSundayCoupon && !isFullCollection) {
         discountBanner = `
           <div class="bundle-tag summary__tag" style="background: rgba(255, 177, 66, 0.14); border-color: rgba(255, 177, 66, 0.5); color: #ffb142;">
-            <span>⚠️ SUNDAY50 is valid only on The Full Collection (All 12 Packs)!</span>
+            <span>⚠️ SUNDAY50 gives 50% OFF only on The Full Collection (All 12 Packs)!</span>
             <button type="button" class="coupon-chip" id="upgradeToMegaBtn" style="margin-left: 6px;">Upgrade for ₹834</button>
           </div>
         `;
       } else if (isMega) {
+        // NORMAL DAYS: 30% FULL VAULT DISCOUNT
         discountBanner = `
           <div class="bundle-tag summary__tag">
             🔥 30% FULL VAULT DISCOUNT APPLIED (-${money(saved)})
@@ -494,12 +495,12 @@
     // Update coupon box if coupon active
     const msgEl = $('#couponMsg');
     if (msgEl) {
-      if (isSunday && isFullCollection) {
-        msgEl.textContent = `🎉 Coupon ${couponKey} active: 50% OFF on Full Collection (₹834)!`;
+      if (hasSundayCoupon && isFullCollection) {
+        msgEl.textContent = `🎉 Sunday 50% OFF active: Full Collection for ₹834!`;
         msgEl.className = 'co-coupon-msg is-success';
         msgEl.hidden = false;
-      } else if (isSunday && !isFullCollection) {
-        msgEl.innerHTML = '⚠️ <strong>SUNDAY50</strong> is valid only on <strong>The Full Collection (All 12 Packs)</strong>. <button type="button" class="coupon-chip" id="upgradeToMegaBtn">Upgrade for ₹834</button>';
+      } else if (hasSundayCoupon && !isFullCollection) {
+        msgEl.innerHTML = '⚠️ <strong>SUNDAY50</strong> applies only to <strong>The Full Collection (All 12 Packs)</strong>. <button type="button" class="coupon-chip" id="upgradeToMegaBtn">Upgrade for ₹834</button>';
         msgEl.className = 'co-coupon-msg is-error';
         msgEl.hidden = false;
       }
@@ -535,7 +536,7 @@
     const items = $('#formItems');
     const amount = $('#formAmount');
     if (items) {
-      const couponSuffix = (isSunday && isFullCollection) ? ` [Coupon ${couponKey}: 50% OFF Full Collection]` : '';
+      const couponSuffix = (hasSundayCoupon && isFullCollection) ? ' [Sunday 50% OFF Full Collection]' : '';
       items.value = summary.items.map(item => item.name).join(', ') + couponSuffix;
     }
     if (amount) amount.value = payableStr;
@@ -926,6 +927,25 @@
 
     
     // Coupon apply button
+    
+    // Sunday Banner CTA and Offer Mode Switch
+    $('#sundayHeroClaim')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      grabMega();
+      applyCoupon('SUNDAY50');
+      openCheckout();
+    });
+
+    $('#offerToggleBtn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const current = isSundayActive();
+      const next = !current;
+      sessionStorage.setItem('dt_sunday_preview', next ? '1' : '0');
+      toast(next ? 'Switched to Sunday 50% Mode' : 'Switched to Normal Day Mode');
+      initOfferEngine();
+      if (checkoutDialog?.open) renderCheckout();
+    });
+
     $('#applyCouponBtn')?.addEventListener('click', () => {
       const val = $('#couponInput')?.value;
       applyCoupon(val);
@@ -1122,53 +1142,165 @@
   /* ---------------------------------------------------------
      Deal Countdown Timer (Urgency Engine)
      --------------------------------------------------------- */
-  function initDealTimer() {
-    const DURATION_SECS = 14 * 60 + 35; // 14 mins 35 secs
-    const STORAGE_KEY = 'dt_urgency_expiry_v2';
-
-    let expiry = parseInt(sessionStorage.getItem(STORAGE_KEY) || '0', 10);
-    const now = Date.now();
-
-    if (!expiry || expiry <= now) {
-      expiry = now + DURATION_SECS * 1000;
-      sessionStorage.setItem(STORAGE_KEY, String(expiry));
+    /* ---------------------------------------------------------
+     Urgency & Scheduled Offers Engine
+     --------------------------------------------------------- */
+  function isSundayActive() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('offer') === 'sunday' || params.get('sunday') === '1' || params.get('sunday') === 'true') {
+      return true;
     }
+    if (params.get('offer') === 'normal' || params.get('sunday') === '0' || params.get('sunday') === 'false') {
+      return false;
+    }
+    const preview = sessionStorage.getItem('dt_sunday_preview');
+    if (preview === '1') return true;
+    if (preview === '0') return false;
 
-    function updateTimers() {
-      const currentTime = Date.now();
-      let remainingSecs = Math.max(0, Math.floor((expiry - currentTime) / 1000));
+    // Real-world: Sunday is getDay() === 0 (starts 00:00:00, ends 23:59:59 Sunday)
+    return new Date().getDay() === 0;
+  }
 
-      // Perpetual loop so it never gets stuck at 00:00
-      if (remainingSecs <= 0) {
-        expiry = Date.now() + DURATION_SECS * 1000;
-        sessionStorage.setItem(STORAGE_KEY, String(expiry));
-        remainingSecs = DURATION_SECS;
+  function initOfferEngine() {
+    const isSunday = isSundayActive();
+    const urgencyBarNormal = $('#urgencyBarNormal');
+    const sundayBanner = $('#sundayBanner');
+    const megaSundayCallout = $('#megaSundayCallout');
+    const megaBadge = $('[data-mega-badge]');
+    const megaPrice = $('[data-mega-price]');
+    const megaWas = $('[data-mega-was]');
+    const megaSave = $('[data-mega-save]');
+    const megaBtn = $('#megaBtn');
+    const toggleBtn = $('#offerToggleBtn');
+
+    if (isSunday) {
+      // 1. Show Sunday sexy banner, hide normal urgency bar
+      if (urgencyBarNormal) urgencyBarNormal.hidden = true;
+      if (sundayBanner) sundayBanner.hidden = false;
+
+      // 2. The 30% is completely gone on The Full Vault!
+      if (megaBadge) {
+        megaBadge.textContent = '🔥 50% OFF SUNDAY EXCLUSIVE';
+        megaBadge.classList.add('is-sunday');
+      }
+      if (megaPrice) megaPrice.textContent = '₹834';
+      if (megaWas) megaWas.textContent = '₹1,668';
+      if (megaSave) megaSave.textContent = 'You save ₹1,549 today (Flat 50% OFF with SUNDAY50)';
+      if (megaBtn) megaBtn.textContent = 'Grab Full Collection @ ₹834';
+      if (megaSundayCallout) megaSundayCallout.hidden = false;
+      if (toggleBtn) {
+        toggleBtn.textContent = '● Sunday 50% Active (Click for Normal Day)';
+        toggleBtn.style.borderColor = '#ff4757';
+        toggleBtn.style.color = '#fff';
       }
 
-      const m = Math.floor(remainingSecs / 60);
-      const s = remainingSecs % 60;
-      const mStr = String(m).padStart(2, '0');
-      const sStr = String(s).padStart(2, '0');
+      // Automatically set SUNDAY50 as active coupon on Sunday
+      if (!state.coupon) {
+        state.coupon = 'SUNDAY50';
+      }
 
-      const elMins = document.getElementById('timerMins');
-      const elSecs = document.getElementById('timerSecs');
-      if (elMins) elMins.textContent = mStr;
-      if (elSecs) elSecs.textContent = sStr;
+      // Ticking timer to Sunday midnight
+      function updateSundayTimer() {
+        const now = new Date();
+        const midnight = new Date(now);
+        midnight.setHours(23, 59, 59, 999);
+        const diffSecs = Math.max(0, Math.floor((midnight - now) / 1000));
+        const h = Math.floor(diffSecs / 3600);
+        const m = Math.floor((diffSecs % 3600) / 60);
+        const s = diffSecs % 60;
 
-      const megaTimer = document.getElementById('megaTimerText');
-      if (megaTimer) megaTimer.textContent = `${mStr}m ${sStr}s`;
+        const hStr = String(h).padStart(2, '0');
+        const mStr = String(m).padStart(2, '0');
+        const sStr = String(s).padStart(2, '0');
 
-      const coTimer = document.getElementById('coTimerText');
-      if (coTimer) coTimer.textContent = `${mStr}:${sStr}`;
+        const elH = $('#sundayHours');
+        const elM = $('#sundayMins');
+        const elS = $('#sundaySecs');
+        if (elH) elH.textContent = hStr;
+        if (elM) elM.textContent = mStr;
+        if (elS) elS.textContent = sStr;
 
-      const genericTimers = document.querySelectorAll('.timer-display');
-      genericTimers.forEach(el => {
-        el.textContent = `${mStr}:${sStr}`;
-      });
+        const megaTimer = $('#megaTimerText');
+        if (megaTimer) megaTimer.textContent = `${hStr}h ${mStr}m ${sStr}s`;
+        const coTimer = $('#coTimerText');
+        if (coTimer) coTimer.textContent = `${hStr}h ${mStr}m`;
+      }
+      updateSundayTimer();
+      setInterval(updateSundayTimer, 1000);
+
+    } else {
+      // Normal Days (Mon - Sat)
+      // 1. Show fake off timer urgency bar, hide Sunday banner
+      if (urgencyBarNormal) urgencyBarNormal.hidden = false;
+      if (sundayBanner) sundayBanner.hidden = true;
+
+      // 2. Normal 30% discount is active
+      if (megaBadge) {
+        megaBadge.textContent = '30% off everything';
+        megaBadge.classList.remove('is-sunday');
+      }
+      if (megaPrice) megaPrice.textContent = '₹1,668';
+      if (megaWas) megaWas.textContent = '₹2,383';
+      if (megaSave) megaSave.textContent = 'You keep ₹715 in your pocket';
+      if (megaBtn) megaBtn.textContent = 'Grab the bundle';
+      if (megaSundayCallout) megaSundayCallout.hidden = true;
+      if (toggleBtn) {
+        toggleBtn.textContent = '○ Normal Day Mode (Click to preview Sunday Offer)';
+        toggleBtn.style.borderColor = 'rgba(255, 255, 255, 0.16)';
+        toggleBtn.style.color = '#94a3b8';
+      }
+
+      // If Sunday coupon was saved, clear it for normal days
+      if (state.coupon === 'SUNDAY50' || state.coupon === 'SUNDAY' || state.coupon === 'DESI50') {
+        state.coupon = null;
+        try { sessionStorage.removeItem('dt_coupon'); } catch (e) {}
+      }
+
+      // Fake 14m 35s rolling timer
+      const DURATION_SECS = 14 * 60 + 35;
+      const STORAGE_KEY = 'dt_urgency_expiry_v2';
+
+      let expiry = parseInt(sessionStorage.getItem(STORAGE_KEY) || '0', 10);
+      const now = Date.now();
+
+      if (!expiry || expiry <= now) {
+        expiry = now + DURATION_SECS * 1000;
+        sessionStorage.setItem(STORAGE_KEY, String(expiry));
+      }
+
+      function updateFakeTimer() {
+        const currentTime = Date.now();
+        let remainingSecs = Math.max(0, Math.floor((expiry - currentTime) / 1000));
+
+        if (remainingSecs <= 0) {
+          expiry = Date.now() + DURATION_SECS * 1000;
+          sessionStorage.setItem(STORAGE_KEY, String(expiry));
+          remainingSecs = DURATION_SECS;
+        }
+
+        const m = Math.floor(remainingSecs / 60);
+        const s = remainingSecs % 60;
+        const mStr = String(m).padStart(2, '0');
+        const sStr = String(s).padStart(2, '0');
+
+        const elMins = $('#timerMins');
+        const elSecs = $('#timerSecs');
+        if (elMins) elMins.textContent = mStr;
+        if (elSecs) elSecs.textContent = sStr;
+
+        const megaTimer = $('#megaTimerText');
+        if (megaTimer) megaTimer.textContent = `${mStr}m ${sStr}s`;
+        const coTimer = $('#coTimerText');
+        if (coTimer) coTimer.textContent = `${mStr}:${sStr}`;
+      }
+
+      updateFakeTimer();
+      setInterval(updateFakeTimer, 1000);
     }
+  }
 
-    updateTimers();
-    setInterval(updateTimers, 1000);
+  function initDealTimer() {
+    initOfferEngine();
   }
 
   function boot() {
@@ -1178,7 +1310,7 @@
     renderCart();
     bind();
     initAgeGate();
-    initDealTimer();
+    initOfferEngine();
     refreshRates().then(renderCart);
   }
 
