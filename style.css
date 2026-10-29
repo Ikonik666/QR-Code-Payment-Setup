@@ -2460,3 +2460,72 @@ html[data-gate="accepted"] .gate { display: none; }
   border-color: #2ed573;
   color: #2ed573;
 }
+
+
+/* Hero Category Navigation Ribbon */
+.hero__cats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  max-width: 720px;
+  margin: 16px auto 0;
+  padding: 0 10px;
+}
+.hero__cat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 999px;
+  color: #e2e8f0;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.hero__cat-pill:hover {
+  background: rgba(255, 59, 78, 0.16);
+  border-color: rgba(255, 59, 78, 0.45);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 59, 78, 0.2);
+}
+.hero__cat-pill .cat-icon {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+/* Trust Bar & Items */
+.trust-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 16px auto 0;
+  padding: 0 10px;
+}
+.trust-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+.trust-item .ico {
+  width: 14px;
+  height: 14px;
+  color: #2ed573;
+}
+.trust-sep {
+  color: rgba(255, 255, 255, 0.25);
+  font-weight: 800;
+  user-select: none;
+}

@@ -127,13 +127,13 @@
      3. Read the catalogue out of the DOM
      --------------------------------------------------------- */
   const VAULT_LABELS = {
-    top: 'Trending & Popular',
-    prem: 'Cinema & 4K Studio',
-    premium: 'Cinema & 4K Studio',
-    series: 'Private & Underground',
-    library: 'Trending & Popular',
-    studio: 'Cinema & 4K Studio',
-    atelier: 'Private & Underground'
+    top: 'MMS & Desi Erotica',
+    prem: 'Actresses, OTT & AI',
+    premium: 'Actresses, OTT & AI',
+    series: 'Spy Cam & Taboo Vault',
+    library: 'MMS & Desi Erotica',
+    studio: 'Actresses, OTT & AI',
+    atelier: 'Spy Cam & Taboo Vault'
   };
 
   const packs = $$('.pack').map(el => ({
@@ -303,8 +303,10 @@
   }
 
   function renderStats() {
-    const el = $('[data-stat="packs"]');
-    if (el) el.textContent = String(packs.length);
+    const elPacks = $('[data-stat="packs"]');
+    if (elPacks) elPacks.textContent = String(packs.length);
+    const elFiles = $('[data-stat="files"]');
+    if (elFiles) elFiles.textContent = '150K+';
   }
 
   function renderBadges() {
