@@ -2254,3 +2254,213 @@ html[data-gate="accepted"] .gate { display: none; }
     justify-content: center;
   }
 }
+
+
+/* =========================================================
+   CLEAN MEGA VAULT CARD & TRANSPARENT BILLING CHECKOUT
+   ========================================================= */
+.mega__price-wrap {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.mega__save-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: rgba(46, 213, 115, 0.16);
+  border: 1px solid rgba(46, 213, 115, 0.45);
+  color: #2ed573;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.cta--mega {
+  margin-top: 22px;
+  padding: 13px 26px;
+  font-size: 1rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ff4757, #eb2f06);
+  color: #fff;
+  border-radius: 999px;
+  box-shadow: 0 4px 18px rgba(255, 71, 87, 0.4);
+  cursor: pointer;
+  border: none;
+  transition: transform var(--fast) var(--ease), filter var(--fast) var(--ease);
+}
+
+.cta--mega:hover {
+  filter: brightness(1.12);
+  transform: translateY(-2px);
+}
+
+/* Checkout Bill Card (Clear original price, discount, and payable amount) */
+.co-bill-card {
+  background: rgba(14, 19, 32, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--r-md, 10px);
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.co-bill-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 4px 0;
+  font-size: 0.84rem;
+}
+
+.co-bill-lbl {
+  color: var(--ink-2, #94a3b8);
+  font-weight: 600;
+}
+
+.co-bill-val {
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.co-bill-was {
+  text-decoration: line-through;
+  color: #94a3b8;
+  text-decoration-color: #ef4444;
+}
+
+.co-bill-discount-row {
+  color: #2ed573;
+}
+
+.co-bill-discount-row .co-bill-lbl {
+  color: #2ed573;
+  font-weight: 700;
+}
+
+.co-bill-saved {
+  color: #2ed573;
+  font-weight: 800;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.05rem;
+}
+
+.co-bill-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 8px 0;
+}
+
+.co-bill-total-row {
+  padding-top: 2px;
+}
+
+.co-bill-total-lbl {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.co-bill-total-val {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.co-bill-savings-tag {
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: rgba(46, 213, 115, 0.12);
+  border: 1px dashed rgba(46, 213, 115, 0.45);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #2ed573;
+  text-align: center;
+}
+
+/* Pay Instruction */
+.co-pay-instruction {
+  text-align: center;
+  font-size: 0.86rem;
+  color: #cbd5e1;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.co-pay-instruction strong {
+  color: #2ed573;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 900;
+  margin-left: 2px;
+}
+
+/* Clean, Non-confusing Inline UPI Copy Row */
+.upi-copy-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 10px auto 6px;
+  padding: 8px 12px;
+  max-width: 320px;
+  background: rgba(17, 23, 40, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-sm, 6px);
+}
+
+.upi-copy-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.upi-copy-label {
+  font-size: 0.74rem;
+  color: var(--ink-3, #64748b);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.upi-copy-id {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #f1c40f;
+}
+
+.btn-copy-upi {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--fast) var(--ease);
+}
+
+.btn-copy-upi:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.btn-copy-upi.is-copied {
+  background: rgba(46, 213, 115, 0.2);
+  border-color: #2ed573;
+  color: #2ed573;
+}

@@ -35,7 +35,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="/assets/bg/hero.webp" fetchpriority="high">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="/style.css?v=32">
+<link rel="stylesheet" href="/style.css?v=34">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -211,7 +211,7 @@
 
 <section class="mega" aria-labelledby="h-mega">
   <div class="mega__inner">
-        <div class="mega__copy">
+            <div class="mega__copy">
       <div class="mega__header-row">
         <p class="mega__badge" data-mega-badge>30% off everything</p>
         <div class="mega__timer-badge">
@@ -220,13 +220,15 @@
         </div>
       </div>
       <h2 class="mega__title" id="h-mega">The Full Vault</h2>
-      <p class="mega__sub">Every pack on the site, one payment, permanent access.</p>
-      <div class="mega__sunday-coupon" id="megaSundayCallout" hidden>
-        <span>🎁 <strong>Sunday Special:</strong> All 12 packs for <strong>50% OFF</strong>! Code <strong class="coupon-chip" id="chipSunday50">SUNDAY50</strong> active (Only <strong>₹834</strong>).</span>
+      <p class="mega__sub">All 12 premium packs in one complete archive. Lifetime access.</p>
+      
+      <div class="mega__price-wrap">
+        <span class="mega__now" data-mega-price>₹1,668</span>
+        <s class="mega__was" data-mega-was>₹2,383</s>
+        <span class="mega__save-badge" data-mega-save>SAVE 30%</span>
       </div>
-      <p class="mega__price"><span class="mega__now" data-mega-price>₹1,668</span><s class="mega__was" data-mega-was>₹2,383</s></p>
-      <p class="mega__save" data-mega-save>You keep ₹715 in your pocket</p>
-      <button class="cta" type="button" id="megaBtn">Grab the bundle</button>
+
+      <button class="cta cta--mega" type="button" id="megaBtn">Get Complete Vault · ₹1,668</button>
     </div>
     <ul class="mega__list" data-mega-list role="list"></ul>
   </div>
@@ -287,48 +289,41 @@
 <!-- ================= checkout dialog ================= -->
 <dialog class="dlg dlg--checkout" id="checkoutDialog" aria-labelledby="checkoutTitle">
   <div class="dlg__head">
-    <h2 class="dlg__title" id="checkoutTitle">Checkout</h2>
+    <h2 class="dlg__title" id="checkoutTitle">Complete Order</h2>
     <button class="dlg__x" type="button" data-close aria-label="Close"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
   </div>
 
   <div class="dlg__body">
-    <!-- Top Discount Banner & Order Summary Accordion -->
-    <div class="summary" id="orderSummary"></div>
+    <!-- Transparent Price & Savings Breakdown -->
+    <div id="orderSummary"></div>
 
-    <!-- Centered Payable Amount matching Image 2 -->
-    <div class="co-payable-heading">Payable Amount: <b id="coTotal">₹0</b></div>
-
-        <!-- Minimalist Promo Code Toggle -->
-    <div class="co-coupon-wrap" id="coCouponWrap">
-      <button type="button" class="co-coupon-toggle" id="couponToggle">Have a promo code?</button>
-      <div class="co-coupon-expand" id="couponExpand" hidden>
-        <div class="co-coupon-input-group">
-          <input type="text" id="couponInput" class="co-coupon-input" placeholder="Coupon Code" autocomplete="off" autocapitalize="characters">
-          <button type="button" id="applyCouponBtn" class="co-coupon-btn">Apply</button>
-        </div>
-        <div class="co-coupon-msg" id="couponMsg" hidden></div>
-      </div>
-    </div>
-
-    <!-- Tabs with authentic icons matching Image 2 -->
+    <!-- Tabs with authentic icons -->
     <div class="tabs" role="tablist" aria-label="Payment method">
       <button class="tab is-active" role="tab" id="tab-upi" aria-controls="pane-upi" aria-selected="true" type="button"><i class="fas fa-qrcode"></i> UPI</button>
       <button class="tab" role="tab" id="tab-paypal" aria-controls="pane-paypal" aria-selected="false" type="button"><i class="fab fa-paypal"></i> PayPal</button>
       <button class="tab" role="tab" id="tab-crypto" aria-controls="pane-crypto" aria-selected="false" type="button"><i class="fab fa-bitcoin"></i> Crypto</button>
     </div>
 
-    <!-- UPI Pane matching Image 2 -->
+    <!-- UPI Pane -->
     <section class="pane is-active" id="pane-upi" role="tabpanel" aria-labelledby="tab-upi">
-      <p class="pane__hint">Scan to pay with any UPI App (GPay, PhonePe, Paytm, CRED)</p>
-      <div class="qr-wrap">
-        <img class="qr" src="/upi-qr.jpg" width="280" height="280" alt="DesiTease UPI payment QR code" decoding="async">
+      <div class="co-pay-instruction">
+        Scan &amp; pay exactly <strong id="upiAmount">₹0</strong> with any UPI App
       </div>
-      <div class="upi-box">
-        <div class="upi-id-label">UPI ID: <span class="upi-id-val" id="coUpiId">desigurshermax@fam</span></div>
-        <button class="cta cta--upi-copy" id="copyUpiBtn" type="button">
-          <i class="fas fa-copy"></i> Copy UPI
+      <div class="qr-wrap">
+        <img class="qr" src="/upi-qr.jpg" width="220" height="220" alt="DesiTease UPI payment QR code" decoding="async">
+      </div>
+      
+      <!-- Clean inline copy row (Non-confusing) -->
+      <div class="upi-copy-row">
+        <div class="upi-copy-info">
+          <span class="upi-copy-label">UPI ID</span>
+          <code class="upi-copy-id" id="coUpiId">desigurshermax@fam</code>
+        </div>
+        <button type="button" class="btn-copy-upi" id="copyUpiBtn">
+          <i class="fas fa-copy"></i> <span>Copy</span>
         </button>
       </div>
+      
       <a class="qr-download-link" href="/upi-qr.jpg" download="desitease-upi-qr.jpg">
         <i class="fas fa-download"></i> Download QR Code
       </a>
@@ -354,7 +349,7 @@
       <p class="pane__foot">Amounts include a 20% crypto-processing margin. Rates refresh every 10 minutes.</p>
     </section>
 
-    <!-- Form matching Image 2 -->
+    <!-- Form -->
     <form class="order" name="desi-orders" method="POST" data-netlify="true" netlify-honeypot="bot-field" enctype="multipart/form-data" action="/success.html">
       <input type="hidden" name="form-name" value="desi-orders">
       <input type="hidden" name="items" id="formItems">
@@ -392,6 +387,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="/script.js?v=32" defer></script>
+<script src="/script.js?v=34" defer></script>
 </body>
 </html>

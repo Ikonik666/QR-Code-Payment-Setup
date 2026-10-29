@@ -273,12 +273,22 @@
   }
 
   function renderMega() {
+    const isSunday = isSundayActive();
     const now = $('[data-mega-price]');
     const was = $('[data-mega-was]');
     const save = $('[data-mega-save]');
-    if (now) now.textContent = money(mega.price);
-    if (was) was.textContent = money(mega.was);
-    if (save) save.textContent = `You keep ${money(mega.was - mega.price)} in your pocket`;
+    const btn = $('#megaBtn');
+    if (isSunday) {
+      if (now) now.textContent = '₹834';
+      if (was) was.textContent = '₹1,668';
+      if (save) save.textContent = 'SAVE 50% TODAY';
+      if (btn) btn.textContent = 'Get Complete Vault · ₹834';
+    } else {
+      if (now) now.textContent = money(mega.price);
+      if (was) was.textContent = money(mega.was);
+      if (save) save.textContent = 'SAVE 30%';
+      if (btn) btn.textContent = `Get Complete Vault · ${money(mega.price)}`;
+    }
 
     const list = $('[data-mega-list]');
     if (list) {
@@ -441,37 +451,54 @@
     }
     const finalTotal = Math.max(0, baseTotal - couponDiscount);
 
+    // Calculate Original MRP, Discount Amount, Discount Label, and Total Savings
+    let originalPrice = baseTotal;
+    let discountAmount = 0;
+    let discountLabel = '';
+    let savingsText = '';
+
+    if (hasSundayCoupon && isFullCollection) {
+      originalPrice = mega.price;
+      discountAmount = couponDiscount;
+      discountLabel = '🎉 Sunday Special (50% OFF)';
+      savingsText = `🔥 You save ${money(couponDiscount)} (50% OFF) on this order!`;
+    } else if (isMega) {
+      originalPrice = mega.was;
+      discountAmount = saved;
+      discountLabel = '🔥 The Full Vault (30% OFF)';
+      savingsText = `🔥 You save ${money(saved)} (30% OFF) on this order!`;
+    } else if (saved > 0) {
+      originalPrice = baseTotal + saved;
+      discountAmount = saved;
+      discountLabel = '🎉 Bundle Discount (20% OFF)';
+      savingsText = `🎉 You save ${money(saved)} (20% OFF) on this order!`;
+    }
+
     const summaryBox = $('#orderSummary');
     if (summaryBox) {
-      let discountBanner = '';
-      if (hasSundayCoupon && isFullCollection) {
-        // SUNDAY 50% IS ACTIVE: THE 30% IS COMPLETELY GONE!
-        discountBanner = `
-          <div class="bundle-tag summary__tag coupon-applied-tag">
-            <span>🎉 50% SUNDAY FULL COLLECTION DISCOUNT APPLIED (-${money(couponDiscount)})</span>
-            <button type="button" class="coupon-rm-btn" id="rmCouponBtn" aria-label="Remove coupon" title="Remove coupon">&times;</button>
+      let discountRowHtml = '';
+      if (discountAmount > 0) {
+        discountRowHtml = `
+          <div class="co-bill-row co-bill-discount-row">
+            <span class="co-bill-lbl">${discountLabel}</span>
+            <span class="co-bill-val co-bill-saved">-${money(discountAmount)}</span>
           </div>
         `;
-      } else if (hasSundayCoupon && !isFullCollection) {
-        discountBanner = `
-          <div class="bundle-tag summary__tag" style="background: rgba(255, 177, 66, 0.14); border-color: rgba(255, 177, 66, 0.5); color: #ffb142;">
-            <span>⚠️ SUNDAY50 gives 50% OFF only on The Full Collection (All 12 Packs)!</span>
-            <button type="button" class="coupon-chip" id="upgradeToMegaBtn" style="margin-left: 6px;">Upgrade for ₹834</button>
+      }
+
+      let warningHtml = '';
+      if (hasSundayCoupon && !isFullCollection) {
+        warningHtml = `
+          <div class="co-bill-savings-tag" style="background: rgba(255, 177, 66, 0.15); border-color: rgba(255, 177, 66, 0.5); color: #ffb142; margin-bottom: 8px;">
+            <span>⚠️ SUNDAY50 gives 50% OFF only on The Full Collection!</span>
+            <button type="button" class="coupon-chip" id="upgradeToMegaBtn" style="margin-left: 6px; padding: 2px 8px;">Upgrade for ₹834</button>
           </div>
         `;
-      } else if (isMega) {
-        // NORMAL DAYS: 30% FULL VAULT DISCOUNT
-        discountBanner = `
-          <div class="bundle-tag summary__tag">
-            🔥 30% FULL VAULT DISCOUNT APPLIED (-${money(saved)})
-          </div>
-        `;
-      } else if (saved > 0) {
-        discountBanner = `
-          <div class="bundle-tag summary__tag">
-            🎉 20% VAULT BUNDLE DISCOUNT APPLIED (-${money(saved)})
-          </div>
-        `;
+      }
+
+      let savingsTagHtml = '';
+      if (savingsText) {
+        savingsTagHtml = `<div class="co-bill-savings-tag">${savingsText}</div>`;
       }
 
       const rowsHtml = lines.map(line => `
@@ -480,8 +507,29 @@
           <span>${money(line.price)}<button class="summary__rm" type="button" ${line.id ? `data-remove="${line.id}"` : `data-remove-vault="${line.vault}"`} aria-label="Remove ${escapeHtml(line.name)}">&times;</button></span>
         </div>`).join('');
 
+      const itemSummaryText = isFullCollection
+        ? `The Full Vault (all 12 packs)`
+        : `${lines.length} pack${lines.length === 1 ? '' : 's'} selected`;
+
       summaryBox.innerHTML = `
-        ${discountBanner}
+        ${warningHtml}
+        <div class="co-bill-card">
+          <div class="co-bill-row">
+            <span class="co-bill-lbl">Order</span>
+            <span class="co-bill-val">${itemSummaryText}</span>
+          </div>
+          <div class="co-bill-row">
+            <span class="co-bill-lbl">Price</span>
+            <span class="co-bill-val ${discountAmount > 0 ? 'co-bill-was' : ''}">${money(originalPrice)}</span>
+          </div>
+          ${discountRowHtml}
+          <div class="co-bill-divider"></div>
+          <div class="co-bill-row co-bill-total-row">
+            <span class="co-bill-total-lbl">Total Payable</span>
+            <span class="co-bill-total-val" id="coTotal">${money(finalTotal)}</span>
+          </div>
+          ${savingsTagHtml}
+        </div>
         <details class="summary__collapse"${lines.length <= 1 ? ' open' : ''}>
           <summary class="summary__toggle">
             <span>Packs in order (${lines.length})</span>
@@ -492,24 +540,8 @@
       `;
     }
 
-    // Update coupon box if coupon active
-    const msgEl = $('#couponMsg');
-    if (msgEl) {
-      if (hasSundayCoupon && isFullCollection) {
-        msgEl.textContent = `🎉 Sunday 50% OFF active: Full Collection for ₹834!`;
-        msgEl.className = 'co-coupon-msg is-success';
-        msgEl.hidden = false;
-      } else if (hasSundayCoupon && !isFullCollection) {
-        msgEl.innerHTML = '⚠️ <strong>SUNDAY50</strong> applies only to <strong>The Full Collection (All 12 Packs)</strong>. <button type="button" class="coupon-chip" id="upgradeToMegaBtn">Upgrade for ₹834</button>';
-        msgEl.className = 'co-coupon-msg is-error';
-        msgEl.hidden = false;
-      }
-    }
-
-    // Update Total
+    // Update UPI and payment elements
     const payableStr = money(finalTotal);
-    if ($('#coTotal')) $('#coTotal').textContent = payableStr;
-    if ($('#coCartTotal')) $('#coCartTotal').textContent = `Payable Amount: ${payableStr}`;
     const upiAmount = $('#upiAmount');
     if (upiAmount) upiAmount.textContent = payableStr;
 
@@ -990,11 +1022,15 @@
           toast('UPI ID copied to clipboard');
           if (btn) {
             const orig = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-check" style="color:#15803d"></i> <span style="color:#15803d; font-weight:700;">Copied!</span>';
-            setTimeout(() => { btn.innerHTML = orig; }, 2000);
+            btn.innerHTML = '<i class="fas fa-check" style="color:#2ed573"></i> <span style="color:#2ed573; font-weight:700;">Copied!</span>';
+            btn.classList.add('is-copied');
+            setTimeout(() => {
+              btn.innerHTML = orig;
+              btn.classList.remove('is-copied');
+            }, 2000);
           }
         } else {
-          toast('Copy failed');
+          toast('UPI ID: ' + CONFIG.upiId);
         }
       });
     });
@@ -1185,13 +1221,13 @@
 
       // 2. The 30% is completely gone on The Full Vault!
       if (megaBadge) {
-        megaBadge.textContent = '🔥 50% OFF SUNDAY EXCLUSIVE';
+        megaBadge.textContent = '🔥 50% OFF SUNDAY DROP';
         megaBadge.classList.add('is-sunday');
       }
       if (megaPrice) megaPrice.textContent = '₹834';
       if (megaWas) megaWas.textContent = '₹1,668';
-      if (megaSave) megaSave.textContent = 'You save ₹1,549 today (Flat 50% OFF with SUNDAY50)';
-      if (megaBtn) megaBtn.textContent = 'Grab Full Collection @ ₹834';
+      if (megaSave) megaSave.textContent = 'SAVE 50% TODAY';
+      if (megaBtn) megaBtn.textContent = 'Get Complete Vault · ₹834';
       if (megaSundayCallout) megaSundayCallout.hidden = false;
       if (toggleBtn) {
         toggleBtn.textContent = '● Sunday 50% Active (Click for Normal Day)';
@@ -1241,13 +1277,13 @@
 
       // 2. Normal 30% discount is active
       if (megaBadge) {
-        megaBadge.textContent = '30% off everything';
+        megaBadge.textContent = '30% OFF ALL 12 PACKS';
         megaBadge.classList.remove('is-sunday');
       }
       if (megaPrice) megaPrice.textContent = '₹1,668';
       if (megaWas) megaWas.textContent = '₹2,383';
-      if (megaSave) megaSave.textContent = 'You keep ₹715 in your pocket';
-      if (megaBtn) megaBtn.textContent = 'Grab the bundle';
+      if (megaSave) megaSave.textContent = 'SAVE 30%';
+      if (megaBtn) megaBtn.textContent = 'Get Complete Vault · ₹1,668';
       if (megaSundayCallout) megaSundayCallout.hidden = true;
       if (toggleBtn) {
         toggleBtn.textContent = '○ Normal Day Mode (Click to preview Sunday Offer)';
