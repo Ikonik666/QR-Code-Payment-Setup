@@ -33,7 +33,6 @@
 <!-- Fonts: trimmed to the weights actually used -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="image" href="/assets/bg/hero.webp" fetchpriority="high">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="/style.css?v=34">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -159,7 +158,7 @@
   </div>
   <div class="grid">
     <article class="pack" data-id="pdf" data-price="103" data-old="139" data-blurb="Massive library of 40,000+ original text stories and novels in PDF & plain text covering bhabhi, college, neighbour, office and taboo scenarios." data-specs="FILES:40,000+;FORMAT:PDF / TXT;GENRES:Bhabhi, Office, Taboo;ACCESS:Lifetime">
-      <button class="pack__media" type="button" data-detail="pdf"><span class="sr-only">PDF Stories Pack</span><img src="/assets/packs/pdf.webp" loading="lazy" alt=""><span class="pack__type" aria-hidden="true">📖 TEXT</span><span class="card-info-icon" aria-hidden="true"><svg class="ico"><use href="#i-info"/></svg> INFO</span></button>
+      <button class="pack__media" type="button" data-detail="pdf"><span class="sr-only">PDF Stories Pack</span><img src="/assets/packs/pdf.webp" fetchpriority="high" alt=""><span class="pack__type" aria-hidden="true">📖 TEXT</span><span class="card-info-icon" aria-hidden="true"><svg class="ico"><use href="#i-info"/></svg> INFO</span></button>
       <div class="pack__body"><h3 class="pack__name">PDF Stories Pack</h3><p class="pack__desc">40,000+ uncensored story files & novels.</p><div class="pack__buy"><p class="price"><s>₹139 </s><span>₹103</span></p><button class="add" data-add="pdf">Add</button></div></div>
     </article>
     <article class="pack" data-id="audio" data-price="139" data-old="189" data-blurb="Immersive audio drama you can listen to with headphones - 4,500+ episodes and 3,000+ hours in Hindi, Punjabi, Urdu and English." data-specs="TRACKS:4,500+;HOURS:3,000+;LANGUAGES:Hindi / Punjabi / Urdu;UPDATES:Weekly">
@@ -342,7 +341,7 @@
         Scan &amp; pay exactly <strong id="upiAmount">₹0</strong> with any UPI App
       </div>
       <div class="qr-wrap">
-        <img class="qr" src="/upi-qr.jpg" width="220" height="220" alt="DesiTease UPI payment QR code" decoding="async">
+        <img class="qr" src="/upi-qr.jpg" width="220" height="220" alt="DesiTease UPI payment QR code" decoding="async" fetchpriority="low">
       </div>
       <a class="qr-download-link" href="/upi-qr.jpg" download="desitease-upi-qr.jpg">
         <i class="fas fa-download"></i> Download QR Code

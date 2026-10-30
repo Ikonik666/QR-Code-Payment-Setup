@@ -708,7 +708,15 @@ a { color: inherit; }
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
   overflow: hidden;
 }
-.dlg::backdrop { background: rgba(5, 7, 12, .82); backdrop-filter: blur(8px); }
+.dlg:modal {
+  overscroll-behavior: contain;
+}
+.dlg::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background: rgba(5, 7, 12, .82);
+  backdrop-filter: blur(8px);
+}
 .dlg[open] { animation: pop var(--slow) var(--ease); }
 @keyframes pop { from { opacity: 0; transform: translateY(18px) scale(.97); } }
 
@@ -780,7 +788,7 @@ a { color: inherit; }
   cursor: pointer;
   vertical-align: middle;
   padding: 0;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   user-select: none;
 }
 .summary__rm:hover {
@@ -1368,7 +1376,7 @@ html[data-gate="accepted"] .gate { display: none; }
   font-weight: 800;
   cursor: pointer;
   letter-spacing: 0.04em;
-  transition: all var(--fast) var(--ease);
+  transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease), color var(--fast) var(--ease), transform var(--fast) var(--ease);
 }
 
 .coupon-chip:hover {
@@ -1444,7 +1452,7 @@ html[data-gate="accepted"] .gate { display: none; }
   font-weight: 700;
   color: var(--ink-2, #94a3b8);
   cursor: pointer;
-  transition: all var(--fast) var(--ease);
+  transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease), color var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
 }
 
 .dlg--checkout .tab:hover {
