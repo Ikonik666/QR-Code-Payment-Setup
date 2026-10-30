@@ -959,7 +959,6 @@
         selectTab(next);
         next.focus();
       });
-    });
     selectTab($('#tab-upi'));
 
     
@@ -1029,25 +1028,6 @@
         return;
       }
     });
-
-    $('#copyUpiBtn')?.addEventListener('click', () => {
-      const btn = $('#copyUpiBtn');
-      copy(CONFIG.upiId).then(ok => {
-        if (ok) {
-          toast('UPI ID copied to clipboard');
-          if (btn) {
-            const orig = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-check" style="color:#2ed573"></i> <span style="color:#2ed573; font-weight:700;">Copied!</span>';
-            btn.classList.add('is-copied');
-            setTimeout(() => {
-              btn.innerHTML = orig;
-              btn.classList.remove('is-copied');
-            }, 2000);
-          }
-        } else {
-          toast('UPI ID: ' + CONFIG.upiId);
-        }
-      });
     });
 
     const screenshotInput = $('#screenshotInput');

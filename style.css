@@ -2569,66 +2569,7 @@ html[data-gate="accepted"] .gate { display: none; }
   margin-left: 2px;
 }
 
-/* Clean, Non-confusing Inline UPI Copy Row */
-.upi-copy-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin: 10px auto 6px;
-  padding: 8px 12px;
-  max-width: 320px;
-  background: rgba(17, 23, 40, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--r-sm, 6px);
-}
 
-.upi-copy-info {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.upi-copy-label {
-  font-size: 0.74rem;
-  color: var(--ink-3, #64748b);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.upi-copy-id {
-  font-family: ui-monospace, Menlo, monospace;
-  font-size: 0.88rem;
-  font-weight: 800;
-  color: #f1c40f;
-}
-
-.btn-copy-upi {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  color: #fff;
-  font-size: 0.76rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all var(--fast) var(--ease);
-}
-
-.btn-copy-upi:hover {
-  background: rgba(255, 255, 255, 0.16);
-  border-color: rgba(255, 255, 255, 0.35);
-}
-
-.btn-copy-upi.is-copied {
-  background: rgba(46, 213, 115, 0.2);
-  border-color: #2ed573;
-  color: #2ed573;
-}
 
 
 /* Trust Bar & Items */
@@ -2800,15 +2741,6 @@ html[data-gate="accepted"] .gate { display: none; }
   }
   .bar-normal__deal {
     font-size: 0.76rem;
-  }
-  .bar-normal__cta {
-    display: none;
-  }
-}
-
-@media (max-width: 380px) {
-  .bar-normal__deal {
-    font-size: 0.78rem;
   }
   .bar-normal__cta {
     display: none;
