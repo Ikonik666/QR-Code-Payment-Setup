@@ -19,7 +19,7 @@
     cryptoMarkup: 1.20,
 
     paypalHandle: 'desitease',
-    upiId: 'desigurshermax@fam',
+    upiId: '7973341301@okbizaxis',
     validCoupons: { 'SUNDAY50': 0.50, 'SUNDAY': 0.50, 'DESI50': 0.50 },
 
     // wallets
