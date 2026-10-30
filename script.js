@@ -311,7 +311,7 @@
     const elPacks = $('[data-stat="packs"]');
     if (elPacks) elPacks.textContent = String(packs.length);
     const elFiles = $('[data-stat="files"]');
-    if (elFiles) elFiles.textContent = '150K+';
+    if (elFiles) elFiles.textContent = '350K+';
   }
 
   function renderBadges() {
@@ -430,6 +430,12 @@
       checkoutDialog._opener = document.activeElement;
       checkoutDialog.showModal();
     }
+    requestAnimationFrame(() => {
+      const dlgBody = checkoutDialog.querySelector('.dlg__body');
+      if (dlgBody) {
+        dlgBody.scrollTop = dlgBody.scrollHeight;
+      }
+    });
   }
 
   function upiLink(total) {
