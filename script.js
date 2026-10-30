@@ -128,6 +128,7 @@
      --------------------------------------------------------- */
   const VAULT_LABELS = {
     top: 'Top Picks',
+    new: 'New Vault',
     prem: 'Premium Vault',
     premium: 'Premium Vault',
     series: 'Dark Vault',
@@ -156,12 +157,14 @@
     const key = el.dataset.vault;
     const own = packs.filter(pack => pack.vault === key);
     const subtotal = own.reduce((sum, pack) => sum + pack.price, 0);
+    const discount = el.dataset.discount !== undefined ? parseFloat(el.dataset.discount) : CONFIG.vaultDiscount;
     return {
       key,
-      label: VAULT_LABELS[key] || key,
+      label: VAULT_LABELS[key] || el.querySelector('.vault__title')?.textContent.replace('◆', '').trim() || key,
       packs: own,
       subtotal,
-      price: Math.round(subtotal * (1 - CONFIG.vaultDiscount))
+      discount,
+      price: Math.round(subtotal * (1 - discount))
     };
   });
 
@@ -269,7 +272,7 @@
       if (label) {
         label.textContent = complete
           ? `${vault.label} bundle added ✓`
-          : `Save ${Math.round(CONFIG.vaultDiscount * 100)}% · Bundle ${money(vault.price)}`;
+          : `Save ${Math.round(vault.discount * 100)}% · Bundle ${money(vault.price)}`;
       }
       if (button) button.setAttribute('aria-pressed', String(complete));
     }
@@ -475,8 +478,9 @@
     } else if (saved > 0) {
       originalPrice = baseTotal + saved;
       discountAmount = saved;
-      discountLabel = '🎉 Bundle Discount (20% OFF)';
-      savingsText = `🎉 You save ${money(saved)} (20% OFF) on this order!`;
+      const discountPercent = Math.round((discountAmount / originalPrice) * 100);
+      discountLabel = `🎉 Bundle Discount (${discountPercent}% OFF)`;
+      savingsText = `🎉 You save ${money(saved)} (${discountPercent}% OFF) on this order!`;
     }
 
     const summaryBox = $('#orderSummary');

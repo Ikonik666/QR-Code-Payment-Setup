@@ -28,6 +28,7 @@
 
   /* vault accents */
   --top:           #ff9f43;
+  --new:           #00d2d3;
   --premium:       #a855f7;
   --series:        #ff4d6d;
 
@@ -276,6 +277,7 @@ a { color: inherit; }
 .vault__title { display: flex; align-items: center; gap: 12px; font-size: clamp(1.5rem, 4.4vw, 2.2rem); }
 .vault__gem { font-size: .8em; }
 .vault__title--top    .vault__gem { color: var(--top); }
+.vault__title--new    .vault__gem { color: var(--new); }
 .vault__title--premium .vault__gem { color: var(--premium); }
 .vault__title--series  .vault__gem { color: var(--series); }
 .vault__desc { margin-top: 6px; color: var(--ink-3); font-size: .88rem; }
@@ -339,6 +341,13 @@ a { color: inherit; }
 }
 #vault-top .pack:hover {
   border-color: rgba(255, 149, 0, 0.65);
+}
+
+#vault-new .pack {
+  border-color: rgba(0, 210, 211, 0.28);
+}
+#vault-new .pack:hover {
+  border-color: rgba(0, 210, 211, 0.65);
 }
 
 #vault-premium .pack {
