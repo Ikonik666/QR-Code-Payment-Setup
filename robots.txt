@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /success.html
 
-Sitemap: https://desitease.netlify.app/sitemap.xml
+Sitemap: https://desiteasestore.netlify.app/sitemap.xml

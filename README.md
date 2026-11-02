@@ -1,6 +1,6 @@
 # DesiTease — Premium Store
 
-Static storefront for **desitease.netlify.app**. No build step, no framework, no
+Static storefront for **desiteasestore.netlify.app**. No build step, no framework, no
 runtime dependencies: plain HTML, CSS and JavaScript, deployed straight from
 this repo to Netlify.
 

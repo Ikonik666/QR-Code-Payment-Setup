@@ -1043,6 +1043,13 @@
     const screenshotInput = $('#screenshotInput');
     screenshotInput?.addEventListener('change', () => {
       const file = screenshotInput.files?.[0];
+      if (file && file.size > 8 * 1024 * 1024) {
+        toast('Screenshot is too large (max 8MB). Please choose a compressed image.');
+        screenshotInput.value = '';
+        const info = $('#screenshotFeedback');
+        if (info) info.textContent = '';
+        return;
+      }
       let info = $('#screenshotFeedback');
       if (!info) {
         info = document.createElement('div');
@@ -1092,6 +1099,12 @@
         toast('Your cart is empty');
         return;
       }
+      const file = screenshotInput?.files?.[0];
+      if (file && file.size > 8 * 1024 * 1024) {
+        event.preventDefault();
+        toast('Screenshot is too large (max 8MB). Please choose a smaller image.');
+        return;
+      }
       const { items, total, discount } = getCartSummary();
       const activeTab = $('.tab.is-active');
       const methods = { 'tab-upi': 'UPI', 'tab-paypal': 'PayPal', 'tab-crypto': 'Crypto' };
@@ -1116,6 +1129,15 @@
         localStorage.setItem(CONFIG.orderKey, JSON.stringify(order));
       } catch (e) {
         /* the confirmation page has an empty state */
+      }
+
+      // Visual feedback and double-click prevention
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.style.pointerEvents = 'none';
+        submitBtn.style.opacity = '0.85';
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading & Verifying...';
+        setTimeout(() => { submitBtn.disabled = true; }, 10);
       }
     });
   }
