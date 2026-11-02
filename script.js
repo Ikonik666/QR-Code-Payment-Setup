@@ -1043,13 +1043,6 @@
     const screenshotInput = $('#screenshotInput');
     screenshotInput?.addEventListener('change', () => {
       const file = screenshotInput.files?.[0];
-      if (file && file.size > 8 * 1024 * 1024) {
-        toast('Screenshot is too large (max 8MB). Please choose a compressed image.');
-        screenshotInput.value = '';
-        const info = $('#screenshotFeedback');
-        if (info) info.textContent = '';
-        return;
-      }
       let info = $('#screenshotFeedback');
       if (!info) {
         info = document.createElement('div');
@@ -1097,12 +1090,6 @@
       if (state.cart.size === 0) {
         event.preventDefault();
         toast('Your cart is empty');
-        return;
-      }
-      const file = screenshotInput?.files?.[0];
-      if (file && file.size > 8 * 1024 * 1024) {
-        event.preventDefault();
-        toast('Screenshot is too large (max 8MB). Please choose a smaller image.');
         return;
       }
       const { items, total, discount } = getCartSummary();
